@@ -3,6 +3,7 @@ import type { ComponentChildren } from "../types"
 
 export type DescriptionsSize = "comfortable" | "compact"
 export type DescriptionsLayout = "horizontal" | "vertical"
+export type DescriptionsCollapseBelow = "sm" | "md" | "lg" | "none"
 
 export type DescriptionsItem = {
   key: string
@@ -18,6 +19,7 @@ export type DescriptionsProps = {
   columns?: number
   size?: DescriptionsSize
   layout?: DescriptionsLayout
+  collapseBelow?: DescriptionsCollapseBelow
   bordered?: boolean
   emptyState?: ComponentChildren
 }
@@ -35,6 +37,10 @@ export function resolveDescriptionsLayout(layout?: DescriptionsLayout): Descript
   return layout ?? "horizontal"
 }
 
+export function resolveDescriptionsCollapseBelow(collapseBelow?: DescriptionsCollapseBelow): DescriptionsCollapseBelow {
+  return collapseBelow ?? "sm"
+}
+
 export function resolveDescriptionsItemSpan(span: number | undefined, columns: number): number {
   const next = Math.floor(span ?? 1)
   return Math.max(1, Math.min(columns, next))
@@ -49,6 +55,7 @@ export function Descriptions(_handle: Handle) {
     const columns = resolveDescriptionsColumns(props.columns)
     const size = resolveDescriptionsSize(props.size)
     const layout = resolveDescriptionsLayout(props.layout)
+    const collapseBelow = resolveDescriptionsCollapseBelow(props.collapseBelow)
     const bordered = resolveDescriptionsBordered(props.bordered)
 
     return (
@@ -56,6 +63,7 @@ export function Descriptions(_handle: Handle) {
         className="rf-descriptions"
         data-size={size}
         data-layout={layout}
+        data-collapse-below={collapseBelow}
         data-bordered={bordered ? "true" : "false"}
         style={`--rf-descriptions-columns: ${columns};`}
       >

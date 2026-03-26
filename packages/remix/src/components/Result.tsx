@@ -10,6 +10,10 @@ export type ResultProps = {
   actions?: ComponentChildren
 }
 
+export type ResultTitleProps = { children: ComponentChildren }
+export type ResultDescriptionProps = { children: ComponentChildren }
+export type ResultActionsProps = { children: ComponentChildren }
+
 export function resolveResultTone(tone?: ResultTone): ResultTone {
   return tone ?? "info"
 }
@@ -31,4 +35,16 @@ export function Result(_handle: Handle) {
       </section>
     )
   }
+}
+
+export function ResultTitle(_handle: Handle) {
+  return (props: ResultTitleProps) => <h2 className="rf-result-title">{props.children}</h2>
+}
+
+export function ResultDescription(_handle: Handle) {
+  return (props: ResultDescriptionProps) => <p className="rf-result-description">{props.children}</p>
+}
+
+export function ResultActions(_handle: Handle) {
+  return (props: ResultActionsProps) => <div className="rf-result-actions">{props.children}</div>
 }

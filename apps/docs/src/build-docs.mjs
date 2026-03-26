@@ -12,39 +12,53 @@ const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", 
 
 const demoByComponent = new Map([
   ["alert", { id: "alert-basic", title: "Alert: tone and dismiss patterns" }],
+  ["anchor", { id: "anchor-basic", title: "Anchor: in-page section navigation" }],
   ["appheader", { id: "app-header-basic", title: "AppHeader: brand, nav, and actions" }],
   ["appprovider", { id: "app-provider-basic", title: "AppProvider: locale, direction, and navigation" }],
   ["appshell", { id: "app-shell-basic", title: "AppShell: header, sidebar, and content regions" }],
+  ["avatar", { id: "avatar-basic", title: "Avatar: initials, size, shape, and status" }],
   ["autocomplete", { id: "autocomplete-basic", title: "Autocomplete: free text with suggestion commit" }],
   ["badge", { id: "badge-basic", title: "Badge: compact status labels" }],
   ["breadcrumboverflow", { id: "breadcrumbs-overflow-basic", title: "BreadcrumbOverflow: collapsed long paths" }],
   ["breadcrumbs", { id: "breadcrumbs-basic", title: "Breadcrumbs: hierarchical location path" }],
   ["button", { id: "button-basic", title: "Button: interactive counter" }],
+  ["calendar", { id: "calendar-basic", title: "Calendar: native date/month selection" }],
   ["card", { id: "card-basic", title: "Card: header, body, footer composition" }],
+  ["cascader", { id: "cascader-basic", title: "Cascader: multi-level option selection" }],
   ["chip", { id: "chip-basic", title: "Chip: compact metadata token" }],
   ["combobox", { id: "combobox-basic", title: "Combobox: search and select options" }],
   ["confirmdialog", { id: "confirm-dialog-basic", title: "ConfirmDialog: destructive action confirmation" }],
   ["commandpalette", { id: "command-palette-basic", title: "CommandPalette: quick action launcher" }],
+  ["collapse", { id: "collapse-basic", title: "Collapse: details and summary disclosure" }],
+  ["configprovider", { id: "config-provider-basic", title: "ConfigProvider: app-level locale and navigation context" }],
   ["datagridlite", { id: "data-grid-lite-basic", title: "DataGridLite: sorting and selection" }],
   ["datalist", { id: "data-list-basic", title: "DataList: item metadata and actions" }],
   ["descriptions", { id: "descriptions-basic", title: "Descriptions: record detail fields" }],
+  ["divider", { id: "divider-basic", title: "Divider: horizontal and vertical separators" }],
   ["datatable", { id: "data-table-basic", title: "DataTable: sorting, selection, and pagination" }],
   ["datepicker", { id: "date-picker-basic", title: "DatePicker: calendar date selection" }],
   ["datetimepicker", { id: "date-time-picker-basic", title: "DateTimePicker: combined date and time" }],
   ["daterangepicker", { id: "date-range-picker-basic", title: "DateRangePicker: start and end selection" }],
   ["dropdown", { id: "dropdown-basic", title: "Dropdown: menu wrapper for actions" }],
+  ["empty", { id: "empty-basic", title: "Empty: generic no-data messaging" }],
   ["drawer", { id: "drawer-basic", title: "Drawer: side panel workflow" }],
   ["emptystate", { id: "empty-state-basic", title: "EmptyState: recovery-focused messaging" }],
   ["emptyresults", { id: "empty-results-basic", title: "EmptyResults: no-match recovery state" }],
   ["fileupload", { id: "file-upload-basic", title: "FileUpload: native file picker and constraints" }],
   ["field", { id: "field-basic", title: "Field: label, description, error wiring" }],
+  ["flex", { id: "flex-basic", title: "Flex: one-dimensional alignment and distribution" }],
+  ["form", { id: "form-basic", title: "Form: submit and reset orchestration" }],
   ["formfieldset", { id: "form-fieldset-basic", title: "FormFieldset: grouped controls with legend" }],
   ["formlayout", { id: "form-layout-basic", title: "FormLayout: structured form sections" }],
   ["formmessage", { id: "form-message-basic", title: "FormMessage: helper and validation feedback" }],
+  ["grid", { id: "grid-basic", title: "Grid: span-based tile layout" }],
   ["filterbar", { id: "filter-bar-basic", title: "FilterBar: grouped controls and actions" }],
   ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
   ["input", { id: "field-input", title: "Field + Input: live validation" }],
   ["inlinealert", { id: "inline-alert-basic", title: "InlineAlert: compact in-flow status" }],
+  ["image", { id: "image-basic", title: "Image: media with fit strategies" }],
+  ["layout", { id: "layout-basic", title: "Layout: header, sider, content, footer shell" }],
+  ["link", { id: "link-basic", title: "Link: internal routing and external navigation" }],
   ["checkbox", { id: "checkbox-basic", title: "Checkbox: native checked semantics" }],
   ["radio", { id: "radio-group", title: "RadioGroup: single selection" }],
   ["rangeslider", { id: "range-slider-basic", title: "RangeSlider: two-thumb range selection" }],
@@ -55,10 +69,13 @@ const demoByComponent = new Map([
   ["progress", { id: "progress-basic", title: "Progress: completion and status tracking" }],
   ["select", { id: "select-basic", title: "Select: native option selection" }],
   ["sidenav", { id: "side-nav-basic", title: "SideNav: sectioned app navigation" }],
+  ["topnav", { id: "top-nav-basic", title: "TopNav: horizontal route navigation" }],
   ["splitter", { id: "splitter-basic", title: "Splitter: resizable two-pane layout" }],
   ["skeleton", { id: "skeleton-basic", title: "Skeleton: loading placeholders" }],
   ["slider", { id: "slider-basic", title: "Slider: range selection with live value" }],
   ["spinner", { id: "spinner-basic", title: "Spinner: inline loading indicator" }],
+  ["space", { id: "space-basic", title: "Space: consistent inline and wrapped spacing" }],
+  ["statistic", { id: "statistic-basic", title: "Statistic: labeled value metrics" }],
   ["steps", { id: "steps-basic", title: "Steps: multi-step progress indicator" }],
   ["switch", { id: "switch-basic", title: "Switch: boolean setting toggle" }],
   ["table", { id: "table-basic", title: "Table: semantic columns and rows" }],
@@ -74,6 +91,7 @@ const demoByComponent = new Map([
   ["pagination", { id: "pagination-basic", title: "Pagination: previous, next, and current page" }],
   ["toast", { id: "toast-queue", title: "Toast: queue and auto-dismiss" }],
   ["tooltip", { id: "tooltip-basic", title: "Tooltip: hover and focus context" }],
+  ["typography", { id: "typography-basic", title: "Typography: semantic text primitives" }],
   ["tree", { id: "tree-basic", title: "Tree: hierarchical navigation and selection" }],
   ["treeselect", { id: "tree-select-basic", title: "TreeSelect: hierarchical option picker" }],
 ])
@@ -530,6 +548,43 @@ const html = `<!doctype html>
       .rf-card-footer { border-top: 1px solid #dbe3ee; }
       .rf-card-title { margin: 0; font-size: 1.05rem; }
       .rf-card-subtitle { margin: 0.25rem 0 0; color: #475569; }
+      .rf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--rf-grid-gap, .75rem); align-items: stretch; }
+      .rf-grid[data-columns="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+      .rf-grid[data-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rf-grid[data-columns="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .rf-grid[data-columns="6"] { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .rf-grid[data-columns="12"] { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+      .rf-statistic {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0.8rem 0.9rem;
+        border: 1px solid #dbe3ee;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 1px 0 #e2e8f0;
+      }
+      .rf-statistic-label,
+      .rf-statistic-caption,
+      .rf-statistic-value { margin: 0; }
+      .rf-statistic-label { font-size: 0.79rem; color: #64748b; font-weight: 600; letter-spacing: 0.01em; }
+      .rf-statistic-value { font-size: 1.45rem; line-height: 1.15; font-weight: 750; color: #0f172a; }
+      .rf-statistic-caption { font-size: 0.82rem; color: #64748b; display: inline-flex; align-items: center; gap: 0.3rem; }
+      .rf-statistic-trend { font-weight: 700; font-size: 0.9em; }
+      .rf-statistic[data-trend="up"] .rf-statistic-caption,
+      .rf-statistic[data-trend="up"] .rf-statistic-trend { color: #15803d; }
+      .rf-statistic[data-trend="down"] .rf-statistic-caption,
+      .rf-statistic[data-trend="down"] .rf-statistic-trend { color: #b91c1c; }
+      .rf-statistic[data-trend="neutral"] .rf-statistic-caption,
+      .rf-statistic[data-trend="neutral"] .rf-statistic-trend { color: #475569; }
+      @media (max-width: 1000px) {
+        .rf-grid[data-columns="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 700px) {
+        .rf-grid[data-columns="3"],
+        .rf-grid[data-columns="2"],
+        .rf-grid[data-columns="4"] { grid-template-columns: 1fr; }
+        .rf-statistic-value { font-size: 1.28rem; }
+      }
       .rf-page-header {
         display: flex;
         align-items: end;
@@ -572,6 +627,13 @@ const html = `<!doctype html>
       .rf-side-nav-link:hover { background: #eff6ff; }
       .rf-side-nav-item[data-active="true"] > .rf-side-nav-link,
       .rf-side-nav-link[aria-current="page"] { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-top-nav { overflow-x: auto; }
+      .rf-top-nav-list { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: .3rem; min-width: max-content; }
+      .rf-top-nav-link { display: inline-flex; align-items: center; border-radius: .5rem; padding: .45rem .6rem; color: #334155; text-decoration: none; font-size: .9rem; line-height: 1.3; white-space: nowrap; }
+      .rf-top-nav-link:hover { background: #eff6ff; }
+      .rf-top-nav-item[data-active="true"] > .rf-top-nav-link,
+      .rf-top-nav-link[aria-current="page"] { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-top-nav-link[data-disabled="true"] { opacity: .55; cursor: not-allowed; }
       .rf-tree { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.15rem; }
       .rf-tree-group { margin: 0 0 0 .4rem; padding: 0 0 0 1rem; list-style: none; display: grid; gap: .15rem; border-left: 1px solid #dbe3ee; }
       .rf-tree-group[hidden] { display: none; }
@@ -600,6 +662,28 @@ const html = `<!doctype html>
       .rf-tree-select-item[data-disabled="true"] > .rf-tree-select-row .rf-tree-select-toggle { opacity: .55; cursor: not-allowed; }
       .rf-tree-select-spacer { width: 1.5rem; height: 1.5rem; display: inline-block; }
       .rf-tree-select-empty { margin: 0; padding: .4rem; color: #64748b; font-size: .86rem; }
+      .rf-cascader { position: relative; display: grid; gap: .35rem; max-width: 24rem; }
+      .rf-cascader-trigger { border: 1px solid #cbd5e1; border-radius: .6rem; background: #fff; color: #0f172a; font: inherit; min-height: 2.25rem; padding: .4rem .6rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; cursor: pointer; }
+      .rf-cascader-trigger-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .rf-cascader-trigger-icon { color: #64748b; font-size: .8rem; }
+      .rf-cascader-panel { border: 1px solid #cbd5e1; border-radius: .65rem; background: #fff; overflow: auto; max-height: 16rem; padding: .35rem; }
+      .rf-cascader-columns { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(9rem, 1fr); gap: .35rem; min-width: min-content; }
+      .rf-cascader-column { margin: 0; padding: 0; list-style: none; display: grid; gap: .1rem; }
+      .rf-cascader-column[hidden] { display: none; }
+      .rf-cascader-column + .rf-cascader-column { border-left: 1px solid #dbe3ee; padding-left: .35rem; }
+      .rf-cascader-option { width: 100%; border: 0; background: transparent; color: #0f172a; font: inherit; text-align: left; border-radius: .45rem; min-height: 1.9rem; padding: .22rem .45rem; display: flex; justify-content: space-between; align-items: center; gap: .4rem; cursor: pointer; }
+      .rf-cascader-option[data-active="true"] { background: #f1f5f9; }
+      .rf-cascader-option:hover:not(:disabled) { background: #eef2ff; }
+      .rf-cascader-option[data-selected="true"] { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-cascader-option:disabled { opacity: .55; cursor: not-allowed; }
+      .rf-cascader-option-icon { color: #64748b; }
+      .rf-cascader-empty { margin: 0; padding: .4rem; color: #64748b; font-size: .86rem; }
+      .rf-anchor { display: block; }
+      .rf-anchor-list { margin: 0; padding: 0; list-style: none; display: grid; gap: .2rem; }
+      .rf-anchor-link { display: inline-flex; align-items: center; border-radius: .45rem; text-decoration: none; font-size: .9rem; line-height: 1.3; color: #334155; padding: .2rem .5rem; }
+      .rf-anchor-link:hover { background: #eef2ff; color: #0f172a; }
+      .rf-anchor-link[data-active="true"], .rf-anchor-link[aria-current="location"] { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-anchor-link[data-disabled="true"] { opacity: .55; cursor: not-allowed; }
       .rf-breadcrumbs-list { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
       .rf-breadcrumbs-item { display: inline-flex; align-items: center; gap: 0.45rem; }
       .rf-breadcrumbs-link,

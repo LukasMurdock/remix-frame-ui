@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   resolveDescriptionsBordered,
+  resolveDescriptionsCollapseBelow,
   resolveDescriptionsColumns,
   resolveDescriptionsItemSpan,
   resolveDescriptionsLayout,
@@ -20,6 +21,8 @@ describe("descriptions helpers", () => {
     expect(resolveDescriptionsSize("compact")).toBe("compact")
     expect(resolveDescriptionsLayout()).toBe("horizontal")
     expect(resolveDescriptionsLayout("vertical")).toBe("vertical")
+    expect(resolveDescriptionsCollapseBelow()).toBe("sm")
+    expect(resolveDescriptionsCollapseBelow("lg")).toBe("lg")
   })
 
   it("resolves item span and bordered defaults", () => {
