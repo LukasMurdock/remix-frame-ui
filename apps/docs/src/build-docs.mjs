@@ -171,6 +171,7 @@ const html = `<!doctype html>
         position: sticky;
         top: 4.2rem;
         height: calc(100vh - 4.2rem);
+        box-sizing: border-box;
         overflow: auto;
         border-right: 1px solid #dbe3ee;
         background: #f8fafc;
