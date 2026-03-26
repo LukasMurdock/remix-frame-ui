@@ -1,6 +1,7 @@
 const registry = {
   "alert-basic": mountAlertDemo,
   "app-header-basic": mountAppHeaderDemo,
+  "app-provider-basic": mountAppProviderDemo,
   "app-shell-basic": mountAppShellDemo,
   "autocomplete-basic": mountAutocompleteDemo,
   "badge-basic": mountBadgeDemo,
@@ -14,6 +15,7 @@ const registry = {
   "command-palette-basic": mountCommandPaletteDemo,
   "data-grid-lite-basic": mountDataGridLiteDemo,
   "data-list-basic": mountDataListDemo,
+  "descriptions-basic": mountDescriptionsDemo,
   "data-table-basic": mountDataTableDemo,
   "date-picker-basic": mountDatePickerDemo,
   "date-time-picker-basic": mountDateTimePickerDemo,
@@ -29,15 +31,18 @@ const registry = {
   "field-input": mountFieldDemo,
   "checkbox-basic": mountCheckboxDemo,
   "filter-bar-basic": mountFilterBarDemo,
+  "filter-panel-basic": mountFilterPanelDemo,
   "inline-alert-basic": mountInlineAlertDemo,
   "radio-group": mountRadioDemo,
   "range-slider-basic": mountRangeSliderDemo,
   "result-basic": mountResultDemo,
+  "segmented-basic": mountSegmentedDemo,
   "page-header-basic": mountPageHeaderDemo,
   "popover-basic": mountPopoverDemo,
   "progress-basic": mountProgressDemo,
   "select-basic": mountSelectDemo,
   "side-nav-basic": mountSideNavDemo,
+  "splitter-basic": mountSplitterDemo,
   "skeleton-basic": mountSkeletonDemo,
   "slider-basic": mountSliderDemo,
   "spinner-basic": mountSpinnerDemo,
@@ -47,7 +52,9 @@ const registry = {
   "tag-basic": mountTagDemo,
   "tabs-basic": mountTabsDemo,
   "textarea-basic": mountTextareaDemo,
+  "transfer-basic": mountTransferDemo,
   "time-picker-basic": mountTimePickerDemo,
+  "timeline-basic": mountTimelineDemo,
   "drawer-basic": mountDrawerDemo,
   "dialog-controlled": mountDialogDemo,
   "menu-actions": mountMenuDemo,
@@ -55,6 +62,8 @@ const registry = {
   "pagination-basic": mountPaginationDemo,
   "toast-queue": mountToastDemo,
   "tooltip-basic": mountTooltipDemo,
+  "tree-basic": mountTreeDemo,
+  "tree-select-basic": mountTreeSelectDemo,
 }
 
 export function mountAllDemos(root = document) {
@@ -197,6 +206,65 @@ function mountAppHeaderDemo(mount) {
   `
 }
 
+function mountAppProviderDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-app-provider" lang="en-US" dir="ltr" data-color-scheme="light" data-reduced-motion="no-preference" style="display:grid;gap:.6rem;max-width:34rem;">
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <label style="display:grid;gap:.2rem;font-size:.85rem;">
+          Locale
+          <input class="docs-input" id="app-provider-locale" value="en-US" />
+        </label>
+        <label style="display:grid;gap:.2rem;font-size:.85rem;">
+          Direction
+          <select class="docs-input" id="app-provider-direction"><option value="ltr">ltr</option><option value="rtl">rtl</option></select>
+        </label>
+      </div>
+      <nav style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="/projects" id="app-provider-internal">Internal link</a>
+        <a href="https://example.com" id="app-provider-external">External link</a>
+      </nav>
+      <p id="app-provider-status" style="margin:0;color:#475569;font-size:.85rem;">Navigate: none</p>
+    </section>
+  `
+
+  const provider = mount.querySelector(".rf-app-provider")
+  const locale = mount.querySelector("#app-provider-locale")
+  const direction = mount.querySelector("#app-provider-direction")
+  const status = mount.querySelector("#app-provider-status")
+
+  if (
+    !(provider instanceof HTMLElement &&
+      locale instanceof HTMLInputElement &&
+      direction instanceof HTMLSelectElement &&
+      status instanceof HTMLElement)
+  ) {
+    return
+  }
+
+  locale.addEventListener("input", () => {
+    provider.lang = locale.value.trim() || "en-US"
+  })
+
+  direction.addEventListener("change", () => {
+    provider.dir = direction.value === "rtl" ? "rtl" : "ltr"
+  })
+
+  provider.addEventListener("click", (event) => {
+    const target = event.target
+    if (!(target instanceof Element)) return
+    const anchor = target.closest("a[href]")
+    if (!(anchor instanceof HTMLAnchorElement)) return
+
+    const href = anchor.getAttribute("href")
+    if (!href) return
+    if (!href.startsWith("/")) return
+
+    event.preventDefault()
+    status.textContent = `Navigate: ${href}`
+  })
+
+}
+
 function mountAppShellDemo(mount) {
   mount.innerHTML = `
     <section class="rf-app-shell" data-sidebar-state="expanded">
@@ -284,6 +352,233 @@ function mountSideNavDemo(mount) {
   }
 }
 
+function mountTreeDemo(mount) {
+  mount.innerHTML = `
+    <ul class="rf-tree" role="tree" aria-label="Project tree">
+      <li class="rf-tree-item" role="treeitem" aria-expanded="true" data-selected="true" data-node-id="projects">
+        <div class="rf-tree-row">
+          <button class="rf-tree-toggle" type="button" data-toggle="projects" aria-label="Collapse">▾</button>
+          <button class="rf-tree-label" type="button" data-select="projects">Projects</button>
+        </div>
+        <ul class="rf-tree-group" role="group" data-group="projects">
+          <li class="rf-tree-item" role="treeitem" data-selected="false" data-node-id="alpha">
+            <div class="rf-tree-row">
+              <span class="rf-tree-spacer" aria-hidden="true"></span>
+              <button class="rf-tree-label" type="button" data-select="alpha">Alpha</button>
+            </div>
+          </li>
+          <li class="rf-tree-item" role="treeitem" data-selected="false" data-node-id="beta">
+            <div class="rf-tree-row">
+              <span class="rf-tree-spacer" aria-hidden="true"></span>
+              <button class="rf-tree-label" type="button" data-select="beta">Beta</button>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="rf-tree-item" role="treeitem" data-selected="false" data-node-id="settings">
+        <div class="rf-tree-row">
+          <span class="rf-tree-spacer" aria-hidden="true"></span>
+          <button class="rf-tree-label" type="button" data-select="settings">Settings</button>
+        </div>
+      </li>
+    </ul>
+    <p id="tree-state" style="margin:.5rem 0 0;font-size:.85rem;color:#475569;">Selected: projects</p>
+  `
+
+  const state = mount.querySelector("#tree-state")
+  if (!(state instanceof HTMLElement)) return
+
+  const items = Array.from(mount.querySelectorAll(".rf-tree-item"))
+  const selectButtons = Array.from(mount.querySelectorAll("[data-select]"))
+  const toggleButtons = Array.from(mount.querySelectorAll("[data-toggle]"))
+
+  for (const button of selectButtons) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const id = button.dataset.select
+      if (!id) return
+
+      for (const item of items) {
+        if (!(item instanceof HTMLElement)) continue
+        const selected = item.dataset.nodeId === id
+        item.dataset.selected = selected ? "true" : "false"
+        item.setAttribute("aria-selected", selected ? "true" : "false")
+      }
+
+      state.textContent = `Selected: ${id}`
+    })
+  }
+
+  for (const button of toggleButtons) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const id = button.dataset.toggle
+      if (!id) return
+
+      const group = mount.querySelector(`[data-group="${id}"]`)
+      const item = mount.querySelector(`[data-node-id="${id}"]`)
+      if (!(group instanceof HTMLElement && item instanceof HTMLElement)) return
+
+      const expanded = item.getAttribute("aria-expanded") !== "false"
+      item.setAttribute("aria-expanded", expanded ? "false" : "true")
+      group.hidden = expanded
+      group.style.display = expanded ? "none" : "grid"
+      button.textContent = expanded ? "▸" : "▾"
+      button.setAttribute("aria-label", expanded ? "Expand" : "Collapse")
+    })
+  }
+}
+
+function mountTreeSelectDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-tree-select" data-open="false">
+      <button class="rf-tree-select-trigger" type="button" aria-haspopup="tree" aria-expanded="false" id="tree-select-trigger">
+        <span class="rf-tree-select-trigger-label" id="tree-select-label">Projects</span>
+        <span class="rf-tree-select-trigger-icon" aria-hidden="true">▾</span>
+      </button>
+      <div class="rf-tree-select-panel" role="listbox" id="tree-select-panel" hidden>
+        <ul class="rf-tree-select-tree" role="tree">
+          <li class="rf-tree-select-item" role="treeitem" data-node-id="projects" data-selected="true" aria-expanded="true">
+            <div class="rf-tree-select-row">
+              <button type="button" class="rf-tree-select-toggle" data-toggle="projects" aria-label="Collapse">▾</button>
+              <button type="button" class="rf-tree-select-option" data-select="projects">Projects</button>
+            </div>
+            <ul class="rf-tree-select-group" role="group" data-group="projects">
+              <li class="rf-tree-select-item" role="treeitem" data-node-id="alpha" data-selected="false">
+                <div class="rf-tree-select-row">
+                  <span class="rf-tree-select-spacer" aria-hidden="true"></span>
+                  <button type="button" class="rf-tree-select-option" data-select="alpha">Alpha</button>
+                </div>
+              </li>
+              <li class="rf-tree-select-item" role="treeitem" data-node-id="beta" data-selected="false">
+                <div class="rf-tree-select-row">
+                  <span class="rf-tree-select-spacer" aria-hidden="true"></span>
+                  <button type="button" class="rf-tree-select-option" data-select="beta">Beta</button>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li class="rf-tree-select-item" role="treeitem" data-node-id="settings" data-selected="false">
+            <div class="rf-tree-select-row">
+              <span class="rf-tree-select-spacer" aria-hidden="true"></span>
+              <button type="button" class="rf-tree-select-option" data-select="settings">Settings</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <p id="tree-select-state" style="margin:.45rem 0 0;font-size:.85rem;color:#475569;">Selected: projects</p>
+  `
+
+  const trigger = mount.querySelector("#tree-select-trigger")
+  const label = mount.querySelector("#tree-select-label")
+  const panel = mount.querySelector("#tree-select-panel")
+  const state = mount.querySelector("#tree-select-state")
+  if (!(trigger instanceof HTMLButtonElement && label instanceof HTMLElement && panel instanceof HTMLElement && state instanceof HTMLElement)) return
+
+  const setOpen = (nextOpen) => {
+    panel.hidden = !nextOpen
+    trigger.setAttribute("aria-expanded", nextOpen ? "true" : "false")
+  }
+
+  trigger.addEventListener("click", () => {
+    setOpen(panel.hidden)
+  })
+
+  for (const button of mount.querySelectorAll("[data-toggle]")) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const id = button.dataset.toggle
+      if (!id) return
+      const item = mount.querySelector(`[data-node-id="${id}"]`)
+      const group = mount.querySelector(`[data-group="${id}"]`)
+      if (!(item instanceof HTMLElement && group instanceof HTMLElement)) return
+      const expanded = item.getAttribute("aria-expanded") !== "false"
+      item.setAttribute("aria-expanded", expanded ? "false" : "true")
+      group.hidden = expanded
+      button.textContent = expanded ? "▸" : "▾"
+    })
+  }
+
+  for (const button of mount.querySelectorAll("[data-select]")) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const id = button.dataset.select
+      if (!id) return
+
+      for (const item of mount.querySelectorAll(".rf-tree-select-item")) {
+        if (!(item instanceof HTMLElement)) continue
+        item.dataset.selected = item.dataset.nodeId === id ? "true" : "false"
+      }
+
+      label.textContent = button.textContent ?? id
+      state.textContent = `Selected: ${id}`
+      setOpen(false)
+    })
+  }
+}
+
+function mountSplitterDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-splitter" data-orientation="horizontal" style="--rf-splitter-size: 50%;">
+      <div class="rf-splitter-pane" data-pane="first">
+        <strong>Navigation panel</strong>
+        <p style="margin:.35rem 0 0;color:#475569;">Use arrow keys on the divider to resize.</p>
+      </div>
+      <div
+        class="rf-splitter-handle"
+        id="splitter-handle"
+        role="separator"
+        tabIndex="0"
+        aria-orientation="vertical"
+        aria-valuemin="20"
+        aria-valuemax="80"
+        aria-valuenow="50"
+      >
+        <span class="rf-splitter-handle-dot" aria-hidden="true"></span>
+      </div>
+      <div class="rf-splitter-pane" data-pane="second">
+        <strong>Content panel</strong>
+        <p style="margin:.35rem 0 0;color:#475569;">Resizable pane for data surfaces and detail views.</p>
+      </div>
+    </section>
+    <p id="splitter-state" style="margin:.5rem 0 0;font-size:.85rem;color:#475569;">First pane: 50%</p>
+  `
+
+  const splitter = mount.querySelector(".rf-splitter")
+  const handle = mount.querySelector("#splitter-handle")
+  const state = mount.querySelector("#splitter-state")
+  if (!(splitter instanceof HTMLElement && handle instanceof HTMLElement && state instanceof HTMLElement)) return
+
+  const clamp = (value) => Math.max(20, Math.min(80, value))
+  const setSize = (next) => {
+    const size = clamp(next)
+    splitter.style.setProperty("--rf-splitter-size", `${size}%`)
+    handle.setAttribute("aria-valuenow", String(Math.round(size)))
+    state.textContent = `First pane: ${Math.round(size)}%`
+  }
+
+  handle.addEventListener("keydown", (event) => {
+    const current = Number(handle.getAttribute("aria-valuenow") || 50)
+    if (event.key === "ArrowLeft") {
+      event.preventDefault()
+      setSize(current - 5)
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault()
+      setSize(current + 5)
+    }
+    if (event.key === "Home") {
+      event.preventDefault()
+      setSize(20)
+    }
+    if (event.key === "End") {
+      event.preventDefault()
+      setSize(80)
+    }
+  })
+}
+
 function mountInlineAlertDemo(mount) {
   mount.innerHTML = `
     <div class="rf-inline-alert" data-tone="warning" role="alert" style="max-width:30rem;">
@@ -304,6 +599,42 @@ function mountResultDemo(mount) {
       </div>
     </section>
   `
+}
+
+function mountSegmentedDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:28rem;">
+      <div class="rf-segmented" role="radiogroup" aria-label="View mode">
+        <button class="rf-segmented-option" role="radio" aria-checked="true" data-selected="true" type="button" data-value="overview">Overview</button>
+        <button class="rf-segmented-option" role="radio" aria-checked="false" data-selected="false" type="button" data-value="activity">Activity</button>
+        <button class="rf-segmented-option" role="radio" aria-checked="false" data-selected="false" type="button" data-value="settings">Settings</button>
+      </div>
+      <p id="segmented-state" style="margin:0;font-size:.85rem;color:#475569;">Selected: overview</p>
+    </div>
+  `
+
+  const buttons = Array.from(mount.querySelectorAll(".rf-segmented-option"))
+  const state = mount.querySelector("#segmented-state")
+  if (!(state instanceof HTMLElement)) return
+
+  const setSelected = (nextValue) => {
+    for (const button of buttons) {
+      if (!(button instanceof HTMLButtonElement)) continue
+      const selected = button.dataset.value === nextValue
+      button.dataset.selected = selected ? "true" : "false"
+      button.setAttribute("aria-checked", selected ? "true" : "false")
+    }
+    state.textContent = `Selected: ${nextValue}`
+  }
+
+  for (const button of buttons) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const value = button.dataset.value
+      if (!value) return
+      setSelected(value)
+    })
+  }
 }
 
 function mountBadgeDemo(mount) {
@@ -768,6 +1099,83 @@ function mountFilterBarDemo(mount) {
   `
 }
 
+function mountFilterPanelDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <button class="docs-button" type="button" data-variant="outline" id="filter-panel-open">Open filters</button>
+      <p id="filter-panel-state" style="margin:0;font-size:.85rem;color:#475569;">No filters applied</p>
+      <div class="docs-overlay docs-drawer-backdrop" id="filter-panel-overlay" hidden>
+        <section class="docs-drawer-panel" role="dialog" aria-modal="true" aria-label="Filters">
+          <header class="docs-drawer-header"><h3>Filters</h3></header>
+          <div class="docs-drawer-body">
+            <section class="rf-filter-panel" aria-label="Filter controls">
+              <p class="rf-filter-panel-description">Narrow table results by query and status.</p>
+              <div class="rf-filter-panel-fields">
+                <input class="docs-input" id="filter-panel-query" type="search" placeholder="Search releases" />
+                <select class="docs-input" id="filter-panel-status"><option value="all">All statuses</option><option value="running">Running</option><option value="failed">Failed</option></select>
+              </div>
+              <div class="rf-filter-panel-actions">
+                <button class="docs-button" type="button" data-variant="outline" id="filter-panel-clear">Clear</button>
+                <button class="docs-button" type="button" id="filter-panel-apply">Apply filters</button>
+              </div>
+            </section>
+          </div>
+          <footer class="docs-drawer-footer">
+            <button class="docs-button" type="button" data-variant="outline" id="filter-panel-close">Close</button>
+          </footer>
+        </section>
+      </div>
+    </div>
+  `
+
+  const open = mount.querySelector("#filter-panel-open")
+  const overlay = mount.querySelector("#filter-panel-overlay")
+  const close = mount.querySelector("#filter-panel-close")
+  const clear = mount.querySelector("#filter-panel-clear")
+  const apply = mount.querySelector("#filter-panel-apply")
+  const query = mount.querySelector("#filter-panel-query")
+  const status = mount.querySelector("#filter-panel-status")
+  const state = mount.querySelector("#filter-panel-state")
+
+  if (
+    !(open instanceof HTMLButtonElement &&
+      overlay instanceof HTMLElement &&
+      close instanceof HTMLButtonElement &&
+      clear instanceof HTMLButtonElement &&
+      apply instanceof HTMLButtonElement &&
+      query instanceof HTMLInputElement &&
+      status instanceof HTMLSelectElement &&
+      state instanceof HTMLElement)
+  ) {
+    return
+  }
+
+  const setOpen = (next) => {
+    overlay.hidden = !next
+  }
+
+  open.addEventListener("click", () => setOpen(true))
+  close.addEventListener("click", () => setOpen(false))
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) setOpen(false)
+  })
+  overlay.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false)
+  })
+
+  clear.addEventListener("click", () => {
+    query.value = ""
+    status.value = "all"
+    state.textContent = "Filters cleared"
+  })
+
+  apply.addEventListener("click", () => {
+    const queryValue = query.value.trim() || "none"
+    state.textContent = `Applied: ${queryValue} / ${status.value}`
+    setOpen(false)
+  })
+}
+
 function mountDataListDemo(mount) {
   mount.innerHTML = `
     <ul class="rf-data-list" role="list">
@@ -793,6 +1201,40 @@ function mountDataListDemo(mount) {
       </li>
     </ul>
   `
+}
+
+function mountDescriptionsDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-descriptions" data-size="comfortable" data-layout="horizontal" data-bordered="true" style="--rf-descriptions-columns: 3;">
+      <header class="rf-descriptions-header">
+        <h3 class="rf-descriptions-title">Deployment details</h3>
+        <div class="rf-descriptions-extra">Updated 2m ago</div>
+      </header>
+      <dl class="rf-descriptions-list">
+        <div class="rf-descriptions-item" style="grid-column: span 1;"><dt class="rf-descriptions-label">Environment</dt><dd class="rf-descriptions-content">Production</dd></div>
+        <div class="rf-descriptions-item" style="grid-column: span 1;"><dt class="rf-descriptions-label">Status</dt><dd class="rf-descriptions-content">Running</dd></div>
+        <div class="rf-descriptions-item" style="grid-column: span 1;"><dt class="rf-descriptions-label">Owner</dt><dd class="rf-descriptions-content">Release Bot</dd></div>
+        <div class="rf-descriptions-item" style="grid-column: span 2;"><dt class="rf-descriptions-label">Commit</dt><dd class="rf-descriptions-content">a2f3d91 / Improve background jobs</dd></div>
+        <div class="rf-descriptions-item" style="grid-column: span 1;"><dt class="rf-descriptions-label">Duration</dt><dd class="rf-descriptions-content">4m 12s</dd></div>
+      </dl>
+    </section>
+    <div style="display:flex;gap:.5rem;margin-top:.55rem;">
+      <button class="docs-button" type="button" data-variant="outline" id="descriptions-layout">Toggle layout</button>
+      <span id="descriptions-state" style="font-size:.85rem;color:#475569;align-self:center;">Layout: horizontal</span>
+    </div>
+  `
+
+  const root = mount.querySelector(".rf-descriptions")
+  const toggle = mount.querySelector("#descriptions-layout")
+  const state = mount.querySelector("#descriptions-state")
+  if (!(root instanceof HTMLElement && toggle instanceof HTMLButtonElement && state instanceof HTMLElement)) return
+
+  toggle.addEventListener("click", () => {
+    const current = root.dataset.layout === "vertical" ? "vertical" : "horizontal"
+    const next = current === "horizontal" ? "vertical" : "horizontal"
+    root.dataset.layout = next
+    state.textContent = `Layout: ${next}`
+  })
 }
 
 function mountDataGridLiteDemo(mount) {
@@ -920,27 +1362,59 @@ function mountDataGridLiteDemo(mount) {
 
 function mountDataTableDemo(mount) {
   mount.innerHTML = `
-    <section class="rf-data-table-wrap" role="region" aria-label="Data table">
-      <table class="rf-data-table">
-        <caption>Releases</caption>
-        <thead>
-          <tr>
-            <th class="rf-data-table-select-col"><input id="table-select-all" type="checkbox" aria-label="Select visible rows" /></th>
-            <th><button type="button" class="rf-data-table-sort" data-sort-key="name"><span>Name</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
-            <th><button type="button" class="rf-data-table-sort" data-sort-key="status"><span>Status</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
-            <th data-align="right"><button type="button" class="rf-data-table-sort" data-sort-key="duration"><span>Duration</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
-          </tr>
-        </thead>
-        <tbody id="data-table-body"></tbody>
-      </table>
-      <footer class="rf-data-table-footer">
-        <span id="data-table-status" class="rf-data-table-pagination-status">Page 1 of 2</span>
-        <div class="rf-data-table-pagination-actions">
-          <button id="data-table-prev" type="button" class="docs-button" data-variant="outline">Previous</button>
-          <button id="data-table-next" type="button" class="docs-button" data-variant="outline">Next</button>
-        </div>
-      </footer>
-    </section>
+    <div style="display:grid;gap:.625rem;max-width:52rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;">
+        <p id="data-table-filter-summary" style="margin:0;font-size:.85rem;color:#475569;">Filters: none</p>
+        <button id="data-table-open-filters" type="button" class="docs-button" data-variant="outline">Open filters</button>
+      </div>
+      <section class="rf-data-table-wrap" role="region" aria-label="Data table">
+        <table class="rf-data-table">
+          <caption>Releases</caption>
+          <thead>
+            <tr>
+              <th class="rf-data-table-select-col"><input id="table-select-all" type="checkbox" aria-label="Select visible rows" /></th>
+              <th><button type="button" class="rf-data-table-sort" data-sort-key="name"><span>Name</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
+              <th><button type="button" class="rf-data-table-sort" data-sort-key="status"><span>Status</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
+              <th data-align="right"><button type="button" class="rf-data-table-sort" data-sort-key="duration"><span>Duration</span><span class="rf-data-table-sort-indicator">↕</span></button></th>
+            </tr>
+          </thead>
+          <tbody id="data-table-body"></tbody>
+        </table>
+        <footer class="rf-data-table-footer">
+          <span id="data-table-status" class="rf-data-table-pagination-status">Page 1 of 1 | 0 results</span>
+          <div class="rf-data-table-pagination-actions">
+            <button id="data-table-prev" type="button" class="docs-button" data-variant="outline">Previous</button>
+            <button id="data-table-next" type="button" class="docs-button" data-variant="outline">Next</button>
+          </div>
+        </footer>
+      </section>
+      <div class="docs-overlay docs-drawer-backdrop" id="data-table-filter-overlay" hidden>
+        <section class="docs-drawer-panel" role="dialog" aria-modal="true" aria-label="Filters">
+          <header class="docs-drawer-header"><h3>Filters</h3></header>
+          <div class="docs-drawer-body">
+            <section class="rf-filter-panel" aria-label="Filter controls">
+              <p class="rf-filter-panel-description">Use query and status filters to narrow visible rows.</p>
+              <div class="rf-filter-panel-fields">
+                <input class="docs-input" id="data-table-filter-query" type="search" placeholder="Search release name" />
+                <select class="docs-input" id="data-table-filter-status">
+                  <option value="all">All statuses</option>
+                  <option value="success">Success</option>
+                  <option value="running">Running</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
+              <div class="rf-filter-panel-actions">
+                <button id="data-table-filter-clear" type="button" class="docs-button" data-variant="outline">Clear</button>
+                <button id="data-table-filter-apply" type="button" class="docs-button">Apply filters</button>
+              </div>
+            </section>
+          </div>
+          <footer class="docs-drawer-footer">
+            <button id="data-table-filter-close" type="button" class="docs-button" data-variant="outline">Close</button>
+          </footer>
+        </section>
+      </div>
+    </div>
   `
 
   const body = mount.querySelector("#data-table-body")
@@ -948,19 +1422,93 @@ function mountDataTableDemo(mount) {
   const prev = mount.querySelector("#data-table-prev")
   const next = mount.querySelector("#data-table-next")
   const selectAll = mount.querySelector("#table-select-all")
+  const filterSummary = mount.querySelector("#data-table-filter-summary")
+  const openFilters = mount.querySelector("#data-table-open-filters")
+  const filterOverlay = mount.querySelector("#data-table-filter-overlay")
+  const filterClose = mount.querySelector("#data-table-filter-close")
+  const filterApply = mount.querySelector("#data-table-filter-apply")
+  const filterClear = mount.querySelector("#data-table-filter-clear")
+  const filterQuery = mount.querySelector("#data-table-filter-query")
+  const filterStatus = mount.querySelector("#data-table-filter-status")
   const sortButtons = Array.from(mount.querySelectorAll(".rf-data-table-sort"))
-  if (!(body instanceof HTMLElement && status instanceof HTMLElement && prev instanceof HTMLButtonElement && next instanceof HTMLButtonElement && selectAll instanceof HTMLInputElement)) return
+  if (!(
+    body instanceof HTMLElement &&
+    status instanceof HTMLElement &&
+    prev instanceof HTMLButtonElement &&
+    next instanceof HTMLButtonElement &&
+    selectAll instanceof HTMLInputElement &&
+    filterSummary instanceof HTMLElement &&
+    openFilters instanceof HTMLButtonElement &&
+    filterOverlay instanceof HTMLElement &&
+    filterClose instanceof HTMLButtonElement &&
+    filterApply instanceof HTMLButtonElement &&
+    filterClear instanceof HTMLButtonElement &&
+    filterQuery instanceof HTMLInputElement &&
+    filterStatus instanceof HTMLSelectElement
+  )) {
+    return
+  }
 
   const pageSize = 2
   let page = 1
   let sort = { key: null, direction: null }
-  let rows = [
+  const allRows = [
     { key: "release-1", name: "Release 1.0", status: "Success", duration: 91 },
     { key: "release-2", name: "Release 1.1", status: "Failed", duration: 132 },
     { key: "release-3", name: "Release 1.2", status: "Running", duration: 64 },
     { key: "release-4", name: "Release 1.3", status: "Success", duration: 82 },
   ]
+  let rows = [...allRows]
   const selected = new Set()
+  let activeFilters = { query: "", status: "all" }
+
+  const setFilterOverlayOpen = (nextOpen) => {
+    filterOverlay.hidden = !nextOpen
+  }
+
+  const resolveCellText = (row, columnKey) => {
+    const value = row[columnKey]
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      return String(value)
+    }
+    return ""
+  }
+
+  const createContainsFilter = (columnKeys, query) => {
+    const normalizedQuery = query.trim().toLowerCase()
+    if (normalizedQuery === "" || columnKeys.length === 0) return undefined
+    return (row) =>
+      columnKeys.some((columnKey) => resolveCellText(row, columnKey).toLowerCase().includes(normalizedQuery))
+  }
+
+  const createEqualsFilter = (columnKey, value, allValue) => {
+    const normalizedValue = String(value).toLowerCase()
+    if (normalizedValue === String(allValue).toLowerCase()) return undefined
+    return (row) => resolveCellText(row, columnKey).toLowerCase() === normalizedValue
+  }
+
+  const composeRowFilter = (...filters) => {
+    const active = filters.filter((filter) => typeof filter === "function")
+    if (active.length === 0) return undefined
+    if (active.length === 1) return active[0]
+    return (row) => active.every((filter) => filter(row))
+  }
+
+  const applyFilterState = (queryValue, statusValue) => {
+    const query = queryValue.trim()
+    activeFilters = { query, status: statusValue }
+
+    const rowFilter = composeRowFilter(
+      createContainsFilter(["name"], query),
+      createEqualsFilter("status", statusValue, "all"),
+    )
+
+    rows = rowFilter ? allRows.filter(rowFilter) : allRows
+
+    const querySummary = activeFilters.query === "" ? "any name" : activeFilters.query.toLowerCase()
+    const statusSummary = activeFilters.status === "all" ? "any status" : activeFilters.status
+    filterSummary.textContent = `Filters: ${querySummary} | ${statusSummary}`
+  }
 
   const totalPages = () => Math.max(1, Math.ceil(rows.length / pageSize))
 
@@ -977,9 +1525,13 @@ function mountDataTableDemo(mount) {
     const currentTotalPages = totalPages()
     page = Math.min(Math.max(1, page), currentTotalPages)
     const pageRows = rows.slice((page - 1) * pageSize, page * pageSize)
-    body.innerHTML = pageRows.map(rowMarkup).join("")
+    if (pageRows.length === 0) {
+      body.innerHTML = `<tr><td class="rf-data-table-empty" colspan="4">No rows</td></tr>`
+    } else {
+      body.innerHTML = pageRows.map(rowMarkup).join("")
+    }
 
-    status.textContent = `Page ${page} of ${currentTotalPages}`
+    status.textContent = `Page ${page} of ${currentTotalPages} | ${rows.length} result${rows.length === 1 ? "" : "s"}`
     prev.disabled = page <= 1
     next.disabled = page >= currentTotalPages
 
@@ -1010,6 +1562,39 @@ function mountDataTableDemo(mount) {
       const row = check.closest("tr")
       if (row instanceof HTMLElement) row.dataset.selected = check.checked ? "true" : "false"
     }
+  })
+
+  openFilters.addEventListener("click", () => {
+    filterQuery.value = activeFilters.query
+    filterStatus.value = activeFilters.status
+    setFilterOverlayOpen(true)
+  })
+
+  filterClose.addEventListener("click", () => {
+    setFilterOverlayOpen(false)
+  })
+
+  filterOverlay.addEventListener("click", (event) => {
+    if (event.target === filterOverlay) setFilterOverlayOpen(false)
+  })
+
+  filterOverlay.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setFilterOverlayOpen(false)
+  })
+
+  filterApply.addEventListener("click", () => {
+    applyFilterState(filterQuery.value, filterStatus.value)
+    page = 1
+    setFilterOverlayOpen(false)
+    render()
+  })
+
+  filterClear.addEventListener("click", () => {
+    filterQuery.value = ""
+    filterStatus.value = "all"
+    applyFilterState("", "all")
+    page = 1
+    render()
   })
 
   prev.addEventListener("click", () => {
@@ -1057,6 +1642,7 @@ function mountDataTableDemo(mount) {
     })
   }
 
+  applyFilterState("", "all")
   render()
 }
 
@@ -1874,6 +2460,86 @@ function mountSwitchDemo(mount) {
   sync()
 }
 
+function mountTransferDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-transfer">
+      <div class="rf-transfer-panel" data-side="left">
+        <header class="rf-transfer-panel-header"><strong>Available</strong><span id="transfer-left-count">3</span></header>
+        <ul class="rf-transfer-list" id="transfer-left-list">
+          <li class="rf-transfer-item" data-key="alerts"><label class="rf-transfer-item-label"><input class="rf-transfer-item-check" type="checkbox" /><span class="rf-transfer-item-text"><span class="rf-transfer-item-title">Alerts</span><span class="rf-transfer-item-description">Incident notifications</span></span></label></li>
+          <li class="rf-transfer-item" data-key="billing"><label class="rf-transfer-item-label"><input class="rf-transfer-item-check" type="checkbox" /><span class="rf-transfer-item-text"><span class="rf-transfer-item-title">Billing</span><span class="rf-transfer-item-description">Invoices and usage</span></span></label></li>
+          <li class="rf-transfer-item" data-key="security"><label class="rf-transfer-item-label"><input class="rf-transfer-item-check" type="checkbox" /><span class="rf-transfer-item-text"><span class="rf-transfer-item-title">Security</span><span class="rf-transfer-item-description">Access events</span></span></label></li>
+        </ul>
+      </div>
+      <div class="rf-transfer-ops" aria-label="Transfer actions">
+        <button class="docs-button" type="button" id="transfer-right" data-variant="outline">&gt;</button>
+        <button class="docs-button" type="button" id="transfer-left" data-variant="outline">&lt;</button>
+      </div>
+      <div class="rf-transfer-panel" data-side="right">
+        <header class="rf-transfer-panel-header"><strong>Selected</strong><span id="transfer-right-count">0</span></header>
+        <ul class="rf-transfer-list" id="transfer-right-list"></ul>
+      </div>
+    </section>
+  `
+
+  const leftList = mount.querySelector("#transfer-left-list")
+  const rightList = mount.querySelector("#transfer-right-list")
+  const moveRight = mount.querySelector("#transfer-right")
+  const moveLeft = mount.querySelector("#transfer-left")
+  const leftCount = mount.querySelector("#transfer-left-count")
+  const rightCount = mount.querySelector("#transfer-right-count")
+
+  if (
+    !(leftList instanceof HTMLElement &&
+      rightList instanceof HTMLElement &&
+      moveRight instanceof HTMLButtonElement &&
+      moveLeft instanceof HTMLButtonElement &&
+      leftCount instanceof HTMLElement &&
+      rightCount instanceof HTMLElement)
+  ) {
+    return
+  }
+
+  const selectedItems = (container) =>
+    Array.from(container.querySelectorAll(".rf-transfer-item")).filter((item) => {
+      if (!(item instanceof HTMLElement)) return false
+      const check = item.querySelector("input[type='checkbox']")
+      return check instanceof HTMLInputElement && check.checked
+    })
+
+  const updateCounts = () => {
+    leftCount.textContent = String(leftList.querySelectorAll(".rf-transfer-item").length)
+    rightCount.textContent = String(rightList.querySelectorAll(".rf-transfer-item").length)
+  }
+
+  const resetChecks = (container) => {
+    for (const input of container.querySelectorAll("input[type='checkbox']")) {
+      if (!(input instanceof HTMLInputElement)) continue
+      input.checked = false
+    }
+  }
+
+  moveRight.addEventListener("click", () => {
+    const items = selectedItems(leftList)
+    for (const item of items) {
+      rightList.append(item)
+    }
+    resetChecks(rightList)
+    updateCounts()
+  })
+
+  moveLeft.addEventListener("click", () => {
+    const items = selectedItems(rightList)
+    for (const item of items) {
+      leftList.append(item)
+    }
+    resetChecks(leftList)
+    updateCounts()
+  })
+
+  updateCounts()
+}
+
 function mountTextareaDemo(mount) {
   mount.innerHTML = `
     <div style="display:grid;gap:.35rem;max-width:24rem;">
@@ -1914,6 +2580,37 @@ function mountTimePickerDemo(mount) {
 
   input.addEventListener("input", sync)
   sync()
+}
+
+function mountTimelineDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-timeline-wrap">
+      <ol class="rf-timeline" role="list">
+        <li class="rf-timeline-item" data-tone="success">
+          <span class="rf-timeline-marker" aria-hidden="true"></span>
+          <div class="rf-timeline-content">
+            <p class="rf-timeline-title">Build completed</p>
+            <p class="rf-timeline-description">All checks passed for release candidate.</p>
+            <p class="rf-timeline-time">10:24</p>
+          </div>
+        </li>
+        <li class="rf-timeline-item" data-tone="warning">
+          <span class="rf-timeline-marker" aria-hidden="true"></span>
+          <div class="rf-timeline-content">
+            <p class="rf-timeline-title">Pending approval</p>
+            <p class="rf-timeline-description">Awaiting production rollout approval.</p>
+            <p class="rf-timeline-time">10:31</p>
+          </div>
+        </li>
+        <li class="rf-timeline-item" data-tone="neutral" data-pending="true">
+          <span class="rf-timeline-marker" aria-hidden="true"></span>
+          <div class="rf-timeline-content">
+            <p class="rf-timeline-title">Waiting for deployment window</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+  `
 }
 
 function mountTabsDemo(mount) {

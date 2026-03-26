@@ -1,6 +1,7 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { renderMarkdownToHtml } from "./render-markdown.js"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, "..")
@@ -12,6 +13,7 @@ const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", 
 const demoByComponent = new Map([
   ["alert", { id: "alert-basic", title: "Alert: tone and dismiss patterns" }],
   ["appheader", { id: "app-header-basic", title: "AppHeader: brand, nav, and actions" }],
+  ["appprovider", { id: "app-provider-basic", title: "AppProvider: locale, direction, and navigation" }],
   ["appshell", { id: "app-shell-basic", title: "AppShell: header, sidebar, and content regions" }],
   ["autocomplete", { id: "autocomplete-basic", title: "Autocomplete: free text with suggestion commit" }],
   ["badge", { id: "badge-basic", title: "Badge: compact status labels" }],
@@ -25,6 +27,7 @@ const demoByComponent = new Map([
   ["commandpalette", { id: "command-palette-basic", title: "CommandPalette: quick action launcher" }],
   ["datagridlite", { id: "data-grid-lite-basic", title: "DataGridLite: sorting and selection" }],
   ["datalist", { id: "data-list-basic", title: "DataList: item metadata and actions" }],
+  ["descriptions", { id: "descriptions-basic", title: "Descriptions: record detail fields" }],
   ["datatable", { id: "data-table-basic", title: "DataTable: sorting, selection, and pagination" }],
   ["datepicker", { id: "date-picker-basic", title: "DatePicker: calendar date selection" }],
   ["datetimepicker", { id: "date-time-picker-basic", title: "DateTimePicker: combined date and time" }],
@@ -39,17 +42,20 @@ const demoByComponent = new Map([
   ["formlayout", { id: "form-layout-basic", title: "FormLayout: structured form sections" }],
   ["formmessage", { id: "form-message-basic", title: "FormMessage: helper and validation feedback" }],
   ["filterbar", { id: "filter-bar-basic", title: "FilterBar: grouped controls and actions" }],
+  ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
   ["input", { id: "field-input", title: "Field + Input: live validation" }],
   ["inlinealert", { id: "inline-alert-basic", title: "InlineAlert: compact in-flow status" }],
   ["checkbox", { id: "checkbox-basic", title: "Checkbox: native checked semantics" }],
   ["radio", { id: "radio-group", title: "RadioGroup: single selection" }],
   ["rangeslider", { id: "range-slider-basic", title: "RangeSlider: two-thumb range selection" }],
   ["result", { id: "result-basic", title: "Result: outcome and recovery actions" }],
+  ["segmented", { id: "segmented-basic", title: "Segmented: mode and view switching" }],
   ["pageheader", { id: "page-header-basic", title: "PageHeader: title, subtitle, actions" }],
   ["popover", { id: "popover-basic", title: "Popover: anchored disclosure panel" }],
   ["progress", { id: "progress-basic", title: "Progress: completion and status tracking" }],
   ["select", { id: "select-basic", title: "Select: native option selection" }],
   ["sidenav", { id: "side-nav-basic", title: "SideNav: sectioned app navigation" }],
+  ["splitter", { id: "splitter-basic", title: "Splitter: resizable two-pane layout" }],
   ["skeleton", { id: "skeleton-basic", title: "Skeleton: loading placeholders" }],
   ["slider", { id: "slider-basic", title: "Slider: range selection with live value" }],
   ["spinner", { id: "spinner-basic", title: "Spinner: inline loading indicator" }],
@@ -59,13 +65,17 @@ const demoByComponent = new Map([
   ["tag", { id: "tag-basic", title: "Tag: categorization labels" }],
   ["tabs", { id: "tabs-basic", title: "Tabs: manual activation" }],
   ["textarea", { id: "textarea-basic", title: "Textarea: multiline field input" }],
+  ["transfer", { id: "transfer-basic", title: "Transfer: move items between lists" }],
   ["timepicker", { id: "time-picker-basic", title: "TimePicker: time-of-day selection" }],
+  ["timeline", { id: "timeline-basic", title: "Timeline: ordered event history" }],
   ["dialog", { id: "dialog-controlled", title: "Dialog: controlled open/close" }],
   ["menu", { id: "menu-actions", title: "Menu: keyboard navigation" }],
   ["numberinput", { id: "number-input-basic", title: "NumberInput: constrained numeric value" }],
   ["pagination", { id: "pagination-basic", title: "Pagination: previous, next, and current page" }],
   ["toast", { id: "toast-queue", title: "Toast: queue and auto-dismiss" }],
   ["tooltip", { id: "tooltip-basic", title: "Tooltip: hover and focus context" }],
+  ["tree", { id: "tree-basic", title: "Tree: hierarchical navigation and selection" }],
+  ["treeselect", { id: "tree-select-basic", title: "TreeSelect: hierarchical option picker" }],
 ])
 
 const files = (await readdir(contentDir)).filter((file) => file.endsWith(".md"))
@@ -85,13 +95,17 @@ for (const file of files) {
       throw new Error(`${file} is missing required section: ${section}`)
     }
   }
-  pages.push({ file, markdown, maturity: maturityByName.get(componentName) })
+  const html = await renderMarkdownToHtml(markdown)
+  pages.push({ file, markdown: html, maturity: maturityByName.get(componentName) })
 }
 
 await mkdir(outDir, { recursive: true })
 
 const nav = pages
-  .map((page) => `<li><a href="#${page.file.replace(/\.md$/, "")}">${page.file.replace(/\.md$/, "")}</a></li>`)
+  .map((page, index) => {
+    const name = page.file.replace(/\.md$/, "")
+    return `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${name}" ${index === 0 ? 'aria-current="page"' : ""}>${name}</a></li>`
+  })
   .join("\n")
 
 const docsBody = pages
@@ -102,7 +116,7 @@ const docsBody = pages
       ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
       : ""
 
-    return `<article id="${name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}<pre>${escapeHtml(page.markdown)}</pre></article>`
+    return `<article id="${name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.markdown}</article>`
   })
   .join("\n")
 
@@ -113,8 +127,45 @@ const html = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Remix Frame UI Docs</title>
     <style>
-      body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 2rem; line-height: 1.5; }
-      main { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; }
+      body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0; line-height: 1.5; background: #f1f5f9; color: #0f172a; }
+      .docs-site-shell.rf-app-shell {
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+        overflow: visible;
+        background: transparent;
+        --rf-app-shell-sidebar-width: 18rem;
+      }
+      .docs-site-shell .rf-app-shell-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid #dbe3ee;
+        background: #fff;
+        padding: 1rem 1.25rem;
+      }
+      .docs-site-shell .rf-app-shell-body {
+        display: grid;
+        grid-template-columns: var(--rf-app-shell-sidebar-width) minmax(0, 1fr);
+        gap: 0;
+      }
+      .docs-site-shell .rf-app-shell-sidebar {
+        position: sticky;
+        top: 4.2rem;
+        height: calc(100vh - 4.2rem);
+        overflow: auto;
+        border-right: 1px solid #dbe3ee;
+        background: #f8fafc;
+        padding: 1rem;
+      }
+      .docs-site-shell .rf-app-shell-main { padding: 1.25rem; }
+      .docs-site-nav { display: grid; gap: 0.75rem; }
+      .docs-site-nav-title { margin: 0; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
+      .docs-site-nav .rf-side-nav-list { display: grid; gap: 0.2rem; margin: 0; padding: 0; list-style: none; }
+      .docs-site-content article {
+        margin-bottom: 2rem;
+        scroll-margin-top: 5.25rem;
+      }
       pre { white-space: pre-wrap; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; }
       .demo-block { border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-bottom: 1rem; background: #fff; }
       .demo-block h3 { margin-top: 0; font-size: 1rem; }
@@ -439,6 +490,38 @@ const html = `<!doctype html>
       .rf-result-title { margin: 0; font-size: 1.1rem; }
       .rf-result-description { margin: 0; max-width: 46ch; color: #475569; }
       .rf-result-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+      .rf-segmented { display: inline-grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .25rem; padding: .25rem; border: 1px solid #cbd5e1; border-radius: .65rem; background: #f8fafc; }
+      .rf-segmented-option { border: 0; border-radius: .5rem; background: transparent; color: #334155; font: inherit; padding: .4rem .65rem; min-height: 2rem; cursor: pointer; white-space: nowrap; }
+      .rf-segmented-option[data-selected="true"] { background: #fff; color: #1e3a8a; box-shadow: 0 0 0 1px #cbd5e1; font-weight: 600; }
+      .rf-segmented-option:disabled { opacity: .55; cursor: not-allowed; }
+      .rf-transfer { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: .8rem; align-items: center; }
+      .rf-transfer-panel { border: 1px solid #cbd5e1; border-radius: .7rem; overflow: clip; background: #fff; min-height: 14rem; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+      .rf-transfer-panel-header { padding: .55rem .65rem; border-bottom: 1px solid #dbe3ee; display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: .86rem; }
+      .rf-transfer-list { margin: 0; padding: 0; list-style: none; overflow: auto; }
+      .rf-transfer-item { border-top: 1px solid #e2e8f0; }
+      .rf-transfer-item:first-child { border-top: 0; }
+      .rf-transfer-item-label { display: grid; grid-template-columns: auto minmax(0,1fr); gap: .5rem; align-items: start; padding: .5rem .6rem; cursor: pointer; }
+      .rf-transfer-item-check { margin-top: .2rem; }
+      .rf-transfer-item-text { display: grid; gap: .2rem; min-width: 0; }
+      .rf-transfer-item-title { font-size: .9rem; color: #0f172a; }
+      .rf-transfer-item-description { font-size: .82rem; color: #64748b; }
+      .rf-transfer-item[data-disabled="true"] .rf-transfer-item-label { opacity: .55; cursor: not-allowed; }
+      .rf-transfer-empty { margin: 0; padding: .7rem; color: #64748b; font-size: .86rem; }
+      .rf-transfer-ops { display: grid; gap: .45rem; }
+      .rf-timeline-wrap { border: 1px solid #cbd5e1; border-radius: .85rem; background: #fff; box-shadow: 0 1px 0 #dbe3ee; padding: .9rem .95rem; }
+      .rf-timeline { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
+      .rf-timeline-item { --rf-timeline-marker-size: .85rem; --rf-timeline-marker-offset: .28rem; --rf-timeline-line-width: 2px; display: grid; grid-template-columns: auto minmax(0,1fr); gap: .65rem; align-items: start; min-height: 2.4rem; position: relative; }
+      .rf-timeline-item:not(:last-child)::after { content: ""; position: absolute; left: calc((var(--rf-timeline-marker-size) - var(--rf-timeline-line-width)) / 2); top: calc(var(--rf-timeline-marker-offset) + var(--rf-timeline-marker-size) + .22rem); bottom: -.55rem; width: var(--rf-timeline-line-width); background: #dbe3ee; border-radius: 999px; z-index: 0; }
+      .rf-timeline-marker { width: var(--rf-timeline-marker-size); height: var(--rf-timeline-marker-size); border-radius: 999px; margin-top: var(--rf-timeline-marker-offset); background: #94a3b8; border: 2px solid #fff; box-shadow: 0 0 0 1px #cbd5e1; box-sizing: border-box; position: relative; z-index: 1; }
+      .rf-timeline-item[data-tone="success"] .rf-timeline-marker { background: #22c55e; box-shadow: 0 0 0 1px #86efac; }
+      .rf-timeline-item[data-tone="warning"] .rf-timeline-marker { background: #f59e0b; box-shadow: 0 0 0 1px #fcd34d; }
+      .rf-timeline-item[data-tone="danger"] .rf-timeline-marker { background: #ef4444; box-shadow: 0 0 0 1px #fca5a5; }
+      .rf-timeline-item[data-pending="true"] .rf-timeline-marker { background: transparent; border-style: dashed; box-shadow: 0 0 0 1px #cbd5e1; }
+      .rf-timeline-item[data-pending="true"] .rf-timeline-title { color: #64748b; font-weight: 500; }
+      .rf-timeline-title { margin: 0; font-size: .96rem; line-height: 1.3; font-weight: 650; }
+      .rf-timeline-description, .rf-timeline-time { margin: .18rem 0 0; font-size: .84rem; line-height: 1.35; color: #64748b; }
+      .rf-timeline-time { font-size: .78rem; letter-spacing: .01em; color: #475569; }
+      .rf-timeline-empty { border: 1px dashed #cbd5e1; border-radius: .75rem; padding: .9rem; color: #64748b; }
       .rf-card { border: 1px solid #cbd5e1; border-radius: 14px; background: #fff; overflow: clip; }
       .rf-card-header,
       .rf-card-body,
@@ -472,6 +555,14 @@ const html = `<!doctype html>
       .rf-app-shell[data-sidebar-state="collapsed"] .rf-app-shell-body { grid-template-columns: 0 minmax(0, 1fr); }
       .rf-app-shell-sidebar { border-right: 1px solid #cbd5e1; padding: 0.75rem; background: #f8fafc; }
       .rf-app-shell-main { padding: 1rem; min-width: 0; }
+      .rf-splitter { --rf-splitter-size: 50%; display: grid; grid-template-columns: minmax(0, var(--rf-splitter-size)) 0.7rem minmax(0, calc(100% - var(--rf-splitter-size))); min-height: 14rem; border: 1px solid #cbd5e1; border-radius: 0.75rem; overflow: hidden; background: #fff; }
+      .rf-splitter[data-orientation="vertical"] { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, var(--rf-splitter-size)) 0.7rem minmax(0, calc(100% - var(--rf-splitter-size))); min-height: 18rem; }
+      .rf-splitter-pane { min-width: 0; min-height: 0; padding: 0.9rem; overflow: auto; }
+      .rf-splitter-pane[data-pane="first"] { background: #f8fafc; }
+      .rf-splitter-handle { display: grid; place-items: center; background: #dbe3ee; cursor: col-resize; }
+      .rf-splitter[data-orientation="vertical"] .rf-splitter-handle { cursor: row-resize; }
+      .rf-splitter-handle-dot { width: 0.25rem; height: 2rem; border-radius: 999px; background: #94a3b8; }
+      .rf-splitter[data-orientation="vertical"] .rf-splitter-handle-dot { width: 2rem; height: 0.25rem; }
       .rf-side-nav { display: grid; gap: 0.85rem; }
       .rf-side-nav-section { display: grid; gap: 0.4rem; }
       .rf-side-nav-heading { margin: 0; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: #64748b; }
@@ -481,6 +572,34 @@ const html = `<!doctype html>
       .rf-side-nav-link:hover { background: #eff6ff; }
       .rf-side-nav-item[data-active="true"] > .rf-side-nav-link,
       .rf-side-nav-link[aria-current="page"] { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-tree { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.15rem; }
+      .rf-tree-group { margin: 0 0 0 .4rem; padding: 0 0 0 1rem; list-style: none; display: grid; gap: .15rem; border-left: 1px solid #dbe3ee; }
+      .rf-tree-group[hidden] { display: none; }
+      .rf-tree-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .3rem; }
+      .rf-tree-toggle, .rf-tree-label { border: 0; background: transparent; color: #0f172a; font: inherit; text-align: left; border-radius: .45rem; min-height: 1.9rem; }
+      .rf-tree-toggle { width: 1.6rem; padding: 0; display: inline-grid; place-items: center; cursor: pointer; }
+      .rf-tree-spacer { width: 1.6rem; height: 1.6rem; display: inline-block; }
+      .rf-tree-label { padding: .22rem .4rem; cursor: pointer; }
+      .rf-tree-item[data-selected="true"] > .rf-tree-row .rf-tree-label { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-tree-item[data-disabled="true"] > .rf-tree-row .rf-tree-label,
+      .rf-tree-item[data-disabled="true"] > .rf-tree-row .rf-tree-toggle { opacity: .55; cursor: not-allowed; }
+      .rf-tree-select { position: relative; display: grid; gap: .35rem; max-width: 22rem; }
+      .rf-tree-select-trigger { border: 1px solid #cbd5e1; border-radius: .6rem; background: #fff; color: #0f172a; font: inherit; min-height: 2.25rem; padding: .4rem .6rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; cursor: pointer; }
+      .rf-tree-select-trigger-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .rf-tree-select-trigger-icon { color: #64748b; font-size: .8rem; }
+      .rf-tree-select-panel { border: 1px solid #cbd5e1; border-radius: .65rem; background: #fff; max-height: 15rem; overflow: auto; padding: .35rem; }
+      .rf-tree-select-tree, .rf-tree-select-group { margin: 0; padding: 0; list-style: none; display: grid; gap: .15rem; }
+      .rf-tree-select-group { margin-left: .4rem; padding-left: .95rem; border-left: 1px solid #dbe3ee; }
+      .rf-tree-select-group[hidden] { display: none; }
+      .rf-tree-select-row { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: .3rem; }
+      .rf-tree-select-toggle, .rf-tree-select-option { border: 0; background: transparent; color: #0f172a; font: inherit; text-align: left; border-radius: .45rem; min-height: 1.85rem; }
+      .rf-tree-select-toggle { width: 1.5rem; padding: 0; display: inline-grid; place-items: center; cursor: pointer; }
+      .rf-tree-select-option { width: 100%; padding: .2rem .45rem; cursor: pointer; }
+      .rf-tree-select-item[data-selected="true"] > .rf-tree-select-row .rf-tree-select-option { background: #dbeafe; color: #1e3a8a; font-weight: 600; }
+      .rf-tree-select-item[data-disabled="true"] > .rf-tree-select-row .rf-tree-select-option,
+      .rf-tree-select-item[data-disabled="true"] > .rf-tree-select-row .rf-tree-select-toggle { opacity: .55; cursor: not-allowed; }
+      .rf-tree-select-spacer { width: 1.5rem; height: 1.5rem; display: inline-block; }
+      .rf-tree-select-empty { margin: 0; padding: .4rem; color: #64748b; font-size: .86rem; }
       .rf-breadcrumbs-list { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
       .rf-breadcrumbs-item { display: inline-flex; align-items: center; gap: 0.45rem; }
       .rf-breadcrumbs-link,
@@ -523,6 +642,10 @@ const html = `<!doctype html>
         gap: 0.625rem;
       }
       .rf-filter-bar-actions { display: flex; gap: 0.5rem; justify-content: end; }
+      .rf-filter-panel { display: grid; gap: 0.875rem; }
+      .rf-filter-panel-description { margin: 0; color: #64748b; font-size: 0.9rem; }
+      .rf-filter-panel-fields { display: grid; gap: 0.75rem; }
+      .rf-filter-panel-actions { display: flex; gap: 0.5rem; justify-content: flex-end; flex-wrap: wrap; }
       .rf-data-list {
         list-style: none;
         margin: 0;
@@ -543,6 +666,18 @@ const html = `<!doctype html>
       .rf-data-list-description,
       .rf-data-list-meta { margin: 0.3rem 0 0; color: #475569; font-size: 0.9rem; }
       .rf-data-list-right { display: grid; justify-items: end; align-content: center; gap: 0.45rem; }
+      .rf-descriptions { border: 1px solid #cbd5e1; border-radius: 0.75rem; background: #fff; }
+      .rf-descriptions-header { padding: .75rem .9rem; border-bottom: 1px solid #dbe3ee; display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+      .rf-descriptions-title { margin: 0; font-size: 1rem; }
+      .rf-descriptions-extra { color: #64748b; font-size: .85rem; }
+      .rf-descriptions-list { margin: 0; padding: .7rem; display: grid; grid-template-columns: repeat(var(--rf-descriptions-columns, 3), minmax(0, 1fr)); gap: 0; }
+      .rf-descriptions-item { margin: 0; padding: .55rem .65rem; display: grid; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: .55rem; border-bottom: 1px solid #e2e8f0; }
+      .rf-descriptions-item:last-child { border-bottom: 0; }
+      .rf-descriptions-label { margin: 0; color: #64748b; font-size: .86rem; }
+      .rf-descriptions-content { margin: 0; color: #0f172a; font-size: .9rem; font-weight: 500; min-width: 0; }
+      .rf-descriptions[data-layout="vertical"] .rf-descriptions-item { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+      .rf-descriptions[data-size="compact"] .rf-descriptions-item { padding: .4rem .5rem; }
+      .rf-descriptions-empty { margin: 0; padding: .85rem .9rem; color: #64748b; }
       .rf-data-grid-wrap {
         overflow: auto;
         border: 1px solid #cbd5e1;
@@ -730,20 +865,50 @@ const html = `<!doctype html>
       .rf-command-list { list-style: none; margin: 0; padding: 0.2rem; display: grid; gap: 0.2rem; }
       .rf-command-item { padding: 0.55rem 0.65rem; border-radius: 0.55rem; cursor: pointer; }
       .rf-command-item:hover { background: #eef4ff; }
-      nav ul { margin: 0; padding-left: 1.2rem; }
-      nav { position: sticky; top: 1rem; align-self: start; max-height: calc(100vh - 2rem); overflow: auto; }
-      article { margin-bottom: 2rem; }
+      @media (max-width: 900px) {
+        .docs-site-shell .rf-app-shell-body { grid-template-columns: 1fr; }
+        .docs-site-shell .rf-app-shell-sidebar { position: static; top: auto; height: auto; border-right: 0; border-bottom: 1px solid #dbe3ee; }
+        .docs-site-shell .rf-app-shell-main { padding-top: 1rem; }
+      }
     </style>
   </head>
   <body>
-    <h1>Remix Frame UI Docs</h1>
-    <main>
-      <nav>
-        <h2>Components</h2>
-        <ul>${nav}</ul>
-      </nav>
-      <section>${docsBody}</section>
-    </main>
+    <section class="rf-app-shell docs-site-shell" data-sidebar-state="expanded">
+      <header class="rf-app-shell-header">
+        <h1 style="margin:0;font-size:1.25rem;">Remix Frame UI Docs</h1>
+      </header>
+      <div class="rf-app-shell-body">
+        <aside class="rf-app-shell-sidebar">
+          <nav class="rf-side-nav docs-site-nav" aria-label="Components">
+            <h2 class="docs-site-nav-title">Components</h2>
+            <ul class="rf-side-nav-list">${nav}</ul>
+          </nav>
+        </aside>
+        <main class="rf-app-shell-main docs-site-content">${docsBody}</main>
+      </div>
+    </section>
+    <script>
+      (() => {
+        const links = Array.from(document.querySelectorAll(".docs-site-nav .rf-side-nav-link"))
+        if (links.length === 0) return
+
+        const update = () => {
+          const fallback = links[0]?.getAttribute("href") || ""
+          const target = (window.location.hash || fallback).replace(/^#/, "")
+          for (const link of links) {
+            if (!(link instanceof HTMLAnchorElement)) continue
+            const item = link.closest(".rf-side-nav-item")
+            const isActive = link.getAttribute("href") === "#" + target
+            if (item instanceof HTMLElement) item.dataset.active = isActive ? "true" : "false"
+            if (isActive) link.setAttribute("aria-current", "page")
+            else link.removeAttribute("aria-current")
+          }
+        }
+
+        window.addEventListener("hashchange", update)
+        update()
+      })()
+    </script>
     <script type="module" src="./docs-runtime.js"></script>
   </body>
 </html>`
@@ -751,10 +916,3 @@ const html = `<!doctype html>
 await writeFile(path.join(outDir, "index.html"), html)
 await writeFile(path.join(outDir, "docs-runtime.js"), await readFile(runtimeSourcePath, "utf8"))
 console.log(`Built docs for ${pages.length} components`)
-
-function escapeHtml(input) {
-  return input
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-}
