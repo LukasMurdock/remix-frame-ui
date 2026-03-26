@@ -18,6 +18,7 @@ export type DataTableRow = {
 export type DataTableProps = {
   columns: DataTableColumn[]
   rows: DataTableRow[]
+  rowFilter?: DataTableRowFilter
   caption?: ComponentChildren
   loading?: boolean
   errorState?: ComponentChildren
@@ -34,6 +35,8 @@ export type DataTableProps = {
   onPageChange?: (page: number) => void
   pageSize?: number
 }
+
+export type DataTableRowFilter = (row: DataTableRow) => boolean
 
 export function resolveDataTablePageSize(pageSize?: number): number {
   if (pageSize === undefined) return 10
@@ -55,6 +58,59 @@ export function clampDataTablePage(page: number | undefined, totalPages: number)
 export function paginateDataTableRows(rows: DataTableRow[], page: number, pageSize: number): DataTableRow[] {
   const start = (page - 1) * pageSize
   return rows.slice(start, start + pageSize)
+}
+
+export function filterDataTableRows(
+  rows: DataTableRow[],
+  rowFilter?: DataTableRowFilter,
+): DataTableRow[] {
+  if (!rowFilter) return rows
+  return rows.filter((row) => rowFilter(row))
+}
+
+export function composeDataTableRowFilter(
+  ...filters: Array<DataTableRowFilter | undefined>
+): DataTableRowFilter | undefined {
+  const active = filters.filter((filter): filter is DataTableRowFilter => filter !== undefined)
+  if (active.length === 0) return undefined
+  if (active.length === 1) return active[0]
+  return (row) => active.every((filter) => filter(row))
+}
+
+export function resolveDataTableCellText(row: DataTableRow, columnKey: string): string {
+  const sortValue = row.sortValues?.[columnKey]
+  if (typeof sortValue === "string" || typeof sortValue === "number") {
+    return String(sortValue)
+  }
+
+  const cell = row.cells[columnKey]
+  if (typeof cell === "string" || typeof cell === "number" || typeof cell === "boolean") {
+    return String(cell)
+  }
+
+  return ""
+}
+
+export function createDataTableContainsFilter(
+  columnKeys: string[],
+  query: string | undefined,
+): DataTableRowFilter | undefined {
+  const normalizedQuery = query?.trim().toLowerCase() ?? ""
+  if (normalizedQuery === "" || columnKeys.length === 0) return undefined
+
+  return (row) =>
+    columnKeys.some((columnKey) => resolveDataTableCellText(row, columnKey).toLowerCase().includes(normalizedQuery))
+}
+
+export function createDataTableEqualsFilter(
+  columnKey: string,
+  value: string | number | undefined,
+  allValue?: string | number,
+): DataTableRowFilter | undefined {
+  if (value === undefined) return undefined
+  const expected = String(value).toLowerCase()
+  if (allValue !== undefined && expected === String(allValue).toLowerCase()) return undefined
+  return (row) => resolveDataTableCellText(row, columnKey).toLowerCase() === expected
 }
 
 export function DataTable(handle: Handle) {
@@ -90,7 +146,8 @@ export function DataTable(handle: Handle) {
 
   return (props: DataTableProps) => {
     const sort = props.sort ?? localSort ?? props.defaultSort
-    const sortedRows = sortRows(props.rows, sort)
+    const filteredRows = filterDataTableRows(props.rows, props.rowFilter)
+    const sortedRows = sortRows(filteredRows, sort)
 
     const pageSize = resolveDataTablePageSize(props.pageSize)
     const totalPages = resolveDataTableTotalPages(sortedRows.length, pageSize)

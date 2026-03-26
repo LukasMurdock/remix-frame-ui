@@ -9,6 +9,9 @@ Maturity: experimental
 ## Runtime notes
 
 Supports loading, error, and empty states with controlled or uncontrolled sort/selection/page state.
+Pairs cleanly with `FilterPanel` by filtering source rows before sort and pagination.
+Accepts `rowFilter` for declarative row-level filtering in component usage.
+Use `createDataTableContainsFilter`, `createDataTableEqualsFilter`, and `composeDataTableRowFilter` to build filter predicates from UI state.
 
 ## Accessibility matrix
 
@@ -22,3 +25,29 @@ Supports loading, error, and empty states with controlled or uncontrolled sort/s
 
 - `Tab`: move between sortable headers, selection checkboxes, and pagination controls
 - `Enter`/`Space`: activate sortable headers and controls
+
+## Example: FilterPanel integration
+
+```ts
+import {
+  composeDataTableRowFilter,
+  createDataTableContainsFilter,
+  createDataTableEqualsFilter,
+  type DataTableRow,
+} from "@remix-frame-ui/remix"
+
+type Filters = {
+  query: string
+  status: "all" | "success" | "running" | "failed"
+}
+
+function toRowFilter(filters: Filters) {
+  return composeDataTableRowFilter(
+    createDataTableContainsFilter(["name"], filters.query),
+    createDataTableEqualsFilter("status", filters.status, "all"),
+  )
+}
+
+const rowFilter = toRowFilter({ query: "1.2", status: "running" })
+const visibleRows: DataTableRow[] = rowFilter ? allRows.filter(rowFilter) : allRows
+```
