@@ -10,6 +10,10 @@ export type PopoverProps = {
   onOpenChange?: (open: boolean) => void
 }
 
+export function resolvePopoverOpen(props: PopoverProps, uncontrolledOpen: boolean | undefined): boolean {
+  return props.open ?? uncontrolledOpen ?? false
+}
+
 export function Popover(handle: Handle) {
   let uncontrolledOpen: boolean | undefined
   let triggerElement: HTMLElement | null = null
@@ -33,14 +37,14 @@ export function Popover(handle: Handle) {
   return (props: PopoverProps) => {
     if (uncontrolledOpen === undefined) uncontrolledOpen = props.defaultOpen ?? false
 
-    const open = props.open ?? uncontrolledOpen ?? false
+    const open = resolvePopoverOpen(props, uncontrolledOpen)
     const panelId = `${handle.id}-panel`
 
     return (
       <div
         className="rf-popover"
         mix={[
-          ref((_node, signal) => {
+          ref((node, signal) => {
             if (typeof document === "undefined") return
 
             const onPointerDown = (event: Event) => {
@@ -55,6 +59,19 @@ export function Popover(handle: Handle) {
             }
 
             document.addEventListener("pointerdown", onPointerDown, { signal })
+
+            const onFocusOut = (event: FocusEvent) => {
+              if (!open) return
+              const next = event.relatedTarget
+              if (next instanceof Node) {
+                if (triggerElement?.contains(next)) return
+                if (panelElement?.contains(next)) return
+              }
+
+              setOpen(props, false)
+            }
+
+            node.addEventListener("focusout", onFocusOut, { signal })
           }),
         ]}
       >
@@ -62,6 +79,7 @@ export function Popover(handle: Handle) {
           type="button"
           className="rf-button"
           data-variant="outline"
+          aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}
           mix={[
@@ -90,8 +108,6 @@ export function Popover(handle: Handle) {
               on("keydown", (event) => {
                 if (event.key === "Escape") {
                   setOpen(props, false, true)
-                } else if (event.key === "Tab") {
-                  setOpen(props, false)
                 }
               }),
             ]}

@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Use `view="month"` for day-level selection and `view="year"` for month-level selection. Native browser widgets handle interaction.
+Use `view="month"` for day-level selection and `view="year"` for month-level selection. Native browser widgets handle interaction, with optional `onValueChange` hydration for app state sync.
 
 ## Accessibility matrix
 

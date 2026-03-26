@@ -396,6 +396,12 @@ async function bootDocs() {
       outline-offset: 1px;
       background: #eef4ff;
     }
+    .rf-space { display: inline-flex; align-items: center; gap: 0.75rem; }
+    .rf-space[data-wrap="true"] { flex-wrap: wrap; }
+    .rf-divider { border: 0; background: #cbd5e1; flex: none; }
+    .rf-divider[data-orientation="horizontal"] { width: 100%; height: 1px; }
+    .rf-divider[data-orientation="vertical"] { width: 1px; align-self: stretch; min-height: 1.25rem; }
+    .rf-divider[data-inset="true"] { margin-inline: 0.75rem; }
     .docs-toast-stack {
       list-style: none;
       margin: 0;

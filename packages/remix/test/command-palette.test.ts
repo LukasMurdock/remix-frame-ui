@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  buildCommandOptionId,
   filterCommands,
   findNextEnabledCommandIndex,
   type CommandItem,
@@ -22,5 +23,9 @@ describe("command palette helpers", () => {
     expect(findNextEnabledCommandIndex(commands, 0, 1)).toBe(2)
     expect(findNextEnabledCommandIndex(commands, 2, 1)).toBe(0)
     expect(findNextEnabledCommandIndex(commands, 2, -1)).toBe(0)
+  })
+
+  it("builds stable command option ids", () => {
+    expect(buildCommandOptionId("palette-1", "deploy")).toBe("palette-1-command-deploy")
   })
 })

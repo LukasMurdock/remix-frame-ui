@@ -6,6 +6,7 @@ export type DividerProps = {
   orientation?: DividerOrientation
   decorative?: boolean
   inset?: boolean
+  ariaLabel?: string
 }
 
 export function resolveDividerOrientation(orientation?: DividerOrientation): DividerOrientation {
@@ -33,6 +34,7 @@ export function Divider(_handle: Handle) {
         data-inset={inset ? "true" : "false"}
         role={decorative ? undefined : "separator"}
         aria-orientation={decorative ? undefined : orientation}
+        aria-label={!decorative ? props.ariaLabel : undefined}
         aria-hidden={decorative ? "true" : undefined}
       />
     )

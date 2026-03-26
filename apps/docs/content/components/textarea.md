@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Hydration optional. Works server-only unless you add dynamic behavior.
+Hydration optional. Works server-only unless you add dynamic behavior like `onValueChange` for live character feedback.
 
 ## Accessibility matrix
 

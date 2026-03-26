@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Use horizontal dividers between stacked sections and vertical dividers between inline groups. Set `decorative={false}` to expose separator semantics.
+Use horizontal dividers between stacked sections and vertical dividers between inline groups. Set `decorative={false}` to expose separator semantics and optionally provide `ariaLabel` for assistive context.
 
 ## Accessibility matrix
 

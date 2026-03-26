@@ -11,6 +11,7 @@ export type TimePickerProps = {
   disabled?: boolean
   required?: boolean
   onValueChange?: (value: string | undefined) => void
+  onValueCommit?: (value: string | undefined) => void
   "aria-describedby"?: string
   "aria-invalid"?: "true"
 }
@@ -56,6 +57,10 @@ export function TimePicker(_handle: Handle) {
         on("input", (event) => {
           const target = event.currentTarget as HTMLInputElement
           props.onValueChange?.(target.value || undefined)
+        }),
+        on("change", (event) => {
+          const target = event.currentTarget as HTMLInputElement
+          props.onValueCommit?.(target.value || undefined)
         }),
       ]}
     />

@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Default activation is manual; automatic activation can be enabled. In uncontrolled mode, tab clicks update local component state via `handle.update()`.
+Default activation is manual; automatic activation can be enabled. In uncontrolled mode, tab clicks update local component state via `handle.update()`. Use `overflow="menu"` with `maxVisibleTabs` to collapse excess tabs into a More menu while keeping the selected tab visible.
 
 ## Accessibility matrix
 
@@ -22,3 +22,4 @@ Default activation is manual; automatic activation can be enabled. In uncontroll
 
 - Arrow keys: move focus across tabs
 - `Enter`/`Space`: activate focused tab in manual mode
+- `Home`/`End`: jump to first or last visible tab

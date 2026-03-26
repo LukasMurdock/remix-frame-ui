@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Uses `Menu` behavior for open state, keyboard navigation, and dismissal patterns.
+Uses `Menu` behavior for open state, keyboard navigation, item selection callbacks, and dismissal patterns.
 
 ## Accessibility matrix
 

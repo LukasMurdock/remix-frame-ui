@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Hydration optional for basic usage. Add hydration if you need custom parsing feedback.
+Hydration optional for basic usage. Add hydration for `onValueChange`/`onValueCommit` flows and custom parsing feedback.
 
 ## Accessibility matrix
 
