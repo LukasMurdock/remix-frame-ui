@@ -1,0 +1,26 @@
+# Splitter
+
+Maturity: experimental
+
+## HTML parity
+
+`Splitter` creates a two-pane resizable layout with a draggable separator handle.
+
+## Runtime notes
+
+Supports horizontal and vertical layouts, controlled or uncontrolled size, keyboard resizing, and min/max constraints.
+
+## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Separator semantics | handle uses `role="separator"` with value metadata |
+| Keyboard resize | arrow keys adjust size, `Home` and `End` jump to bounds |
+| Orientation metadata | separator announces horizontal or vertical axis |
+
+## Keymap spec
+
+- `ArrowLeft`/`ArrowRight`: resize horizontal splitter by step
+- `ArrowUp`/`ArrowDown`: resize vertical splitter by step
+- `Home`: set first pane to minimum size
+- `End`: set first pane to maximum size
