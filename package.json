@@ -12,6 +12,7 @@
     "check:css-order": "pnpm --filter @remix-frame-ui/styles run check:css-order",
     "check:bundle": "node scripts/check-bundle-size.mjs",
     "docs:build": "pnpm --filter @remix-frame-ui/docs run build",
+    "docs:deploy": "pnpm --filter @remix-frame-ui/docs run cf:deploy",
     "license:report": "node scripts/license-report.mjs",
     "ci": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundle && pnpm run docs:build && pnpm run test:e2e && (pnpm run license:report || true)"
   },
