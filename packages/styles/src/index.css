@@ -1,0 +1,6 @@
+@layer tokens, primitives, patterns, components;
+
+@import "./generated/tokens.css";
+@import "./primitives.css";
+@import "./patterns.css";
+@import "./components.css";

@@ -1,0 +1,239 @@
+import { on, type Handle } from "remix/component"
+import type { ComponentChildren } from "../types"
+import { nextSort, sortRows, type DataGridSort } from "./DataGridLite"
+
+export type DataTableColumn = {
+  key: string
+  header: ComponentChildren
+  align?: "left" | "center" | "right"
+  sortable?: boolean
+}
+
+export type DataTableRow = {
+  key: string
+  cells: Record<string, ComponentChildren>
+  sortValues?: Record<string, string | number>
+}
+
+export type DataTableProps = {
+  columns: DataTableColumn[]
+  rows: DataTableRow[]
+  caption?: ComponentChildren
+  loading?: boolean
+  errorState?: ComponentChildren
+  emptyState?: ComponentChildren
+  selectable?: boolean
+  selectedKeys?: string[]
+  defaultSelectedKeys?: string[]
+  onSelectionChange?: (keys: string[]) => void
+  sort?: DataGridSort
+  defaultSort?: DataGridSort
+  onSortChange?: (sort: DataGridSort | undefined) => void
+  page?: number
+  defaultPage?: number
+  onPageChange?: (page: number) => void
+  pageSize?: number
+}
+
+export function resolveDataTablePageSize(pageSize?: number): number {
+  if (pageSize === undefined) return 10
+  return Math.max(1, Math.floor(pageSize))
+}
+
+export function resolveDataTableTotalPages(rowCount: number, pageSize: number): number {
+  if (rowCount <= 0) return 1
+  return Math.max(1, Math.ceil(rowCount / pageSize))
+}
+
+export function clampDataTablePage(page: number | undefined, totalPages: number): number {
+  const next = page ?? 1
+  if (next < 1) return 1
+  if (next > totalPages) return totalPages
+  return next
+}
+
+export function paginateDataTableRows(rows: DataTableRow[], page: number, pageSize: number): DataTableRow[] {
+  const start = (page - 1) * pageSize
+  return rows.slice(start, start + pageSize)
+}
+
+export function DataTable(handle: Handle) {
+  let localSort: DataGridSort | undefined
+  let localSelected = new Set<string>()
+  let localPage: number | undefined
+
+  function getSelected(props: DataTableProps): Set<string> {
+    if (props.selectedKeys) return new Set(props.selectedKeys)
+
+    if (localSelected.size === 0 && props.defaultSelectedKeys) {
+      localSelected = new Set(props.defaultSelectedKeys)
+    }
+
+    return new Set(localSelected)
+  }
+
+  function setSelected(props: DataTableProps, next: Set<string>): void {
+    if (props.selectedKeys === undefined) {
+      localSelected = new Set(next)
+      handle.update()
+    }
+    props.onSelectionChange?.([...next])
+  }
+
+  function setPage(props: DataTableProps, nextPage: number): void {
+    if (props.page === undefined) {
+      localPage = nextPage
+      handle.update()
+    }
+    props.onPageChange?.(nextPage)
+  }
+
+  return (props: DataTableProps) => {
+    const sort = props.sort ?? localSort ?? props.defaultSort
+    const sortedRows = sortRows(props.rows, sort)
+
+    const pageSize = resolveDataTablePageSize(props.pageSize)
+    const totalPages = resolveDataTableTotalPages(sortedRows.length, pageSize)
+    const page = clampDataTablePage(props.page ?? localPage ?? props.defaultPage, totalPages)
+    const pageRows = paginateDataTableRows(sortedRows, page, pageSize)
+
+    const selected = getSelected(props)
+    const allPageRowsSelected = pageRows.length > 0 && pageRows.every((row) => selected.has(row.key))
+
+    if (props.loading) {
+      return <section className="rf-data-table-loading">Loading…</section>
+    }
+
+    if (props.errorState) {
+      return <section className="rf-data-table-error">{props.errorState}</section>
+    }
+
+    return (
+      <section className="rf-data-table-wrap" role="region" aria-label="Data table">
+        <table className="rf-data-table">
+          {props.caption ? <caption>{props.caption}</caption> : null}
+          <thead>
+            <tr>
+              {props.selectable ? (
+                <th scope="col" className="rf-data-table-select-col">
+                  <input
+                    type="checkbox"
+                    aria-label="Select visible rows"
+                    checked={allPageRowsSelected}
+                    mix={[
+                      on("change", (event) => {
+                        const checked = (event.currentTarget as HTMLInputElement).checked
+                        const next = new Set(selected)
+                        for (const row of pageRows) {
+                          if (checked) next.add(row.key)
+                          else next.delete(row.key)
+                        }
+                        setSelected(props, next)
+                      }),
+                    ]}
+                  />
+                </th>
+              ) : null}
+
+              {props.columns.map((column) => {
+                const isSorted = sort?.columnKey === column.key
+                const ariaSort = isSorted ? (sort?.direction === "asc" ? "ascending" : "descending") : "none"
+
+                return (
+                  <th key={column.key} scope="col" data-align={column.align ?? "left"} aria-sort={ariaSort}>
+                    {column.sortable ? (
+                      <button
+                        type="button"
+                        className="rf-data-table-sort rf-focus-ring"
+                        mix={[
+                          on("click", () => {
+                            const next = nextSort(sort, column.key)
+                            if (props.sort === undefined) localSort = next
+                            if (props.page === undefined) localPage = 1
+                            handle.update()
+                            props.onSortChange?.(next)
+                            props.onPageChange?.(1)
+                          }),
+                        ]}
+                      >
+                        <span>{column.header}</span>
+                        <span className="rf-data-table-sort-indicator" aria-hidden="true">
+                          {isSorted ? (sort?.direction === "asc" ? "↑" : "↓") : "↕"}
+                        </span>
+                      </button>
+                    ) : (
+                      <span>{column.header}</span>
+                    )}
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+
+          <tbody>
+            {pageRows.length === 0 ? (
+              <tr>
+                <td colSpan={props.columns.length + (props.selectable ? 1 : 0)} className="rf-data-table-empty">
+                  {props.emptyState ?? "No rows"}
+                </td>
+              </tr>
+            ) : (
+              pageRows.map((row) => (
+                <tr key={row.key} data-selected={selected.has(row.key) ? "true" : "false"}>
+                  {props.selectable ? (
+                    <td className="rf-data-table-select-col">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select row ${row.key}`}
+                        checked={selected.has(row.key)}
+                        mix={[
+                          on("change", (event) => {
+                            const checked = (event.currentTarget as HTMLInputElement).checked
+                            const next = new Set(selected)
+                            if (checked) next.add(row.key)
+                            else next.delete(row.key)
+                            setSelected(props, next)
+                          }),
+                        ]}
+                      />
+                    </td>
+                  ) : null}
+
+                  {props.columns.map((column) => (
+                    <td key={`${row.key}-${column.key}`} data-align={column.align ?? "left"}>
+                      {row.cells[column.key] ?? null}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+        <footer className="rf-data-table-footer">
+          <span className="rf-data-table-pagination-status">Page {page} of {totalPages}</span>
+          <div className="rf-data-table-pagination-actions">
+            <button
+              type="button"
+              className="rf-button"
+              data-variant="outline"
+              disabled={page <= 1}
+              mix={[on("click", () => setPage(props, Math.max(1, page - 1)))]}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="rf-button"
+              data-variant="outline"
+              disabled={page >= totalPages}
+              mix={[on("click", () => setPage(props, Math.min(totalPages, page + 1)))]}
+            >
+              Next
+            </button>
+          </div>
+        </footer>
+      </section>
+    )
+  }
+}

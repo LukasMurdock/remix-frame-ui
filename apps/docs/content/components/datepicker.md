@@ -1,0 +1,27 @@
+# DatePicker
+
+Maturity: experimental
+
+## HTML parity
+
+`DatePicker` composes an input-like trigger with a calendar dialog for date selection.
+
+## Runtime notes
+
+Hydration required for calendar navigation, keyboard movement, and date selection.
+
+## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Trigger semantics | input exposes `aria-haspopup="dialog"` and `aria-expanded` |
+| Calendar semantics | popup uses `role="dialog"` and labeled month heading |
+| Keyboard support | arrow keys, page keys, and enter/space selection |
+
+## Keymap spec
+
+- `ArrowDown` / `Enter` / `Space` on trigger: open calendar
+- `Arrow` keys in grid: move focused day
+- `PageUp` / `PageDown`: previous/next month
+- `Enter` / `Space`: select focused day
+- `Escape`: close calendar

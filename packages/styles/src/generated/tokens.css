@@ -1,0 +1,28 @@
+@layer tokens {
+  :root {
+    --rf-color-gray-50: #f8fafc;
+    --rf-color-gray-100: #f1f5f9;
+    --rf-color-gray-300: #cbd5e1;
+    --rf-color-gray-700: #334155;
+    --rf-color-gray-900: #0f172a;
+    --rf-color-blue-500: #2563eb;
+    --rf-color-blue-600: #1d4ed8;
+    --rf-color-red-600: #dc2626;
+    --rf-surface-default: var(--rf-color-gray-50);
+    --rf-surface-inverse: var(--rf-color-gray-900);
+    --rf-text-default: var(--rf-color-gray-900);
+    --rf-text-inverse: var(--rf-color-gray-50);
+    --rf-border-default: var(--rf-color-gray-300);
+    --rf-brand-default: var(--rf-color-blue-500);
+    --rf-brand-strong: var(--rf-color-blue-600);
+    --rf-danger-default: var(--rf-color-red-600);
+  }
+
+  [data-theme="dark"] {
+    --rf-surface-default: var(--rf-color-gray-900);
+    --rf-surface-inverse: var(--rf-color-gray-50);
+    --rf-text-default: var(--rf-color-gray-50);
+    --rf-text-inverse: var(--rf-color-gray-900);
+    --rf-border-default: var(--rf-color-gray-700);
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "remix-frame-ui-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.8.1",
+  "scripts": {
+    "build": "pnpm -r --filter @remix-frame-ui/* --filter=!@remix-frame-ui/docs run build && pnpm --filter @remix-frame-ui/docs run build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "test:e2e": "playwright test",
+    "tokens:build": "pnpm --filter @remix-frame-ui/styles run tokens:build",
+    "check:css-order": "pnpm --filter @remix-frame-ui/styles run check:css-order",
+    "check:bundle": "node scripts/check-bundle-size.mjs",
+    "docs:build": "pnpm --filter @remix-frame-ui/docs run build",
+    "license:report": "node scripts/license-report.mjs",
+    "ci": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundle && pnpm run docs:build && pnpm run test:e2e && (pnpm run license:report || true)"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.53.2",
+    "@testing-library/dom": "^10.4.0",
+    "@types/node": "^22.16.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

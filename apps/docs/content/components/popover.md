@@ -1,0 +1,25 @@
+# Popover
+
+Maturity: experimental
+
+## HTML parity
+
+`Popover` composes a trigger button with an anchored panel using semantic dialog-like content.
+
+## Runtime notes
+
+Supports controlled and uncontrolled open state with Escape/Tab dismissal behavior.
+
+## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Trigger relationship | `aria-expanded` and `aria-controls` wiring |
+| Panel role | rendered as labeled dialog surface |
+| Dismiss behavior | Escape and Tab close panel |
+
+## Keymap spec
+
+- `Enter`/`Space`: toggle from trigger
+- `Escape`: close panel
+- `Tab`: closes panel and returns flow control

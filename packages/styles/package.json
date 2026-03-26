@@ -1,0 +1,16 @@
+{
+  "name": "@remix-frame-ui/styles",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.css",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "tokens:build": "node src/scripts/build-tokens.mjs",
+    "check:css-order": "node src/scripts/check-css-order.mjs",
+    "build": "pnpm run tokens:build && pnpm run check:css-order",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

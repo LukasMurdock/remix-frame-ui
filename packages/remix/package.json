@@ -1,0 +1,37 @@
+{
+  "name": "@remix-frame-ui/remix",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/server/index.ts src/client/index.ts --format esm --dts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@remix-frame-ui/core": "workspace:*",
+    "@remix-frame-ui/styles": "workspace:*",
+    "remix": "3.0.0-alpha.4"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  }
+}

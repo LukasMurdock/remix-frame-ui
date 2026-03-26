@@ -1,0 +1,19 @@
+{
+  "name": "@remix-frame-ui/docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node src/build-docs.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@remix-frame-ui/remix": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "7.1.12"
+  }
+}

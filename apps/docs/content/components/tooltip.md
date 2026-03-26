@@ -1,0 +1,24 @@
+# Tooltip
+
+Maturity: experimental
+
+## HTML parity
+
+`Tooltip` provides contextual text tied to a focusable trigger and `role="tooltip"` content.
+
+## Runtime notes
+
+Tooltip visibility is controlled by pointer and focus interactions.
+
+## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Association | trigger uses `aria-describedby` when open |
+| Semantics | floating content uses `role="tooltip"` |
+| Inputs | pointer and keyboard focus both supported |
+
+## Keymap spec
+
+- `Tab`: focus trigger reveals tooltip
+- `Shift+Tab`: leaving trigger hides tooltip
