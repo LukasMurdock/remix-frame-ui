@@ -1,0 +1,23 @@
+# Calendar
+
+Maturity: experimental
+
+## HTML parity
+
+`Calendar` renders a native date input, with optional month-only mode for year-style selection.
+
+## Runtime notes
+
+Use `view="month"` for day-level selection and `view="year"` for month-level selection. Native browser widgets handle interaction.
+
+## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Input semantics | native date or month input control |
+| Keyboard | browser-native date input keyboard support |
+| Disabled state | native disabled behavior |
+
+## Keymap spec
+
+- Browser-native date input key handling

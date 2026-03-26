@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node src/build-docs.mjs",
+    "check:demos": "node src/check-component-demos.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"

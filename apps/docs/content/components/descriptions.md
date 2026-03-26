@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Supports grid columns, item spans, horizontal/vertical layouts, compact density, optional header metadata, and empty state.
+Supports grid columns, item spans, horizontal/vertical layouts, compact density, optional header metadata, responsive collapse breakpoints, and empty state.
 
 ## Accessibility matrix
 

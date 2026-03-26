@@ -1,38 +1,51 @@
 const registry = {
   "alert-basic": mountAlertDemo,
+  "anchor-basic": mountAnchorDemo,
+  "anchor-controlled": mountAnchorControlledDemo,
   "app-header-basic": mountAppHeaderDemo,
   "app-provider-basic": mountAppProviderDemo,
+  "avatar-basic": mountAvatarDemo,
   "app-shell-basic": mountAppShellDemo,
   "autocomplete-basic": mountAutocompleteDemo,
   "badge-basic": mountBadgeDemo,
   "breadcrumbs-overflow-basic": mountBreadcrumbOverflowDemo,
   "breadcrumbs-basic": mountBreadcrumbsDemo,
   "button-basic": mountButtonDemo,
+  "calendar-basic": mountCalendarDemo,
+  "cascader-basic": mountCascaderDemo,
   "card-basic": mountCardDemo,
   "chip-basic": mountChipDemo,
   "combobox-basic": mountComboboxDemo,
   "confirm-dialog-basic": mountConfirmDialogDemo,
   "command-palette-basic": mountCommandPaletteDemo,
+  "collapse-basic": mountCollapseDemo,
+  "config-provider-basic": mountConfigProviderDemo,
   "data-grid-lite-basic": mountDataGridLiteDemo,
   "data-list-basic": mountDataListDemo,
   "descriptions-basic": mountDescriptionsDemo,
+  "divider-basic": mountDividerDemo,
   "data-table-basic": mountDataTableDemo,
   "date-picker-basic": mountDatePickerDemo,
   "date-time-picker-basic": mountDateTimePickerDemo,
   "date-range-picker-basic": mountDateRangePickerDemo,
   "dropdown-basic": mountDropdownDemo,
+  "empty-basic": mountEmptyDemo,
   "empty-state-basic": mountEmptyStateDemo,
   "empty-results-basic": mountEmptyResultsDemo,
   "file-upload-basic": mountFileUploadDemo,
   "field-basic": mountFieldStructureDemo,
   "form-fieldset-basic": mountFormFieldsetDemo,
+  "form-basic": mountFormDemo,
   "form-layout-basic": mountFormLayoutDemo,
   "form-message-basic": mountFormMessageDemo,
+  "flex-basic": mountFlexDemo,
+  "grid-basic": mountGridDemo,
   "field-input": mountFieldDemo,
   "checkbox-basic": mountCheckboxDemo,
   "filter-bar-basic": mountFilterBarDemo,
   "filter-panel-basic": mountFilterPanelDemo,
   "inline-alert-basic": mountInlineAlertDemo,
+  "image-basic": mountImageDemo,
   "radio-group": mountRadioDemo,
   "range-slider-basic": mountRangeSliderDemo,
   "result-basic": mountResultDemo,
@@ -42,10 +55,15 @@ const registry = {
   "progress-basic": mountProgressDemo,
   "select-basic": mountSelectDemo,
   "side-nav-basic": mountSideNavDemo,
+  "top-nav-basic": mountTopNavDemo,
+  "layout-basic": mountLayoutDemo,
+  "link-basic": mountLinkDemo,
   "splitter-basic": mountSplitterDemo,
   "skeleton-basic": mountSkeletonDemo,
   "slider-basic": mountSliderDemo,
   "spinner-basic": mountSpinnerDemo,
+  "space-basic": mountSpaceDemo,
+  "statistic-basic": mountStatisticDemo,
   "steps-basic": mountStepsDemo,
   "switch-basic": mountSwitchDemo,
   "table-basic": mountTableDemo,
@@ -62,6 +80,7 @@ const registry = {
   "pagination-basic": mountPaginationDemo,
   "toast-queue": mountToastDemo,
   "tooltip-basic": mountTooltipDemo,
+  "typography-basic": mountTypographyDemo,
   "tree-basic": mountTreeDemo,
   "tree-select-basic": mountTreeSelectDemo,
 }
@@ -174,6 +193,131 @@ function mountAlertDemo(mount) {
   dismiss.addEventListener("click", () => {
     alert.remove()
   })
+}
+
+function mountAnchorDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.5rem;max-width:18rem;">
+      <nav class="rf-anchor" aria-label="Section navigation">
+        <ul class="rf-anchor-list">
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-active="true" data-value="#overview" href="#overview" aria-current="location">Overview</a></li>
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-active="false" data-value="#api" href="#api">API</a></li>
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-active="false" data-value="#faq" href="#faq">FAQ</a></li>
+          <li class="rf-anchor-item"><span class="rf-anchor-link" data-active="false" data-disabled="true">Legacy (disabled)</span></li>
+        </ul>
+      </nav>
+      <p id="anchor-state" style="margin:0;font-size:.85rem;color:#475569;">Active: #overview</p>
+    </div>
+  `
+
+  const links = Array.from(mount.querySelectorAll(".rf-anchor-link[data-value]"))
+  const state = mount.querySelector("#anchor-state")
+  if (!(state instanceof HTMLElement)) return
+
+  const setActive = (href) => {
+    let resolved = href
+    const exists = links.some((link) => link instanceof HTMLAnchorElement && link.getAttribute("href") === href)
+    if (!exists) {
+      resolved = "#overview"
+    }
+
+    for (const link of links) {
+      if (!(link instanceof HTMLAnchorElement)) continue
+      const active = link.getAttribute("href") === resolved
+      link.dataset.active = active ? "true" : "false"
+      if (active) {
+        link.setAttribute("aria-current", "location")
+      } else {
+        link.removeAttribute("aria-current")
+      }
+    }
+
+    state.textContent = `Active: ${resolved}`
+  }
+
+  for (const link of links) {
+    if (!(link instanceof HTMLAnchorElement)) continue
+    link.addEventListener("click", (event) => {
+      event.preventDefault()
+      const href = link.getAttribute("href")
+      if (!href) return
+      setActive(href)
+      history.replaceState(null, "", href)
+    })
+  }
+
+  window.addEventListener("hashchange", () => {
+    const next = window.location.hash || "#overview"
+    setActive(next)
+  })
+
+  const initial = window.location.hash || "#overview"
+  setActive(initial)
+}
+
+function mountAnchorControlledDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.5rem;max-width:18rem;">
+      <nav class="rf-anchor" aria-label="Controlled section navigation">
+        <ul class="rf-anchor-list">
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-value="#overview" href="#overview">Overview</a></li>
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-value="#api" href="#api">API</a></li>
+          <li class="rf-anchor-item"><a class="rf-anchor-link" data-value="#faq" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <p id="anchor-controlled-state" style="margin:0;font-size:.85rem;color:#475569;">onActiveHrefChange: #overview</p>
+    </div>
+  `
+
+  const links = Array.from(mount.querySelectorAll(".rf-anchor-link[data-value]"))
+  const state = mount.querySelector("#anchor-controlled-state")
+  if (!(state instanceof HTMLElement)) return
+
+  let activeHref = "#overview"
+  const onActiveHrefChange = (href) => {
+    activeHref = href
+    render()
+  }
+
+  const render = () => {
+    for (const link of links) {
+      if (!(link instanceof HTMLAnchorElement)) continue
+      const href = link.getAttribute("href")
+      const active = href === activeHref
+      link.dataset.active = active ? "true" : "false"
+      if (active) {
+        link.setAttribute("aria-current", "location")
+      } else {
+        link.removeAttribute("aria-current")
+      }
+    }
+
+    state.textContent = `onActiveHrefChange: ${activeHref}`
+  }
+
+  const setFromHash = () => {
+    const hash = window.location.hash
+    if (!hash) return
+    const exists = links.some((link) => link instanceof HTMLAnchorElement && link.getAttribute("href") === hash)
+    if (!exists) return
+    if (hash === activeHref) return
+    onActiveHrefChange(hash)
+  }
+
+  for (const link of links) {
+    if (!(link instanceof HTMLAnchorElement)) continue
+    link.addEventListener("click", (event) => {
+      event.preventDefault()
+      const href = link.getAttribute("href")
+      if (!href || href === activeHref) return
+      onActiveHrefChange(href)
+      history.replaceState(null, "", href)
+    })
+  }
+
+  window.addEventListener("hashchange", setFromHash)
+  render()
+  setFromHash()
 }
 
 function mountAppHeaderDemo(mount) {
@@ -336,6 +480,45 @@ function mountSideNavDemo(mount) {
       if (!(link instanceof HTMLAnchorElement)) continue
       const active = link === nextLink
       const item = link.closest(".rf-side-nav-item")
+      if (item instanceof HTMLElement) item.dataset.active = active ? "true" : "false"
+      if (active) link.setAttribute("aria-current", "page")
+      else link.removeAttribute("aria-current")
+    }
+    state.textContent = `Current route: ${nextLink.textContent ?? "Unknown"}`
+  }
+
+  for (const link of links) {
+    if (!(link instanceof HTMLAnchorElement)) continue
+    link.addEventListener("click", (event) => {
+      event.preventDefault()
+      activate(link)
+    })
+  }
+}
+
+function mountTopNavDemo(mount) {
+  mount.innerHTML = `
+    <nav class="rf-top-nav" aria-label="Top navigation" style="max-width:42rem;">
+      <ul class="rf-top-nav-list">
+        <li class="rf-top-nav-item" data-active="true"><a class="rf-top-nav-link" href="#overview" aria-current="page">Overview</a></li>
+        <li class="rf-top-nav-item" data-active="false"><a class="rf-top-nav-link" href="#deployments">Deployments</a></li>
+        <li class="rf-top-nav-item" data-active="false"><a class="rf-top-nav-link" href="#incidents">Incidents</a></li>
+        <li class="rf-top-nav-item" data-active="false"><a class="rf-top-nav-link" href="#settings">Settings</a></li>
+        <li class="rf-top-nav-item" data-active="false"><span class="rf-top-nav-link" data-disabled="true">Billing</span></li>
+      </ul>
+    </nav>
+    <p id="top-nav-state" style="margin:.55rem 0 0;font-size:.85rem;color:#475569;">Current route: Overview</p>
+  `
+
+  const state = mount.querySelector("#top-nav-state")
+  const links = Array.from(mount.querySelectorAll(".rf-top-nav-link"))
+  if (!(state instanceof HTMLElement)) return
+
+  const activate = (nextLink) => {
+    for (const link of links) {
+      if (!(link instanceof HTMLAnchorElement)) continue
+      const active = link === nextLink
+      const item = link.closest(".rf-top-nav-item")
       if (item instanceof HTMLElement) item.dataset.active = active ? "true" : "false"
       if (active) link.setAttribute("aria-current", "page")
       else link.removeAttribute("aria-current")
@@ -2152,6 +2335,245 @@ function mountRadioDemo(mount) {
   }
 }
 
+function mountCascaderDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-cascader" data-open="false">
+      <button id="cascader-trigger" class="rf-cascader-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span id="cascader-label" class="rf-cascader-trigger-label">Engineering / Platform / API</span>
+        <span class="rf-cascader-trigger-icon" aria-hidden="true">▾</span>
+      </button>
+      <div id="cascader-panel" class="rf-cascader-panel" role="listbox" hidden>
+        <div class="rf-cascader-columns">
+          <ul class="rf-cascader-column">
+            <li><button class="rf-cascader-option" data-level="0" data-value="engineering" data-active="true"><span class="rf-cascader-option-label">Engineering</span><span class="rf-cascader-option-icon">›</span></button></li>
+            <li><button class="rf-cascader-option" data-level="0" data-value="design"><span class="rf-cascader-option-label">Design</span></button></li>
+          </ul>
+          <ul class="rf-cascader-column" id="cascader-col-1">
+            <li><button class="rf-cascader-option" data-level="1" data-parent="engineering" data-value="platform" data-active="true"><span class="rf-cascader-option-label">Platform</span><span class="rf-cascader-option-icon">›</span></button></li>
+            <li><button class="rf-cascader-option" data-level="1" data-parent="engineering" data-value="infra"><span class="rf-cascader-option-label">Infra</span></button></li>
+          </ul>
+          <ul class="rf-cascader-column" id="cascader-col-2">
+            <li><button class="rf-cascader-option" data-level="2" data-parent="platform" data-value="api" data-selected="true"><span class="rf-cascader-option-label">API</span></button></li>
+            <li><button class="rf-cascader-option" data-level="2" data-parent="platform" data-value="jobs"><span class="rf-cascader-option-label">Jobs</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <p id="cascader-state" style="margin:.45rem 0 0;font-size:.85rem;color:#475569;">Selected: engineering / platform / api</p>
+  `
+
+  const trigger = mount.querySelector("#cascader-trigger")
+  const label = mount.querySelector("#cascader-label")
+  const panel = mount.querySelector("#cascader-panel")
+  const state = mount.querySelector("#cascader-state")
+  const col1 = mount.querySelector("#cascader-col-1")
+  const col2 = mount.querySelector("#cascader-col-2")
+  if (
+    !(trigger instanceof HTMLButtonElement &&
+      label instanceof HTMLElement &&
+      panel instanceof HTMLElement &&
+      state instanceof HTMLElement &&
+      col1 instanceof HTMLElement &&
+      col2 instanceof HTMLElement)
+  ) {
+    return
+  }
+
+  const setOpen = (nextOpen) => {
+    panel.hidden = !nextOpen
+    trigger.setAttribute("aria-expanded", nextOpen ? "true" : "false")
+  }
+
+  trigger.addEventListener("click", () => setOpen(panel.hidden))
+
+  const selectButtons = () => Array.from(mount.querySelectorAll(".rf-cascader-option"))
+  const levelButtons = (level) =>
+    selectButtons().filter(
+      (el) =>
+        el instanceof HTMLButtonElement &&
+        Number(el.dataset.level || "0") === level &&
+        !(el.closest(".rf-cascader-column") instanceof HTMLElement && el.closest(".rf-cascader-column").hidden),
+    )
+  const activeAtLevel = (level) =>
+    levelButtons(level).find((el) => el instanceof HTMLButtonElement && el.dataset.active === "true")
+  const setColumnVisibility = () => {
+    const level0 = mount.querySelector("button[data-level='0'][data-active='true']")
+    const level1 = mount.querySelector("button[data-level='1'][data-active='true']")
+
+    const level0Value = level0 instanceof HTMLButtonElement ? level0.dataset.value : undefined
+    const level1Value = level1 instanceof HTMLButtonElement ? level1.dataset.value : undefined
+
+    const showLevel1 = level0Value === "engineering"
+    const showLevel2 = showLevel1 && level1Value === "platform"
+
+    col1.hidden = !showLevel1
+    col2.hidden = !showLevel2
+  }
+
+  const clearActiveFromLevel = (fromLevel) => {
+    for (const other of selectButtons()) {
+      if (!(other instanceof HTMLButtonElement)) continue
+      const otherLevel = Number(other.dataset.level || "0")
+      if (otherLevel >= fromLevel) {
+        other.dataset.active = "false"
+      }
+    }
+  }
+
+  const setActive = (level, button) => {
+    for (const other of selectButtons()) {
+      if (!(other instanceof HTMLButtonElement)) continue
+      const otherLevel = Number(other.dataset.level || "0")
+      if (otherLevel === level) {
+        other.dataset.active = other === button ? "true" : "false"
+      }
+    }
+  }
+
+  const syncDefaultsAfterActivate = (level, value) => {
+    if (level === 0) {
+      clearActiveFromLevel(1)
+      if (value === "engineering") {
+        const platform = mount.querySelector("button[data-level='1'][data-value='platform']")
+        if (platform instanceof HTMLButtonElement) platform.dataset.active = "true"
+      }
+    }
+
+    if (level === 1) {
+      clearActiveFromLevel(2)
+      if (value === "platform") {
+        const api = mount.querySelector("button[data-level='2'][data-value='api']")
+        if (api instanceof HTMLButtonElement) api.dataset.active = "true"
+      }
+    }
+
+    setColumnVisibility()
+  }
+
+  const commitSelection = (button, value) => {
+    const active = selectButtons()
+      .filter((el) => el instanceof HTMLButtonElement && el.dataset.active === "true")
+      .map((el) => (el instanceof HTMLButtonElement ? el.dataset.value : undefined))
+      .filter(Boolean)
+
+    const path = active.join(" / ")
+    label.textContent = path || value
+    state.textContent = `Selected: ${path || value}`
+
+    for (const other of selectButtons()) {
+      if (!(other instanceof HTMLButtonElement)) continue
+      other.dataset.selected = other === button ? "true" : "false"
+    }
+
+    setOpen(false)
+    trigger.focus()
+  }
+
+  const moveInLevel = (level, startButton, direction) => {
+    const buttons = levelButtons(level)
+    if (buttons.length === 0) return
+    const start = Math.max(0, buttons.indexOf(startButton))
+    const next = (start + direction + buttons.length) % buttons.length
+    const candidate = buttons[next]
+    if (candidate instanceof HTMLButtonElement) candidate.focus()
+  }
+
+  const focusLevel = (level) => {
+    const active = activeAtLevel(level)
+    if (active instanceof HTMLButtonElement) {
+      active.focus()
+      return
+    }
+
+    const first = levelButtons(level)[0]
+    if (first instanceof HTMLButtonElement) first.focus()
+  }
+
+  const activateButton = (button, shouldCommit = true) => {
+    const level = Number(button.dataset.level || "0")
+    const value = button.dataset.value
+    if (!value) return
+
+    setActive(level, button)
+    syncDefaultsAfterActivate(level, value)
+
+    const isLeaf = !button.querySelector(".rf-cascader-option-icon")
+    if (shouldCommit && (level === 2 || isLeaf || (level === 0 && value === "design"))) {
+      commitSelection(button, value)
+    }
+  }
+
+  for (const button of selectButtons()) {
+    if (!(button instanceof HTMLButtonElement)) continue
+
+    button.addEventListener("click", () => {
+      activateButton(button)
+    })
+
+    button.addEventListener("keydown", (event) => {
+      const level = Number(button.dataset.level || "0")
+      if (event.key === "ArrowDown") {
+        event.preventDefault()
+        moveInLevel(level, button, 1)
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault()
+        moveInLevel(level, button, -1)
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault()
+        activateButton(button, false)
+        focusLevel(level + 1)
+      } else if (event.key === "ArrowLeft") {
+        if (level === 0) return
+        event.preventDefault()
+        focusLevel(level - 1)
+      } else if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault()
+        activateButton(button)
+      } else if (event.key === "Escape") {
+        event.preventDefault()
+        setOpen(false)
+        trigger.focus()
+      }
+    })
+  }
+
+  trigger.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") {
+      event.preventDefault()
+      if (panel.hidden) {
+        setOpen(true)
+        const level = col2.hidden ? (col1.hidden ? 0 : 1) : 2
+        focusLevel(level)
+      }
+    } else if (event.key === "Escape") {
+      event.preventDefault()
+      setOpen(false)
+    }
+  })
+
+  document.addEventListener("pointerdown", (event) => {
+    if (panel.hidden) return
+    const target = event.target
+    if (!(target instanceof Node)) return
+    if (mount.contains(target)) return
+    setOpen(false)
+  })
+
+  mount.addEventListener("focusout", (event) => {
+    const next = event.relatedTarget
+    if (next instanceof Node && mount.contains(next)) return
+
+    setTimeout(() => {
+      if (panel.hidden) return
+      const active = document.activeElement
+      if (active instanceof Node && mount.contains(active)) return
+      setOpen(false)
+    }, 0)
+  })
+
+  setColumnVisibility()
+}
+
 function mountSelectDemo(mount) {
   mount.innerHTML = `
     <div style="display:grid;gap:.35rem;max-width:20rem;">
@@ -2944,4 +3366,261 @@ function mountToastDemo(mount) {
       addToast(tone)
     })
   }
+}
+
+function mountCalendarDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.5rem;max-width:18rem;">
+      <input class="rf-calendar rf-input-base rf-focus-ring" type="date" id="calendar-date" />
+      <p id="calendar-state" style="margin:0;font-size:.85rem;color:#475569;">Selected: none</p>
+    </div>
+  `
+
+  const input = mount.querySelector("#calendar-date")
+  const state = mount.querySelector("#calendar-state")
+  if (!(input instanceof HTMLInputElement && state instanceof HTMLElement)) return
+
+  input.addEventListener("input", () => {
+    state.textContent = `Selected: ${input.value || "none"}`
+  })
+}
+
+function mountStatisticDemo(mount) {
+  mount.innerHTML = `
+    <div class="rf-grid" data-columns="3" style="--rf-grid-gap:.6rem;max-width:42rem;">
+      <section class="rf-statistic" data-trend="up">
+        <p class="rf-statistic-label">Monthly active users</p>
+        <p class="rf-statistic-value">18,240</p>
+        <p class="rf-statistic-caption"><span class="rf-statistic-trend">↑</span> +12.4% vs last month</p>
+      </section>
+      <section class="rf-statistic" data-trend="neutral">
+        <p class="rf-statistic-label">Open incidents</p>
+        <p class="rf-statistic-value">7</p>
+        <p class="rf-statistic-caption"><span class="rf-statistic-trend">•</span> No change today</p>
+      </section>
+      <section class="rf-statistic" data-trend="down">
+        <p class="rf-statistic-label">Failed deploys</p>
+        <p class="rf-statistic-value">2</p>
+        <p class="rf-statistic-caption"><span class="rf-statistic-trend">↓</span> -33% this week</p>
+      </section>
+    </div>
+  `
+}
+
+function mountImageDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.5rem;max-width:28rem;">
+      <figure class="rf-image" data-fit="cover">
+        <img
+          class="rf-image-element"
+          src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80"
+          alt="Workspace desk with laptop and notebook"
+          loading="lazy"
+        />
+      </figure>
+      <p style="margin:0;font-size:.85rem;color:#475569;">Image: lazy-loaded cover fit.</p>
+    </div>
+  `
+}
+
+function mountGridDemo(mount) {
+  mount.innerHTML = `
+    <div class="rf-grid" data-columns="4" style="--rf-grid-gap:.6rem;max-width:40rem;">
+      <div class="rf-card rf-grid-item" data-span="2"><div class="rf-card-body">Span 2</div></div>
+      <div class="rf-card rf-grid-item" data-span="1"><div class="rf-card-body">Span 1</div></div>
+      <div class="rf-card rf-grid-item" data-span="1"><div class="rf-card-body">Span 1</div></div>
+      <div class="rf-card rf-grid-item" data-span="4"><div class="rf-card-body">Full row span 4</div></div>
+    </div>
+  `
+}
+
+function mountLayoutDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-layout" data-direction="column" data-has-sider="true" style="display:grid;gap:.6rem;max-width:48rem;">
+      <header class="rf-layout-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <strong>Workspace</strong>
+        <button class="docs-button" data-variant="outline" type="button" id="layout-toggle-sider">Toggle sider</button>
+      </header>
+      <div style="display:grid;grid-template-columns:16rem 1fr;gap:.6rem;">
+        <aside class="rf-layout-sider" id="layout-sider" style="--rf-layout-sider-width:16rem;">
+          <nav style="display:grid;gap:.3rem;"><a href="#">Overview</a><a href="#">Deployments</a><a href="#">Settings</a></nav>
+        </aside>
+        <main class="rf-layout-content">Main content region</main>
+      </div>
+      <footer class="rf-layout-footer">Footer utilities</footer>
+    </section>
+  `
+
+  const toggle = mount.querySelector("#layout-toggle-sider")
+  const sider = mount.querySelector("#layout-sider")
+  if (!(toggle instanceof HTMLButtonElement && sider instanceof HTMLElement)) return
+
+  toggle.addEventListener("click", () => {
+    sider.hidden = !sider.hidden
+  })
+}
+
+function mountEmptyDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-empty" data-size="comfortable" role="status" style="max-width:28rem;">
+      <div class="rf-empty-icon">∅</div>
+      <h2 class="rf-empty-title">No projects yet</h2>
+      <p class="rf-empty-description">Create your first project to start tracking releases and incidents.</p>
+      <div class="rf-empty-action"><button class="docs-button" type="button">Create project</button></div>
+    </section>
+  `
+}
+
+function mountLinkDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.5rem;max-width:28rem;">
+      <nav class="rf-flex" data-align="center" style="--rf-flex-gap:.75rem;">
+        <a href="/projects" id="docs-link-internal">Internal projects</a>
+        <a href="https://example.com" id="docs-link-external" target="_blank" rel="noopener noreferrer">External docs</a>
+      </nav>
+      <p id="link-state" style="margin:0;font-size:.85rem;color:#475569;">Navigate: none</p>
+    </div>
+  `
+
+  const internal = mount.querySelector("#docs-link-internal")
+  const external = mount.querySelector("#docs-link-external")
+  const state = mount.querySelector("#link-state")
+  if (!(internal instanceof HTMLAnchorElement && external instanceof HTMLAnchorElement && state instanceof HTMLElement)) return
+
+  internal.addEventListener("click", (event) => {
+    event.preventDefault()
+    state.textContent = "Navigate: /projects"
+  })
+
+  external.addEventListener("click", () => {
+    state.textContent = "Navigate: external in new tab"
+  })
+}
+
+function mountFormDemo(mount) {
+  mount.innerHTML = `
+    <form style="display:grid;gap:.6rem;max-width:24rem;" novalidate>
+      <label style="display:grid;gap:.25rem;">Name<input class="docs-input" name="name" type="text" required /></label>
+      <label style="display:grid;gap:.25rem;">Email<input class="docs-input" name="email" type="email" required /></label>
+      <div class="rf-space" data-size="sm" data-wrap="true">
+        <button class="docs-button" type="submit">Save</button>
+        <button class="docs-button" type="button" data-variant="outline" id="form-reset">Reset</button>
+      </div>
+      <p id="form-state" style="margin:0;font-size:.85rem;color:#475569;">Submission: none</p>
+    </form>
+  `
+
+  const form = mount.querySelector("form")
+  const reset = mount.querySelector("#form-reset")
+  const state = mount.querySelector("#form-state")
+  if (!(form instanceof HTMLFormElement && reset instanceof HTMLButtonElement && state instanceof HTMLElement)) return
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const data = new FormData(form)
+    const name = String(data.get("name") ?? "")
+    const email = String(data.get("email") ?? "")
+    state.textContent = `Submission: ${name || "(missing name)"} / ${email || "(missing email)"}`
+  })
+
+  reset.addEventListener("click", () => {
+    form.reset()
+    state.textContent = "Submission: reset"
+  })
+}
+
+function mountFlexDemo(mount) {
+  mount.innerHTML = `
+    <div class="rf-flex" data-justify="between" data-align="center" data-wrap="wrap" style="--rf-flex-gap:.6rem;max-width:30rem;">
+      <strong>Deployments</strong>
+      <div class="rf-flex" data-align="center" style="--rf-flex-gap:.5rem;">
+        <button class="docs-button" data-variant="outline" type="button">Filter</button>
+        <button class="docs-button" type="button">New deploy</button>
+      </div>
+    </div>
+  `
+}
+
+function mountSpaceDemo(mount) {
+  mount.innerHTML = `
+    <div class="rf-space" data-size="md" data-wrap="true" style="max-width:28rem;">
+      <button class="docs-button" type="button">Approve</button>
+      <button class="docs-button" data-variant="outline" type="button">Request changes</button>
+      <button class="docs-button" data-variant="outline" type="button">Comment</button>
+    </div>
+  `
+}
+
+function mountTypographyDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.45rem;max-width:34rem;">
+      <h2 class="rf-typography-heading" style="margin:0;">Release readiness</h2>
+      <p class="rf-typography-text" style="margin:0;">All checks passed. One deployment is waiting on manual approval.</p>
+      <p class="rf-typography-text" data-truncate="true" style="margin:0;max-width:18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Very long release note title that demonstrates truncation in compact card contexts</p>
+      <code class="rf-typography-code">pnpm --filter @remix-frame-ui/remix test</code>
+    </div>
+  `
+}
+
+function mountAvatarDemo(mount) {
+  mount.innerHTML = `
+    <div class="rf-space" data-size="md" data-align="center">
+      <span class="rf-avatar" data-size="sm" data-shape="circle"><span class="rf-avatar-fallback">LM</span></span>
+      <span class="rf-avatar" data-size="md" data-shape="circle" data-status="online"><span class="rf-avatar-fallback">AD</span></span>
+      <span class="rf-avatar" data-size="lg" data-shape="square" data-status="busy"><span class="rf-avatar-fallback">RB</span></span>
+    </div>
+  `
+}
+
+function mountCollapseDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:36rem;">
+      <details class="rf-collapse" open>
+        <summary class="rf-collapse-trigger">Release notes</summary>
+        <div class="rf-collapse-content">The latest release includes routing updates, docs demo coverage checks, and layout primitives.</div>
+      </details>
+      <details class="rf-collapse">
+        <summary class="rf-collapse-trigger">Deployment checklist</summary>
+        <div class="rf-collapse-content">Run tests, typecheck, build docs, and verify demo coverage before merge.</div>
+      </details>
+    </div>
+  `
+}
+
+function mountConfigProviderDemo(mount) {
+  mount.innerHTML = `
+    <section class="rf-app-provider" lang="en-US" dir="ltr" data-color-scheme="light" data-reduced-motion="no-preference" style="display:grid;gap:.5rem;max-width:34rem;">
+      <div class="rf-flex" data-justify="between" data-align="center">
+        <strong>ConfigProvider shell</strong>
+        <span class="rf-badge" data-tone="info">light / ltr</span>
+      </div>
+      <a href="/dashboard" id="config-nav-link">Navigate to dashboard</a>
+      <p id="config-nav-state" style="margin:0;font-size:.85rem;color:#475569;">Navigation: none</p>
+    </section>
+  `
+
+  const link = mount.querySelector("#config-nav-link")
+  const state = mount.querySelector("#config-nav-state")
+  if (!(link instanceof HTMLAnchorElement && state instanceof HTMLElement)) return
+
+  link.addEventListener("click", (event) => {
+    event.preventDefault()
+    state.textContent = "Navigation: /dashboard"
+  })
+}
+
+function mountDividerDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.65rem;max-width:30rem;">
+      <div class="rf-space" data-size="sm" data-align="center" data-wrap="true">
+        <span>Overview</span>
+        <div class="rf-divider" data-orientation="vertical" data-inset="false" role="separator" aria-orientation="vertical"></div>
+        <span>Deployments</span>
+        <div class="rf-divider" data-orientation="vertical" data-inset="false" role="separator" aria-orientation="vertical"></div>
+        <span>Settings</span>
+      </div>
+      <div class="rf-divider" data-orientation="horizontal" data-inset="false"></div>
+      <p style="margin:0;color:#475569;font-size:.85rem;">Horizontal and vertical separators for content grouping.</p>
+    </div>
+  `
 }

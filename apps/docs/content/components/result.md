@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Tone controls announcement role and visual emphasis for critical outcomes.
+Tone controls announcement role and visual emphasis for critical outcomes. For composition-heavy screens, use `ResultTitle`, `ResultDescription`, and `ResultActions` primitives.
 
 ## Accessibility matrix
 
