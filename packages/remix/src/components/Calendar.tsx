@@ -1,13 +1,20 @@
-import type { Handle } from "remix/component"
+import { on, type Handle } from "remix/component"
 
 export type CalendarView = "month" | "year"
 
 export type CalendarProps = {
+  id?: string
+  name?: string
   value?: string
+  defaultValue?: string
   min?: string
   max?: string
   disabled?: boolean
+  required?: boolean
   view?: CalendarView
+  onValueChange?: (value: string | undefined) => void
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
 }
 
 export function resolveCalendarView(view?: CalendarView): CalendarView {
@@ -29,13 +36,25 @@ export function Calendar(_handle: Handle) {
 
     return (
       <input
+        id={props.id}
+        name={props.name}
         className="rf-calendar rf-input-base rf-focus-ring"
         type={resolveCalendarType(view)}
         value={props.value}
+        defaultValue={props.defaultValue}
         min={props.min}
         max={props.max}
         disabled={disabled}
+        required={props.required}
+        aria-describedby={props["aria-describedby"]}
+        aria-invalid={props["aria-invalid"]}
         data-view={view}
+        mix={[
+          on("input", (event) => {
+            const target = event.currentTarget as HTMLInputElement
+            props.onValueChange?.(target.value || undefined)
+          }),
+        ]}
       />
     )
   }

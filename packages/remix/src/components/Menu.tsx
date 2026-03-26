@@ -14,6 +14,11 @@ export type MenuProps = {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  onSelect?: (id: string) => void
+}
+
+export function resolveMenuOpen(props: MenuProps, uncontrolledOpen: boolean | undefined): boolean {
+  return props.open ?? uncontrolledOpen ?? props.defaultOpen ?? false
 }
 
 export function Menu(handle: Handle) {
@@ -41,15 +46,15 @@ export function Menu(handle: Handle) {
       uncontrolledOpen = props.defaultOpen ?? false
     }
 
-    const open = props.open ?? uncontrolledOpen ?? props.defaultOpen ?? false
+    const open = resolveMenuOpen(props, uncontrolledOpen)
 
     const menuId = `${handle.id}-menu`
 
     return (
-      <div className="rf-menu">
+      <div className="rf-menu" data-open={open ? "true" : "false"}>
         <button
           type="button"
-          className="rf-button"
+          className="rf-button rf-menu-trigger"
           data-variant="outline"
           aria-haspopup="menu"
           aria-controls={open ? menuId : undefined}
@@ -99,6 +104,8 @@ export function Menu(handle: Handle) {
           <ul
             id={menuId}
             role="menu"
+            aria-orientation="vertical"
+            className="rf-menu-list"
             mix={[
               ref((node, signal) => {
                 menuElement = node
@@ -147,9 +154,15 @@ export function Menu(handle: Handle) {
                   type="button"
                   role="menuitem"
                   disabled={item.disabled}
-                  className="rf-button"
+                  className="rf-button rf-menu-item"
                   data-variant="ghost"
-                  mix={[on("click", () => setOpen(props, false, true))]}
+                  mix={[
+                    on("click", () => {
+                      if (item.disabled) return
+                      props.onSelect?.(item.id)
+                      setOpen(props, false, true)
+                    }),
+                  ]}
                 >
                   {item.label}
                 </button>

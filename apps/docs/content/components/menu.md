@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Menu supports controlled and uncontrolled state. Keyboard dismissal (`Escape`) and trigger toggling are hydrated.
+Menu supports controlled and uncontrolled state with an `onSelect` callback for item activation. Keyboard dismissal (`Escape`) and trigger toggling are hydrated.
 
 ## Accessibility matrix
 

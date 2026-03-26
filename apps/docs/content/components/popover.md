@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Supports controlled and uncontrolled open state with Escape/Tab dismissal behavior.
+Supports controlled and uncontrolled open state with Escape dismissal, outside click handling, and focus-leave close behavior.
 
 ## Accessibility matrix
 

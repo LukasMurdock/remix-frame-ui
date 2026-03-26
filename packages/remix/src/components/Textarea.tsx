@@ -1,4 +1,4 @@
-import type { Handle } from "remix/component"
+import { on, type Handle } from "remix/component"
 
 export type TextareaProps = {
   id?: string
@@ -11,6 +11,7 @@ export type TextareaProps = {
   rows?: number
   maxLength?: number
   minLength?: number
+  onValueChange?: (value: string | undefined) => void
   "aria-describedby"?: string
   "aria-invalid"?: "true"
 }
@@ -36,6 +37,12 @@ export function Textarea(_handle: Handle) {
       aria-describedby={props["aria-describedby"]}
       aria-invalid={props["aria-invalid"]}
       className="rf-input-base rf-textarea-base rf-focus-ring"
+      mix={[
+        on("input", (event) => {
+          const target = event.currentTarget as HTMLTextAreaElement
+          props.onValueChange?.(target.value || undefined)
+        }),
+      ]}
     />
   )
 }

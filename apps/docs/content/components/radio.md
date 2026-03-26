@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Group behavior depends on shared `name` and browser-native exclusivity.
+Group behavior depends on shared `name` and browser-native exclusivity. `RadioGroup` supports orientation and `onValueChange` hooks for app state wiring.
 
 ## Accessibility matrix
 

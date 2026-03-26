@@ -8,6 +8,7 @@ export type DropdownProps = {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  onSelect?: (id: string) => void
 }
 
 export function Dropdown(_handle: Handle) {
@@ -19,6 +20,7 @@ export function Dropdown(_handle: Handle) {
         {...(props.open !== undefined ? { open: props.open } : {})}
         {...(props.defaultOpen !== undefined ? { defaultOpen: props.defaultOpen } : {})}
         {...(props.onOpenChange ? { onOpenChange: props.onOpenChange } : {})}
+        {...(props.onSelect ? { onSelect: props.onSelect } : {})}
       />
     </div>
   )

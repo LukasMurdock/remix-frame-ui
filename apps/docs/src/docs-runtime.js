@@ -3042,15 +3042,27 @@ function mountTabsDemo(mount) {
         <button class="docs-button" type="button" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview">Overview</button>
         <button class="docs-button" type="button" role="tab" aria-selected="false" aria-controls="panel-specs" id="tab-specs" data-variant="outline">Specs</button>
         <button class="docs-button" type="button" role="tab" aria-selected="false" aria-controls="panel-notes" id="tab-notes" data-variant="outline">Notes</button>
+        <button class="docs-button" type="button" role="tab" aria-selected="false" aria-controls="panel-alerts" id="tab-alerts" data-variant="outline">Alerts</button>
+        <details id="tabs-overflow" style="position:relative;">
+          <summary class="docs-button" data-variant="outline" style="list-style:none;">More (2)</summary>
+          <div style="position:absolute;top:calc(100% + .35rem);right:0;display:grid;gap:.2rem;background:#fff;border:1px solid #cbd5e1;border-radius:.5rem;padding:.3rem;min-width:9rem;z-index:2;">
+            <button class="docs-button" type="button" role="tab" aria-selected="false" aria-controls="panel-settings" id="tab-settings" data-variant="outline">Settings</button>
+            <button class="docs-button" type="button" role="tab" aria-selected="false" aria-controls="panel-history" id="tab-history" data-variant="outline">History</button>
+          </div>
+        </details>
       </div>
       <div id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" style="margin-top:.75rem;">Overview content</div>
       <div id="panel-specs" role="tabpanel" aria-labelledby="tab-specs" hidden style="margin-top:.75rem;">Specs content</div>
       <div id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden style="margin-top:.75rem;">Notes content</div>
+      <div id="panel-alerts" role="tabpanel" aria-labelledby="tab-alerts" hidden style="margin-top:.75rem;">Alerts content</div>
+      <div id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" hidden style="margin-top:.75rem;">Settings content</div>
+      <div id="panel-history" role="tabpanel" aria-labelledby="tab-history" hidden style="margin-top:.75rem;">History content</div>
     </section>
   `
 
   const tabs = Array.from(mount.querySelectorAll("[role='tab']"))
   const panels = Array.from(mount.querySelectorAll("[role='tabpanel']"))
+  const overflow = mount.querySelector("#tabs-overflow")
 
   const activate = (tabId) => {
     for (const tab of tabs) {
@@ -3068,7 +3080,10 @@ function mountTabsDemo(mount) {
 
   for (const tab of tabs) {
     if (!(tab instanceof HTMLButtonElement)) continue
-    tab.addEventListener("click", () => activate(tab.id))
+    tab.addEventListener("click", () => {
+      activate(tab.id)
+      if (overflow instanceof HTMLDetailsElement) overflow.open = false
+    })
   }
 }
 

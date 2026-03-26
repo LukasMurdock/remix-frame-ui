@@ -8,7 +8,7 @@ Maturity: experimental
 
 ## Runtime notes
 
-Controlled open state with callback-driven select and close behavior.
+Controlled open state with callback-driven select and close behavior. Search input keeps active option linkage through `aria-activedescendant` and supports Home/End in result lists.
 
 ## Accessibility matrix
 
@@ -21,5 +21,6 @@ Controlled open state with callback-driven select and close behavior.
 ## Keymap spec
 
 - `ArrowDown`/`ArrowUp`: navigate commands
+- `Home`/`End`: jump to first or last enabled result
 - `Enter`: execute selected command
 - `Escape`: close palette
