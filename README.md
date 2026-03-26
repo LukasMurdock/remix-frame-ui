@@ -28,3 +28,15 @@ pnpm run test:e2e
 pnpm run build
 pnpm run docs:build
 ```
+
+## Docs Deployment (Cloudflare Workers)
+
+The docs app includes `apps/docs/wrangler.jsonc` for static asset deployment.
+
+```bash
+# One-time auth for your machine
+pnpm dlx wrangler login
+
+# Deploy docs static assets to Workers
+pnpm run docs:deploy
+```
