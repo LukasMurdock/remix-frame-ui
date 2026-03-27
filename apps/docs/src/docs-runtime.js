@@ -82,7 +82,7 @@ const registry = {
   "tooltip-basic": mountTooltipDemo,
   "typography-basic": mountTypographyDemo,
   "tree-basic": mountTreeDemo,
-  "tree-select-basic": mountTreeSelectDemo,
+  "tree-select-basic": mountTreeSelectDemo
 }
 
 export function mountAllDemos(root = document) {
@@ -148,7 +148,7 @@ export function buildDatePickerMonthCells(viewMonth) {
     return {
       iso: formatDatePickerISODate(date),
       day: date.getDate(),
-      inMonth: date.getMonth() === viewMonth.getMonth() && date.getFullYear() === viewMonth.getFullYear(),
+      inMonth: date.getMonth() === viewMonth.getMonth() && date.getFullYear() === viewMonth.getFullYear()
     }
   })
 }
@@ -376,12 +376,7 @@ function mountAppProviderDemo(mount) {
   const direction = mount.querySelector("#app-provider-direction")
   const status = mount.querySelector("#app-provider-status")
 
-  if (
-    !(provider instanceof HTMLElement &&
-      locale instanceof HTMLInputElement &&
-      direction instanceof HTMLSelectElement &&
-      status instanceof HTMLElement)
-  ) {
+  if (!(provider instanceof HTMLElement && locale instanceof HTMLInputElement && direction instanceof HTMLSelectElement && status instanceof HTMLElement)) {
     return
   }
 
@@ -406,7 +401,6 @@ function mountAppProviderDemo(mount) {
     event.preventDefault()
     status.textContent = `Navigate: ${href}`
   })
-
 }
 
 function mountAppShellDemo(mount) {
@@ -936,9 +930,7 @@ function mountComboboxDemo(mount) {
   const list = mount.querySelector("[role='listbox']")
   if (!(input instanceof HTMLInputElement && list instanceof HTMLElement)) return
 
-  const options = Array.from(list.querySelectorAll("[role='option']")).filter(
-    (option) => option instanceof HTMLElement,
-  )
+  const options = Array.from(list.querySelectorAll("[role='option']")).filter((option) => option instanceof HTMLElement)
   const emptyState = list.querySelector("[data-empty]")
   let highlighted = -1
 
@@ -1043,14 +1035,16 @@ function mountComboboxDemo(mount) {
 
 function mountAutocompleteDemo(mount) {
   mount.innerHTML = `
-    <div class="rf-combobox" style="display:grid;gap:.5rem;max-width:22rem;">
-      <input class="docs-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="autocomplete-demo-list" placeholder="Type or choose a person" />
-      <ul id="autocomplete-demo-list" role="listbox" class="rf-combobox-list" hidden>
-        <li class="rf-combobox-option" role="option" data-value="Ada Lovelace" data-label="Ada Lovelace">Ada Lovelace</li>
-        <li class="rf-combobox-option" role="option" data-value="Grace Hopper" data-label="Grace Hopper">Grace Hopper</li>
-        <li class="rf-combobox-option" role="option" data-value="Margaret Hamilton" data-label="Margaret Hamilton">Margaret Hamilton</li>
-        <li class="rf-combobox-empty" data-empty hidden>No matches</li>
-      </ul>
+    <div style="max-width:22rem;display:grid;gap:.5rem;">
+      <div class="rf-combobox">
+        <input class="docs-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="autocomplete-demo-list" placeholder="Type or choose a person" />
+        <ul id="autocomplete-demo-list" role="listbox" class="rf-combobox-list" hidden>
+          <li class="rf-combobox-option" role="option" data-value="Ada Lovelace" data-label="Ada Lovelace">Ada Lovelace</li>
+          <li class="rf-combobox-option" role="option" data-value="Grace Hopper" data-label="Grace Hopper">Grace Hopper</li>
+          <li class="rf-combobox-option" role="option" data-value="Margaret Hamilton" data-label="Margaret Hamilton">Margaret Hamilton</li>
+          <li class="rf-combobox-empty" data-empty hidden>No matches</li>
+        </ul>
+      </div>
       <p style="margin:0;font-size:.85rem;color:#475569;">Committed value: <strong data-commit>None</strong></p>
     </div>
   `
@@ -1062,9 +1056,7 @@ function mountAutocompleteDemo(mount) {
     return
   }
 
-  const options = Array.from(list.querySelectorAll("[role='option']")).filter(
-    (option) => option instanceof HTMLElement,
-  )
+  const options = Array.from(list.querySelectorAll("[role='option']")).filter((option) => option instanceof HTMLElement)
   const emptyState = list.querySelector("[data-empty]")
   let highlighted = -1
 
@@ -1183,6 +1175,7 @@ function mountCommandPaletteDemo(mount) {
           <li class="rf-command-item" role="option">Create issue</li>
           <li class="rf-command-item" role="option">Open deployments</li>
           <li class="rf-command-item" role="option">Invite teammate</li>
+          <li class="rf-command-empty" hidden>No commands found</li>
         </ul>
       </section>
     </div>
@@ -1191,21 +1184,116 @@ function mountCommandPaletteDemo(mount) {
   const open = mount.querySelector("button")
   const overlay = mount.querySelector(".rf-command-overlay")
   const input = mount.querySelector("input")
-  if (!(open instanceof HTMLButtonElement && overlay instanceof HTMLElement && input instanceof HTMLInputElement)) return
+  const list = mount.querySelector(".rf-command-list")
+  if (!(open instanceof HTMLButtonElement && overlay instanceof HTMLElement && input instanceof HTMLInputElement && list instanceof HTMLUListElement)) {
+    return
+  }
+
+  const items = Array.from(list.querySelectorAll(".rf-command-item"))
+  const empty = list.querySelector(".rf-command-empty")
+  let highlighted = -1
+
+  const visibleItems = () => items.filter((item) => !item.hidden)
+
+  const setHighlighted = (index) => {
+    highlighted = index
+    const visible = visibleItems()
+    for (const [i, item] of visible.entries()) {
+      const isHighlighted = i === index
+      item.dataset.highlighted = isHighlighted ? "true" : "false"
+      item.setAttribute("aria-selected", isHighlighted ? "true" : "false")
+    }
+  }
+
+  const applyFilter = (value) => {
+    const normalized = value.trim().toLowerCase()
+    let visibleCount = 0
+
+    for (const item of items) {
+      const label = (item.textContent ?? "").toLowerCase()
+      const matches = normalized.length === 0 || label.includes(normalized)
+      item.hidden = !matches
+      if (matches) visibleCount += 1
+    }
+
+    if (empty instanceof HTMLElement) {
+      empty.hidden = visibleCount > 0
+    }
+
+    setHighlighted(visibleCount > 0 ? 0 : -1)
+  }
+
+  const moveHighlighted = (step) => {
+    const visible = visibleItems()
+    if (visible.length === 0) return
+
+    let next = highlighted
+    if (next < 0) {
+      next = step > 0 ? -1 : 0
+    }
+
+    next = (next + step + visible.length) % visible.length
+    setHighlighted(next)
+  }
 
   const setOpen = (next) => {
     overlay.hidden = !next
-    if (next) input.focus()
-    else open.focus()
+    if (next) {
+      input.value = ""
+      applyFilter("")
+      input.focus()
+    } else open.focus()
   }
 
   open.addEventListener("click", () => setOpen(true))
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) setOpen(false)
   })
+
+  input.addEventListener("input", () => {
+    applyFilter(input.value)
+  })
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      moveHighlighted(1)
+      return
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault()
+      moveHighlighted(-1)
+      return
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault()
+      const visible = visibleItems()
+      const active = highlighted >= 0 ? visible[highlighted] : undefined
+      if (active) setOpen(false)
+    }
+  })
+
+  for (const item of items) {
+    item.dataset.highlighted = "false"
+    item.setAttribute("aria-selected", "false")
+
+    item.addEventListener("mouseenter", () => {
+      const index = visibleItems().indexOf(item)
+      if (index >= 0) setHighlighted(index)
+    })
+
+    item.addEventListener("click", () => {
+      setOpen(false)
+    })
+  }
+
   overlay.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setOpen(false)
   })
+
+  applyFilter("")
 }
 
 function mountPageHeaderDemo(mount) {
@@ -1320,16 +1408,7 @@ function mountFilterPanelDemo(mount) {
   const status = mount.querySelector("#filter-panel-status")
   const state = mount.querySelector("#filter-panel-state")
 
-  if (
-    !(open instanceof HTMLButtonElement &&
-      overlay instanceof HTMLElement &&
-      close instanceof HTMLButtonElement &&
-      clear instanceof HTMLButtonElement &&
-      apply instanceof HTMLButtonElement &&
-      query instanceof HTMLInputElement &&
-      status instanceof HTMLSelectElement &&
-      state instanceof HTMLElement)
-  ) {
+  if (!(open instanceof HTMLButtonElement && overlay instanceof HTMLElement && close instanceof HTMLButtonElement && clear instanceof HTMLButtonElement && apply instanceof HTMLButtonElement && query instanceof HTMLInputElement && status instanceof HTMLSelectElement && state instanceof HTMLElement)) {
     return
   }
 
@@ -1614,21 +1693,7 @@ function mountDataTableDemo(mount) {
   const filterQuery = mount.querySelector("#data-table-filter-query")
   const filterStatus = mount.querySelector("#data-table-filter-status")
   const sortButtons = Array.from(mount.querySelectorAll(".rf-data-table-sort"))
-  if (!(
-    body instanceof HTMLElement &&
-    status instanceof HTMLElement &&
-    prev instanceof HTMLButtonElement &&
-    next instanceof HTMLButtonElement &&
-    selectAll instanceof HTMLInputElement &&
-    filterSummary instanceof HTMLElement &&
-    openFilters instanceof HTMLButtonElement &&
-    filterOverlay instanceof HTMLElement &&
-    filterClose instanceof HTMLButtonElement &&
-    filterApply instanceof HTMLButtonElement &&
-    filterClear instanceof HTMLButtonElement &&
-    filterQuery instanceof HTMLInputElement &&
-    filterStatus instanceof HTMLSelectElement
-  )) {
+  if (!(body instanceof HTMLElement && status instanceof HTMLElement && prev instanceof HTMLButtonElement && next instanceof HTMLButtonElement && selectAll instanceof HTMLInputElement && filterSummary instanceof HTMLElement && openFilters instanceof HTMLButtonElement && filterOverlay instanceof HTMLElement && filterClose instanceof HTMLButtonElement && filterApply instanceof HTMLButtonElement && filterClear instanceof HTMLButtonElement && filterQuery instanceof HTMLInputElement && filterStatus instanceof HTMLSelectElement)) {
     return
   }
 
@@ -1639,7 +1704,7 @@ function mountDataTableDemo(mount) {
     { key: "release-1", name: "Release 1.0", status: "Success", duration: 91 },
     { key: "release-2", name: "Release 1.1", status: "Failed", duration: 132 },
     { key: "release-3", name: "Release 1.2", status: "Running", duration: 64 },
-    { key: "release-4", name: "Release 1.3", status: "Success", duration: 82 },
+    { key: "release-4", name: "Release 1.3", status: "Success", duration: 82 }
   ]
   let rows = [...allRows]
   const selected = new Set()
@@ -1660,8 +1725,7 @@ function mountDataTableDemo(mount) {
   const createContainsFilter = (columnKeys, query) => {
     const normalizedQuery = query.trim().toLowerCase()
     if (normalizedQuery === "" || columnKeys.length === 0) return undefined
-    return (row) =>
-      columnKeys.some((columnKey) => resolveCellText(row, columnKey).toLowerCase().includes(normalizedQuery))
+    return (row) => columnKeys.some((columnKey) => resolveCellText(row, columnKey).toLowerCase().includes(normalizedQuery))
   }
 
   const createEqualsFilter = (columnKey, value, allValue) => {
@@ -1681,10 +1745,7 @@ function mountDataTableDemo(mount) {
     const query = queryValue.trim()
     activeFilters = { query, status: statusValue }
 
-    const rowFilter = composeRowFilter(
-      createContainsFilter(["name"], query),
-      createEqualsFilter("status", statusValue, "all"),
-    )
+    const rowFilter = composeRowFilter(createContainsFilter(["name"], query), createEqualsFilter("status", statusValue, "all"))
 
     rows = rowFilter ? allRows.filter(rowFilter) : allRows
 
@@ -1862,14 +1923,7 @@ function mountDatePickerDemo(mount) {
   const gridBody = mount.querySelector("#date-picker-grid-body")
   const month = mount.querySelector("#date-picker-month")
   const state = mount.querySelector("#date-picker-state")
-  if (
-    !(input instanceof HTMLInputElement &&
-      toggle instanceof HTMLButtonElement &&
-      panel instanceof HTMLElement &&
-      gridBody instanceof HTMLElement &&
-      month instanceof HTMLElement &&
-      state instanceof HTMLElement)
-  ) {
+  if (!(input instanceof HTMLInputElement && toggle instanceof HTMLButtonElement && panel instanceof HTMLElement && gridBody instanceof HTMLElement && month instanceof HTMLElement && state instanceof HTMLElement)) {
     return
   }
 
@@ -1886,7 +1940,10 @@ function mountDatePickerDemo(mount) {
   }
 
   const renderCalendar = () => {
-    month.textContent = viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    month.textContent = viewMonth.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric"
+    })
     const cells = buildDatePickerMonthCells(viewMonth)
 
     let html = ""
@@ -2012,14 +2069,7 @@ function mountDateRangePickerDemo(mount) {
   const month = mount.querySelector("#date-range-picker-month")
   const state = mount.querySelector("#date-range-picker-state")
 
-  if (
-    !(input instanceof HTMLInputElement &&
-      toggle instanceof HTMLButtonElement &&
-      panel instanceof HTMLElement &&
-      gridBody instanceof HTMLElement &&
-      month instanceof HTMLElement &&
-      state instanceof HTMLElement)
-  ) {
+  if (!(input instanceof HTMLInputElement && toggle instanceof HTMLButtonElement && panel instanceof HTMLElement && gridBody instanceof HTMLElement && month instanceof HTMLElement && state instanceof HTMLElement)) {
     return
   }
 
@@ -2040,7 +2090,10 @@ function mountDateRangePickerDemo(mount) {
   }
 
   const render = () => {
-    month.textContent = viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    month.textContent = viewMonth.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric"
+    })
     input.value = formatRange()
     state.textContent = input.value ? `Selected range: ${input.value}` : "No range selected"
 
@@ -2306,9 +2359,7 @@ function mountCheckboxDemo(mount) {
   if (!(checkbox instanceof HTMLInputElement && state instanceof HTMLElement)) return
 
   checkbox.addEventListener("change", () => {
-    state.textContent = checkbox.checked
-      ? `Submitted value when checked: ${checkbox.value}`
-      : "Currently unchecked"
+    state.textContent = checkbox.checked ? `Submitted value when checked: ${checkbox.value}` : "Currently unchecked"
   })
 }
 
@@ -2368,14 +2419,7 @@ function mountCascaderDemo(mount) {
   const state = mount.querySelector("#cascader-state")
   const col1 = mount.querySelector("#cascader-col-1")
   const col2 = mount.querySelector("#cascader-col-2")
-  if (
-    !(trigger instanceof HTMLButtonElement &&
-      label instanceof HTMLElement &&
-      panel instanceof HTMLElement &&
-      state instanceof HTMLElement &&
-      col1 instanceof HTMLElement &&
-      col2 instanceof HTMLElement)
-  ) {
+  if (!(trigger instanceof HTMLButtonElement && label instanceof HTMLElement && panel instanceof HTMLElement && state instanceof HTMLElement && col1 instanceof HTMLElement && col2 instanceof HTMLElement)) {
     return
   }
 
@@ -2387,15 +2431,8 @@ function mountCascaderDemo(mount) {
   trigger.addEventListener("click", () => setOpen(panel.hidden))
 
   const selectButtons = () => Array.from(mount.querySelectorAll(".rf-cascader-option"))
-  const levelButtons = (level) =>
-    selectButtons().filter(
-      (el) =>
-        el instanceof HTMLButtonElement &&
-        Number(el.dataset.level || "0") === level &&
-        !(el.closest(".rf-cascader-column") instanceof HTMLElement && el.closest(".rf-cascader-column").hidden),
-    )
-  const activeAtLevel = (level) =>
-    levelButtons(level).find((el) => el instanceof HTMLButtonElement && el.dataset.active === "true")
+  const levelButtons = (level) => selectButtons().filter((el) => el instanceof HTMLButtonElement && Number(el.dataset.level || "0") === level && !(el.closest(".rf-cascader-column") instanceof HTMLElement && el.closest(".rf-cascader-column").hidden))
+  const activeAtLevel = (level) => levelButtons(level).find((el) => el instanceof HTMLButtonElement && el.dataset.active === "true")
   const setColumnVisibility = () => {
     const level0 = mount.querySelector("button[data-level='0'][data-active='true']")
     const level1 = mount.querySelector("button[data-level='1'][data-active='true']")
@@ -2911,14 +2948,7 @@ function mountTransferDemo(mount) {
   const leftCount = mount.querySelector("#transfer-left-count")
   const rightCount = mount.querySelector("#transfer-right-count")
 
-  if (
-    !(leftList instanceof HTMLElement &&
-      rightList instanceof HTMLElement &&
-      moveRight instanceof HTMLButtonElement &&
-      moveLeft instanceof HTMLButtonElement &&
-      leftCount instanceof HTMLElement &&
-      rightCount instanceof HTMLElement)
-  ) {
+  if (!(leftList instanceof HTMLElement && rightList instanceof HTMLElement && moveRight instanceof HTMLButtonElement && moveLeft instanceof HTMLButtonElement && leftCount instanceof HTMLElement && rightCount instanceof HTMLElement)) {
     return
   }
 
@@ -3168,9 +3198,7 @@ function mountDrawerDemo(mount) {
   const resetButton = mount.querySelector("#reset-drawer")
   const applyButton = mount.querySelector("#apply-drawer")
   const reason = mount.querySelector("#drawer-reason")
-  if (
-    !(open && overlay instanceof HTMLElement && panel instanceof HTMLElement && closeButton && resetButton && applyButton && reason)
-  ) {
+  if (!(open && overlay instanceof HTMLElement && panel instanceof HTMLElement && closeButton && resetButton && applyButton && reason)) {
     return
   }
 
