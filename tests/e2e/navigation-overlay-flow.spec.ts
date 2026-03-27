@@ -19,6 +19,10 @@ test("command palette demo opens with focused search and closes on escape", asyn
   await expect(overlay).toBeVisible()
   await expect(input).toBeFocused()
 
+  await input.fill("invite")
+  await expect(page.getByRole("option", { name: "Invite teammate" })).toBeVisible()
+  await expect(page.getByRole("option", { name: "Create issue" })).toBeHidden()
+
   await page.keyboard.press("Escape")
   await expect(overlay).toBeHidden()
   await expect(open).toBeFocused()

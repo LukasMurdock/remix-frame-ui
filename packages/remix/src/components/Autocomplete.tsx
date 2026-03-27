@@ -1,10 +1,5 @@
 import { on, ref, type Handle } from "remix/component"
-import {
-  filterComboboxOptions,
-  findFirstEnabledIndex,
-  findNextEnabledIndex,
-  type ComboboxOption,
-} from "./Combobox"
+import { filterComboboxOptions, findFirstEnabledIndex, findNextEnabledIndex, type ComboboxOption } from "./Combobox"
 
 export type AutocompleteOption = ComboboxOption
 
@@ -26,11 +21,7 @@ export type AutocompleteProps = {
   onCommit?: (commit: AutocompleteCommit) => void
 }
 
-export function resolveAutocompleteCommit(
-  options: AutocompleteOption[],
-  highlighted: number,
-  fallbackValue: string,
-): AutocompleteCommit {
+export function resolveAutocompleteCommit(options: AutocompleteOption[], highlighted: number, fallbackValue: string): AutocompleteCommit {
   const option = highlighted >= 0 ? options[highlighted] : undefined
   if (option && !option.disabled) {
     return { value: option.value, option }
@@ -43,6 +34,10 @@ export function Autocomplete(handle: Handle) {
   let open = false
   let highlighted = -1
   let rootElement: HTMLElement | null = null
+
+  function findSelectedEnabledIndex(options: AutocompleteOption[], selectedValue: string): number {
+    return options.findIndex((option) => !option.disabled && option.value === selectedValue)
+  }
 
   function setValue(props: AutocompleteProps, next: string): void {
     if (props.value === undefined) {
@@ -67,9 +62,8 @@ export function Autocomplete(handle: Handle) {
 
     const value = props.value ?? localValue
     const visible = filterComboboxOptions(props.options, value)
-    const firstEnabled = findFirstEnabledIndex(visible)
-    if (highlighted === -1 || !visible[highlighted] || visible[highlighted]?.disabled) {
-      highlighted = firstEnabled
+    if (highlighted >= 0 && (!visible[highlighted] || visible[highlighted]?.disabled)) {
+      highlighted = -1
     }
 
     const listId = `${handle.id}-listbox`
@@ -92,7 +86,7 @@ export function Autocomplete(handle: Handle) {
             }
 
             document.addEventListener("pointerdown", onPointerDown, { signal })
-          }),
+          })
         ]}
       >
         <input
@@ -118,7 +112,11 @@ export function Autocomplete(handle: Handle) {
               handle.update()
             }),
             on("focusin", () => {
+              highlighted = -1
+            }),
+            on("click", () => {
               open = true
+              highlighted = findSelectedEnabledIndex(visible, value)
               handle.update()
             }),
             on("focusout", () => {
@@ -171,7 +169,7 @@ export function Autocomplete(handle: Handle) {
                 close()
                 handle.update()
               }
-            }),
+            })
           ]}
         />
 
@@ -196,7 +194,7 @@ export function Autocomplete(handle: Handle) {
                     commit(props, { value: option.value, option })
                     close()
                     handle.update()
-                  }),
+                  })
                 ]}
               >
                 {option.label}

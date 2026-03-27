@@ -5,7 +5,7 @@ import { renderMarkdownToHtml } from "./render-markdown.js"
 const markdownModules = import.meta.glob("../content/components/*.md", {
   query: "?raw",
   import: "default",
-  eager: true,
+  eager: true
 })
 
 const requiredSections = ["## HTML parity", "## Runtime notes", "## Accessibility matrix"]
@@ -15,54 +15,192 @@ const demoByComponent = new Map([
   ["alert", { id: "alert-basic", title: "Alert: tone and dismiss patterns" }],
   ["anchor", { id: "anchor-basic", title: "Anchor: in-page section navigation" }],
   ["appheader", { id: "app-header-basic", title: "AppHeader: brand, nav, and actions" }],
-  ["appprovider", { id: "app-provider-basic", title: "AppProvider: locale, direction, and navigation" }],
-  ["appshell", { id: "app-shell-basic", title: "AppShell: header, sidebar, and content regions" }],
+  [
+    "appprovider",
+    {
+      id: "app-provider-basic",
+      title: "AppProvider: locale, direction, and navigation"
+    }
+  ],
+  [
+    "appshell",
+    {
+      id: "app-shell-basic",
+      title: "AppShell: header, sidebar, and content regions"
+    }
+  ],
   ["avatar", { id: "avatar-basic", title: "Avatar: initials, size, shape, and status" }],
-  ["autocomplete", { id: "autocomplete-basic", title: "Autocomplete: free text with suggestion commit" }],
+  [
+    "autocomplete",
+    {
+      id: "autocomplete-basic",
+      title: "Autocomplete: free text with suggestion commit"
+    }
+  ],
   ["badge", { id: "badge-basic", title: "Badge: compact status labels" }],
-  ["breadcrumboverflow", { id: "breadcrumbs-overflow-basic", title: "BreadcrumbOverflow: collapsed long paths" }],
-  ["breadcrumbs", { id: "breadcrumbs-basic", title: "Breadcrumbs: hierarchical location path" }],
+  [
+    "breadcrumboverflow",
+    {
+      id: "breadcrumbs-overflow-basic",
+      title: "BreadcrumbOverflow: collapsed long paths"
+    }
+  ],
+  [
+    "breadcrumbs",
+    {
+      id: "breadcrumbs-basic",
+      title: "Breadcrumbs: hierarchical location path"
+    }
+  ],
   ["button", { id: "button-basic", title: "Button: interactive counter" }],
   ["calendar", { id: "calendar-basic", title: "Calendar: native date/month selection" }],
   ["card", { id: "card-basic", title: "Card: header, body, footer composition" }],
   ["cascader", { id: "cascader-basic", title: "Cascader: multi-level option selection" }],
   ["chip", { id: "chip-basic", title: "Chip: compact metadata token" }],
   ["combobox", { id: "combobox-basic", title: "Combobox: search and select options" }],
-  ["confirmdialog", { id: "confirm-dialog-basic", title: "ConfirmDialog: destructive action confirmation" }],
-  ["commandpalette", { id: "command-palette-basic", title: "CommandPalette: quick action launcher" }],
+  [
+    "confirmdialog",
+    {
+      id: "confirm-dialog-basic",
+      title: "ConfirmDialog: destructive action confirmation"
+    }
+  ],
+  [
+    "commandpalette",
+    {
+      id: "command-palette-basic",
+      title: "CommandPalette: quick action launcher"
+    }
+  ],
   ["collapse", { id: "collapse-basic", title: "Collapse: details and summary disclosure" }],
-  ["configprovider", { id: "config-provider-basic", title: "ConfigProvider: app-level locale and navigation context" }],
-  ["datagridlite", { id: "data-grid-lite-basic", title: "DataGridLite: sorting and selection" }],
+  [
+    "configprovider",
+    {
+      id: "config-provider-basic",
+      title: "ConfigProvider: app-level locale and navigation context"
+    }
+  ],
+  [
+    "datagridlite",
+    {
+      id: "data-grid-lite-basic",
+      title: "DataGridLite: sorting and selection"
+    }
+  ],
   ["datalist", { id: "data-list-basic", title: "DataList: item metadata and actions" }],
   ["descriptions", { id: "descriptions-basic", title: "Descriptions: record detail fields" }],
-  ["divider", { id: "divider-basic", title: "Divider: horizontal and vertical separators" }],
-  ["datatable", { id: "data-table-basic", title: "DataTable: sorting, selection, and pagination" }],
+  [
+    "divider",
+    {
+      id: "divider-basic",
+      title: "Divider: horizontal and vertical separators"
+    }
+  ],
+  [
+    "datatable",
+    {
+      id: "data-table-basic",
+      title: "DataTable: sorting, selection, and pagination"
+    }
+  ],
   ["datepicker", { id: "date-picker-basic", title: "DatePicker: calendar date selection" }],
-  ["datetimepicker", { id: "date-time-picker-basic", title: "DateTimePicker: combined date and time" }],
-  ["daterangepicker", { id: "date-range-picker-basic", title: "DateRangePicker: start and end selection" }],
+  [
+    "datetimepicker",
+    {
+      id: "date-time-picker-basic",
+      title: "DateTimePicker: combined date and time"
+    }
+  ],
+  [
+    "daterangepicker",
+    {
+      id: "date-range-picker-basic",
+      title: "DateRangePicker: start and end selection"
+    }
+  ],
   ["dropdown", { id: "dropdown-basic", title: "Dropdown: menu wrapper for actions" }],
   ["empty", { id: "empty-basic", title: "Empty: generic no-data messaging" }],
   ["drawer", { id: "drawer-basic", title: "Drawer: side panel workflow" }],
-  ["emptystate", { id: "empty-state-basic", title: "EmptyState: recovery-focused messaging" }],
-  ["emptyresults", { id: "empty-results-basic", title: "EmptyResults: no-match recovery state" }],
-  ["fileupload", { id: "file-upload-basic", title: "FileUpload: native file picker and constraints" }],
+  [
+    "emptystate",
+    {
+      id: "empty-state-basic",
+      title: "EmptyState: recovery-focused messaging"
+    }
+  ],
+  [
+    "emptyresults",
+    {
+      id: "empty-results-basic",
+      title: "EmptyResults: no-match recovery state"
+    }
+  ],
+  [
+    "fileupload",
+    {
+      id: "file-upload-basic",
+      title: "FileUpload: native file picker and constraints"
+    }
+  ],
   ["field", { id: "field-basic", title: "Field: label, description, error wiring" }],
-  ["flex", { id: "flex-basic", title: "Flex: one-dimensional alignment and distribution" }],
+  [
+    "flex",
+    {
+      id: "flex-basic",
+      title: "Flex: one-dimensional alignment and distribution"
+    }
+  ],
   ["form", { id: "form-basic", title: "Form: submit and reset orchestration" }],
-  ["formfieldset", { id: "form-fieldset-basic", title: "FormFieldset: grouped controls with legend" }],
+  [
+    "formfieldset",
+    {
+      id: "form-fieldset-basic",
+      title: "FormFieldset: grouped controls with legend"
+    }
+  ],
   ["formlayout", { id: "form-layout-basic", title: "FormLayout: structured form sections" }],
-  ["formmessage", { id: "form-message-basic", title: "FormMessage: helper and validation feedback" }],
+  [
+    "formmessage",
+    {
+      id: "form-message-basic",
+      title: "FormMessage: helper and validation feedback"
+    }
+  ],
   ["grid", { id: "grid-basic", title: "Grid: span-based tile layout" }],
-  ["filterbar", { id: "filter-bar-basic", title: "FilterBar: grouped controls and actions" }],
+  [
+    "filterbar",
+    {
+      id: "filter-bar-basic",
+      title: "FilterBar: grouped controls and actions"
+    }
+  ],
   ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
   ["input", { id: "field-input", title: "Field + Input: live validation" }],
   ["inlinealert", { id: "inline-alert-basic", title: "InlineAlert: compact in-flow status" }],
   ["image", { id: "image-basic", title: "Image: media with fit strategies" }],
-  ["layout", { id: "layout-basic", title: "Layout: header, sider, content, footer shell" }],
-  ["link", { id: "link-basic", title: "Link: internal routing and external navigation" }],
+  [
+    "layout",
+    {
+      id: "layout-basic",
+      title: "Layout: header, sider, content, footer shell"
+    }
+  ],
+  [
+    "link",
+    {
+      id: "link-basic",
+      title: "Link: internal routing and external navigation"
+    }
+  ],
   ["checkbox", { id: "checkbox-basic", title: "Checkbox: native checked semantics" }],
   ["radio", { id: "radio-group", title: "RadioGroup: single selection" }],
-  ["rangeslider", { id: "range-slider-basic", title: "RangeSlider: two-thumb range selection" }],
+  [
+    "rangeslider",
+    {
+      id: "range-slider-basic",
+      title: "RangeSlider: two-thumb range selection"
+    }
+  ],
   ["result", { id: "result-basic", title: "Result: outcome and recovery actions" }],
   ["segmented", { id: "segmented-basic", title: "Segmented: mode and view switching" }],
   ["pageheader", { id: "page-header-basic", title: "PageHeader: title, subtitle, actions" }],
@@ -75,7 +213,13 @@ const demoByComponent = new Map([
   ["skeleton", { id: "skeleton-basic", title: "Skeleton: loading placeholders" }],
   ["slider", { id: "slider-basic", title: "Slider: range selection with live value" }],
   ["spinner", { id: "spinner-basic", title: "Spinner: inline loading indicator" }],
-  ["space", { id: "space-basic", title: "Space: consistent inline and wrapped spacing" }],
+  [
+    "space",
+    {
+      id: "space-basic",
+      title: "Space: consistent inline and wrapped spacing"
+    }
+  ],
   ["statistic", { id: "statistic-basic", title: "Statistic: labeled value metrics" }],
   ["steps", { id: "steps-basic", title: "Steps: multi-step progress indicator" }],
   ["switch", { id: "switch-basic", title: "Switch: boolean setting toggle" }],
@@ -88,13 +232,31 @@ const demoByComponent = new Map([
   ["timeline", { id: "timeline-basic", title: "Timeline: ordered event history" }],
   ["dialog", { id: "dialog-controlled", title: "Dialog: controlled open/close" }],
   ["menu", { id: "menu-actions", title: "Menu: keyboard navigation" }],
-  ["numberinput", { id: "number-input-basic", title: "NumberInput: constrained numeric value" }],
-  ["pagination", { id: "pagination-basic", title: "Pagination: previous, next, and current page" }],
+  [
+    "numberinput",
+    {
+      id: "number-input-basic",
+      title: "NumberInput: constrained numeric value"
+    }
+  ],
+  [
+    "pagination",
+    {
+      id: "pagination-basic",
+      title: "Pagination: previous, next, and current page"
+    }
+  ],
   ["toast", { id: "toast-queue", title: "Toast: queue and auto-dismiss" }],
   ["tooltip", { id: "tooltip-basic", title: "Tooltip: hover and focus context" }],
   ["typography", { id: "typography-basic", title: "Typography: semantic text primitives" }],
   ["tree", { id: "tree-basic", title: "Tree: hierarchical navigation and selection" }],
-  ["treeselect", { id: "tree-select-basic", title: "TreeSelect: hierarchical option picker" }],
+  [
+    "treeselect",
+    {
+      id: "tree-select-basic",
+      title: "TreeSelect: hierarchical option picker"
+    }
+  ]
 ])
 
 bootDocs().catch((error) => {
@@ -125,23 +287,16 @@ async function bootDocs() {
 
         const html = await renderMarkdownToHtml(markdown)
         return { name, html, maturity }
-      }),
+      })
     )
   ).sort((a, b) => a.name.localeCompare(b.name))
 
-  const nav = pages
-    .map(
-      (page, index) =>
-        `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.name}" ${index === 0 ? 'aria-current="page"' : ""}>${page.name}</a></li>`,
-    )
-    .join("\n")
+  const nav = pages.map((page, index) => `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.name}" ${index === 0 ? 'aria-current="page"' : ""}>${page.name}</a></li>`).join("\n")
 
   const docsBody = pages
     .map((page) => {
       const demo = demoByComponent.get(page.name)
-      const demoSection = demo
-        ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
-        : ""
+      const demoSection = demo ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>` : ""
 
       return `<article id="${page.name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
     })
@@ -202,6 +357,19 @@ async function bootDocs() {
     .docs-button[data-variant="outline"] { background: #fff; color: #0f172a; }
     .docs-button[data-tone="danger"] { background: #dc2626; border-color: #dc2626; color: #fff; }
     .docs-input { border: 1px solid #cbd5e1; border-radius: 8px; min-height: 2.5rem; padding: 0 0.75rem; }
+    .rf-input-base {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      min-height: 2.5rem;
+      padding: 0 0.75rem;
+      color: #0f172a;
+      background: #fff;
+      font: inherit;
+    }
+    .rf-focus-ring:focus-visible {
+      outline: 2px solid #1d4ed8;
+      outline-offset: 2px;
+    }
     .rf-badge,
     .rf-tag {
       display: inline-flex;
@@ -922,6 +1090,7 @@ async function bootDocs() {
     }
     .rf-combobox-list[hidden] { display: none; }
     .rf-combobox-option { padding: 0.5rem 0.6rem; border-radius: 0.5rem; cursor: pointer; }
+    .rf-combobox-option[data-highlighted="true"] { background: #dbeafe; box-shadow: inset 0 0 0 1px #93c5fd; }
     .rf-combobox-option:hover { background: #eef4ff; }
     .rf-slider { width: min(100%, 20rem); accent-color: #2563eb; cursor: pointer; }
     .rf-range-slider { position: relative; width: min(100%, 22rem); height: 2rem; display: grid; align-items: center; --rf-range-start: 0%; --rf-range-end: 100%; }
@@ -964,7 +1133,50 @@ async function bootDocs() {
     .rf-command-title { margin: 0; font-size: 1rem; }
     .rf-command-list { list-style: none; margin: 0; padding: 0.2rem; display: grid; gap: 0.2rem; }
     .rf-command-item { padding: 0.55rem 0.65rem; border-radius: 0.55rem; cursor: pointer; }
+    .rf-command-item[data-highlighted="true"] { background: #eef4ff; }
     .rf-command-item:hover { background: #eef4ff; }
+    .rf-command-empty { padding: 0.55rem 0.65rem; color: #64748b; }
+    .rf-collapse {
+      width: min(100%, 40rem);
+      border: 1px solid #cbd5e1;
+      border-radius: 0.65rem;
+      background: #ffffff;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+    .rf-collapse + .rf-collapse { margin-top: 0.6rem; }
+    .rf-collapse-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      list-style: none;
+      border-radius: 0.65rem;
+    }
+    .rf-collapse-trigger::-webkit-details-marker { display: none; }
+    .rf-collapse-trigger::before {
+      content: "▸";
+      color: #64748b;
+      transform-origin: center;
+      transition: transform 140ms ease;
+    }
+    .rf-collapse[open] .rf-collapse-trigger::before { transform: rotate(90deg); }
+    .rf-collapse-trigger:hover { background: #f8fafc; }
+    .rf-collapse-trigger:focus-visible {
+      outline: 2px solid #1d4ed8;
+      outline-offset: 2px;
+    }
+    .rf-collapse[open] {
+      border-color: #93c5fd;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+    .rf-collapse-content {
+      padding: 0.65rem 0.75rem 0.75rem;
+      color: #334155;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 0.1rem;
+    }
     @media (max-width: 900px) {
       .docs-site-shell .rf-app-shell-body { grid-template-columns: 1fr; }
       .docs-site-shell .rf-app-shell-sidebar { position: static; top: auto; height: auto; border-right: 0; border-bottom: 1px solid #dbe3ee; }

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test"
 test("autocomplete supports free text and suggestion commit", async ({ page }) => {
   await page.setContent(`
     <style>
-      .rf-combobox { position: relative; width: 320px; display: grid; gap: 8px; }
+      .rf-combobox { position: relative; width: 320px; }
       .rf-combobox-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; margin: 0; padding: 4px; border: 1px solid #cbd5e1; border-radius: 10px; list-style: none; background: white; }
       .rf-combobox-list[hidden] { display: none; }
       .rf-combobox-option { padding: 8px 10px; border-radius: 8px; }
@@ -66,11 +66,21 @@ test("autocomplete supports free text and suggestion commit", async ({ page }) =
         setOpen(true);
       });
       input.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setOpen(false);
+        }
         if (event.key === 'ArrowDown') {
           event.preventDefault();
           const visible = visibleOptions();
           if (visible.length === 0) return;
           const next = highlighted < 0 ? 0 : (highlighted + 1) % visible.length;
+          setHighlighted(next);
+        }
+        if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          const visible = visibleOptions();
+          if (visible.length === 0) return;
+          const next = highlighted < 0 ? visible.length - 1 : (highlighted - 1 + visible.length) % visible.length;
           setHighlighted(next);
         }
         if (event.key === 'Enter') {
@@ -79,6 +89,11 @@ test("autocomplete supports free text and suggestion commit", async ({ page }) =
           const option = highlighted >= 0 ? visible[highlighted] : undefined;
           commitValue(option?.dataset.value || input.value);
         }
+        if (event.key === 'Tab') {
+          const visible = visibleOptions();
+          const option = highlighted >= 0 ? visible[highlighted] : undefined;
+          if (option) commitValue(option.dataset.value || input.value);
+        }
       });
 
       applyFilter('');
@@ -86,15 +101,30 @@ test("autocomplete supports free text and suggestion commit", async ({ page }) =
   `)
 
   const input = page.locator("#auto")
+  const list = page.locator("#auto-list")
   const commit = page.locator("#commit")
   const options = page.locator("[role='option']")
 
   await input.click()
+  await expect(list).toBeVisible()
+  await expect(options.nth(0)).toHaveAttribute("data-highlighted", "true")
+
+  await input.press("ArrowDown")
+  await expect(options.nth(1)).toHaveAttribute("data-highlighted", "true")
+
+  await input.press("ArrowUp")
+  await expect(options.nth(0)).toHaveAttribute("data-highlighted", "true")
+
   await input.fill("gr")
   await expect(options.filter({ hasText: "Grace Hopper" })).toBeVisible()
-  await input.press("Enter")
+  await input.press("Tab")
   await expect(input).toHaveValue("Grace Hopper")
   await expect(commit).toHaveText("Grace Hopper")
+
+  await input.click()
+  await expect(list).toBeVisible()
+  await input.press("Escape")
+  await expect(list).toBeHidden()
 
   await input.click()
   await input.fill("Custom Person")

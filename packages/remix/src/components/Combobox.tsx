@@ -49,6 +49,10 @@ export function Combobox(handle: Handle) {
   let highlighted = -1
   let rootElement: HTMLElement | null = null
 
+  function findSelectedEnabledIndex(options: ComboboxOption[], selectedValue: string): number {
+    return options.findIndex((option) => !option.disabled && option.value === selectedValue)
+  }
+
   function setValue(props: ComboboxProps, next: string): void {
     if (props.value === undefined) {
       localValue = next
@@ -67,9 +71,8 @@ export function Combobox(handle: Handle) {
 
     const value = props.value ?? localValue
     const visible = filterComboboxOptions(props.options, value)
-    const firstEnabled = findFirstEnabledIndex(visible)
-    if (highlighted === -1 || !visible[highlighted] || visible[highlighted]?.disabled) {
-      highlighted = firstEnabled
+    if (highlighted >= 0 && (!visible[highlighted] || visible[highlighted]?.disabled)) {
+      highlighted = -1
     }
 
     const listId = `${handle.id}-listbox`
@@ -92,7 +95,7 @@ export function Combobox(handle: Handle) {
             }
 
             document.addEventListener("pointerdown", onPointerDown, { signal })
-          }),
+          })
         ]}
       >
         <input
@@ -114,7 +117,11 @@ export function Combobox(handle: Handle) {
               handle.update()
             }),
             on("focusin", () => {
+              highlighted = -1
+            }),
+            on("click", () => {
               open = true
+              highlighted = findSelectedEnabledIndex(visible, value)
               handle.update()
             }),
             on("focusout", () => {
@@ -160,7 +167,7 @@ export function Combobox(handle: Handle) {
                 close()
                 handle.update()
               }
-            }),
+            })
           ]}
         />
 
@@ -185,7 +192,7 @@ export function Combobox(handle: Handle) {
                     setValue(props, option.value)
                     close()
                     handle.update()
-                  }),
+                  })
                 ]}
               >
                 {option.label}
