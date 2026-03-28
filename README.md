@@ -69,3 +69,4 @@ This repo uses Changesets.
 - Merging to `main` runs release workflows:
   - stable: creates/updates a release PR and publishes after merge
   - canary: publishes snapshot packages under the `canary` dist-tag
+- Publishing uses npm trusted publishers (OIDC) with GitHub Actions.

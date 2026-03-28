@@ -4,25 +4,27 @@ on:
   push:
     branches: ["main"]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   canary:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
+      - run: npm i -g npm@latest
       - run: pnpm install --frozen-lockfile=false
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run ci
       - name: Publish canary snapshot
         run: pnpm run release:canary
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Verify canary dist-tags
         run: node scripts/verify-dist-tags.mjs canary
