@@ -7,7 +7,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "release:canary": "changeset version --snapshot canary && changeset publish --tag canary",
+    "release:canary": "node scripts/release-canary.mjs",
     "build": "pnpm -r --filter @lukasmurdock/* --filter=!@lukasmurdock/docs run build && pnpm --filter @lukasmurdock/docs run build",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
