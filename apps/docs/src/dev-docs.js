@@ -5,7 +5,7 @@ import { renderMarkdownToHtml } from "./render-markdown.js"
 const markdownModules = import.meta.glob("../content/components/*.md", {
   query: "?raw",
   import: "default",
-  eager: true
+  eager: true,
 })
 
 const requiredSections = ["## HTML parity", "## Runtime notes", "## Accessibility matrix"]
@@ -19,38 +19,38 @@ const demoByComponent = new Map([
     "appprovider",
     {
       id: "app-provider-basic",
-      title: "AppProvider: locale, direction, and navigation"
-    }
+      title: "AppProvider: locale, direction, and navigation",
+    },
   ],
   [
     "appshell",
     {
       id: "app-shell-basic",
-      title: "AppShell: header, sidebar, and content regions"
-    }
+      title: "AppShell: header, sidebar, and content regions",
+    },
   ],
   ["avatar", { id: "avatar-basic", title: "Avatar: initials, size, shape, and status" }],
   [
     "autocomplete",
     {
       id: "autocomplete-basic",
-      title: "Autocomplete: free text with suggestion commit"
-    }
+      title: "Autocomplete: free text with suggestion commit",
+    },
   ],
   ["badge", { id: "badge-basic", title: "Badge: compact status labels" }],
   [
     "breadcrumboverflow",
     {
       id: "breadcrumbs-overflow-basic",
-      title: "BreadcrumbOverflow: collapsed long paths"
-    }
+      title: "BreadcrumbOverflow: collapsed long paths",
+    },
   ],
   [
     "breadcrumbs",
     {
       id: "breadcrumbs-basic",
-      title: "Breadcrumbs: hierarchical location path"
-    }
+      title: "Breadcrumbs: hierarchical location path",
+    },
   ],
   ["button", { id: "button-basic", title: "Button: interactive counter" }],
   ["calendar", { id: "calendar-basic", title: "Calendar: native date/month selection" }],
@@ -62,30 +62,30 @@ const demoByComponent = new Map([
     "confirmdialog",
     {
       id: "confirm-dialog-basic",
-      title: "ConfirmDialog: destructive action confirmation"
-    }
+      title: "ConfirmDialog: destructive action confirmation",
+    },
   ],
   [
     "commandpalette",
     {
       id: "command-palette-basic",
-      title: "CommandPalette: quick action launcher"
-    }
+      title: "CommandPalette: quick action launcher",
+    },
   ],
   ["collapse", { id: "collapse-basic", title: "Collapse: details and summary disclosure" }],
   [
     "configprovider",
     {
       id: "config-provider-basic",
-      title: "ConfigProvider: app-level locale and navigation context"
-    }
+      title: "ConfigProvider: app-level locale and navigation context",
+    },
   ],
   [
     "datagridlite",
     {
       id: "data-grid-lite-basic",
-      title: "DataGridLite: sorting and selection"
-    }
+      title: "DataGridLite: sorting and selection",
+    },
   ],
   ["datalist", { id: "data-list-basic", title: "DataList: item metadata and actions" }],
   ["descriptions", { id: "descriptions-basic", title: "Descriptions: record detail fields" }],
@@ -93,30 +93,30 @@ const demoByComponent = new Map([
     "divider",
     {
       id: "divider-basic",
-      title: "Divider: horizontal and vertical separators"
-    }
+      title: "Divider: horizontal and vertical separators",
+    },
   ],
   [
     "datatable",
     {
       id: "data-table-basic",
-      title: "DataTable: sorting, selection, and pagination"
-    }
+      title: "DataTable: sorting, selection, and pagination",
+    },
   ],
   ["datepicker", { id: "date-picker-basic", title: "DatePicker: calendar date selection" }],
   [
     "datetimepicker",
     {
       id: "date-time-picker-basic",
-      title: "DateTimePicker: combined date and time"
-    }
+      title: "DateTimePicker: combined date and time",
+    },
   ],
   [
     "daterangepicker",
     {
       id: "date-range-picker-basic",
-      title: "DateRangePicker: start and end selection"
-    }
+      title: "DateRangePicker: start and end selection",
+    },
   ],
   ["dropdown", { id: "dropdown-basic", title: "Dropdown: menu wrapper for actions" }],
   ["empty", { id: "empty-basic", title: "Empty: generic no-data messaging" }],
@@ -125,54 +125,54 @@ const demoByComponent = new Map([
     "emptystate",
     {
       id: "empty-state-basic",
-      title: "EmptyState: recovery-focused messaging"
-    }
+      title: "EmptyState: recovery-focused messaging",
+    },
   ],
   [
     "emptyresults",
     {
       id: "empty-results-basic",
-      title: "EmptyResults: no-match recovery state"
-    }
+      title: "EmptyResults: no-match recovery state",
+    },
   ],
   [
     "fileupload",
     {
       id: "file-upload-basic",
-      title: "FileUpload: native file picker and constraints"
-    }
+      title: "FileUpload: native file picker and constraints",
+    },
   ],
   ["field", { id: "field-basic", title: "Field: label, description, error wiring" }],
   [
     "flex",
     {
       id: "flex-basic",
-      title: "Flex: one-dimensional alignment and distribution"
-    }
+      title: "Flex: one-dimensional alignment and distribution",
+    },
   ],
   ["form", { id: "form-basic", title: "Form: submit and reset orchestration" }],
   [
     "formfieldset",
     {
       id: "form-fieldset-basic",
-      title: "FormFieldset: grouped controls with legend"
-    }
+      title: "FormFieldset: grouped controls with legend",
+    },
   ],
   ["formlayout", { id: "form-layout-basic", title: "FormLayout: structured form sections" }],
   [
     "formmessage",
     {
       id: "form-message-basic",
-      title: "FormMessage: helper and validation feedback"
-    }
+      title: "FormMessage: helper and validation feedback",
+    },
   ],
   ["grid", { id: "grid-basic", title: "Grid: span-based tile layout" }],
   [
     "filterbar",
     {
       id: "filter-bar-basic",
-      title: "FilterBar: grouped controls and actions"
-    }
+      title: "FilterBar: grouped controls and actions",
+    },
   ],
   ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
   ["input", { id: "field-input", title: "Field + Input: live validation" }],
@@ -182,15 +182,15 @@ const demoByComponent = new Map([
     "layout",
     {
       id: "layout-basic",
-      title: "Layout: header, sider, content, footer shell"
-    }
+      title: "Layout: header, sider, content, footer shell",
+    },
   ],
   [
     "link",
     {
       id: "link-basic",
-      title: "Link: internal routing and external navigation"
-    }
+      title: "Link: internal routing and external navigation",
+    },
   ],
   ["checkbox", { id: "checkbox-basic", title: "Checkbox: native checked semantics" }],
   ["radio", { id: "radio-group", title: "RadioGroup: single selection" }],
@@ -198,8 +198,8 @@ const demoByComponent = new Map([
     "rangeslider",
     {
       id: "range-slider-basic",
-      title: "RangeSlider: two-thumb range selection"
-    }
+      title: "RangeSlider: two-thumb range selection",
+    },
   ],
   ["result", { id: "result-basic", title: "Result: outcome and recovery actions" }],
   ["segmented", { id: "segmented-basic", title: "Segmented: mode and view switching" }],
@@ -217,8 +217,8 @@ const demoByComponent = new Map([
     "space",
     {
       id: "space-basic",
-      title: "Space: consistent inline and wrapped spacing"
-    }
+      title: "Space: consistent inline and wrapped spacing",
+    },
   ],
   ["statistic", { id: "statistic-basic", title: "Statistic: labeled value metrics" }],
   ["steps", { id: "steps-basic", title: "Steps: multi-step progress indicator" }],
@@ -236,15 +236,15 @@ const demoByComponent = new Map([
     "numberinput",
     {
       id: "number-input-basic",
-      title: "NumberInput: constrained numeric value"
-    }
+      title: "NumberInput: constrained numeric value",
+    },
   ],
   [
     "pagination",
     {
       id: "pagination-basic",
-      title: "Pagination: previous, next, and current page"
-    }
+      title: "Pagination: previous, next, and current page",
+    },
   ],
   ["toast", { id: "toast-queue", title: "Toast: queue and auto-dismiss" }],
   ["tooltip", { id: "tooltip-basic", title: "Tooltip: hover and focus context" }],
@@ -254,9 +254,9 @@ const demoByComponent = new Map([
     "treeselect",
     {
       id: "tree-select-basic",
-      title: "TreeSelect: hierarchical option picker"
-    }
-  ]
+      title: "TreeSelect: hierarchical option picker",
+    },
+  ],
 ])
 
 bootDocs().catch((error) => {
@@ -287,16 +287,23 @@ async function bootDocs() {
 
         const html = await renderMarkdownToHtml(markdown)
         return { name, html, maturity }
-      })
+      }),
     )
   ).sort((a, b) => a.name.localeCompare(b.name))
 
-  const nav = pages.map((page, index) => `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.name}" ${index === 0 ? 'aria-current="page"' : ""}>${page.name}</a></li>`).join("\n")
+  const nav = pages
+    .map(
+      (page, index) =>
+        `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.name}" ${index === 0 ? 'aria-current="page"' : ""}>${page.name}</a></li>`,
+    )
+    .join("\n")
 
   const docsBody = pages
     .map((page) => {
       const demo = demoByComponent.get(page.name)
-      const demoSection = demo ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>` : ""
+      const demoSection = demo
+        ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
+        : ""
 
       return `<article id="${page.name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
     })
@@ -407,7 +414,9 @@ async function bootDocs() {
       margin-right: 0.6rem;
     }
     .rf-date-picker { position: relative; width: min(100%, 20rem); }
-    .rf-date-picker-field { display: grid; grid-template-columns: 1fr auto; gap: 0.45rem; align-items: center; }
+    .rf-date-picker-field { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; align-items: center; }
+    .rf-date-picker-field > .docs-input,
+    .rf-date-picker-field > .rf-input-base { min-width: 0; width: 100%; }
     .rf-date-picker-toggle {
       border: 1px solid #cbd5e1;
       border-radius: 8px;
@@ -1092,6 +1101,39 @@ async function bootDocs() {
     .rf-combobox-option { padding: 0.5rem 0.6rem; border-radius: 0.5rem; cursor: pointer; }
     .rf-combobox-option[data-highlighted="true"] { background: #dbeafe; box-shadow: inset 0 0 0 1px #93c5fd; }
     .rf-combobox-option:hover { background: #eef4ff; }
+    .rf-avatar {
+      --rf-avatar-status-size: 0.56rem;
+      --rf-avatar-status-offset: 0.12rem;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #0f172a;
+      font-weight: 700;
+      line-height: 1;
+      border-radius: 999px;
+    }
+    .rf-avatar[data-shape="square"] { border-radius: 0.55rem; }
+    .rf-avatar[data-size="sm"] { width: 1.75rem; height: 1.75rem; font-size: 0.7rem; --rf-avatar-status-size: 0.48rem; --rf-avatar-status-offset: 0.08rem; }
+    .rf-avatar[data-size="md"] { width: 2.25rem; height: 2.25rem; font-size: 0.8rem; --rf-avatar-status-size: 0.56rem; --rf-avatar-status-offset: 0.12rem; }
+    .rf-avatar[data-size="lg"] { width: 2.75rem; height: 2.75rem; font-size: 0.95rem; --rf-avatar-status-size: 0.64rem; --rf-avatar-status-offset: 0.16rem; }
+    .rf-avatar-fallback { width: 100%; height: 100%; display: inline-flex; align-items: center; justify-content: center; }
+    .rf-avatar[data-status]::after {
+      content: "";
+      position: absolute;
+      right: var(--rf-avatar-status-offset);
+      bottom: var(--rf-avatar-status-offset);
+      width: var(--rf-avatar-status-size);
+      height: var(--rf-avatar-status-size);
+      border: 2px solid #fff;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.35);
+    }
+    .rf-avatar[data-status="online"]::after { background: #2563eb; }
+    .rf-avatar[data-status="busy"]::after { background: #dc2626; }
     .rf-slider { width: min(100%, 20rem); accent-color: #2563eb; cursor: pointer; }
     .rf-range-slider { position: relative; width: min(100%, 22rem); height: 2rem; display: grid; align-items: center; --rf-range-start: 0%; --rf-range-end: 100%; }
     .rf-range-slider-track { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 0.35rem; border-radius: 999px; background: #cbd5e1; overflow: hidden; }

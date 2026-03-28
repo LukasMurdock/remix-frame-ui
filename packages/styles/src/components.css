@@ -107,9 +107,14 @@
 
   .rf-date-picker-field {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.45rem;
     align-items: center;
+  }
+
+  .rf-date-picker-field > .rf-input-base {
+    min-width: 0;
+    width: 100%;
   }
 
   .rf-date-picker-toggle {
@@ -2604,6 +2609,12 @@
     width: min(22rem, 100%);
   }
 
+  .rf-combobox-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--rf-text-default);
+  }
+
   .rf-combobox-list {
     position: absolute;
     top: calc(100% + 0.35rem);
@@ -2991,6 +3002,8 @@
   }
 
   .rf-avatar {
+    --rf-avatar-status-size: 0.56rem;
+    --rf-avatar-status-offset: 0.12rem;
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -3012,18 +3025,24 @@
     width: 1.75rem;
     height: 1.75rem;
     font-size: 0.7rem;
+    --rf-avatar-status-size: 0.48rem;
+    --rf-avatar-status-offset: 0.08rem;
   }
 
   .rf-avatar[data-size="md"] {
     width: 2.25rem;
     height: 2.25rem;
     font-size: 0.8rem;
+    --rf-avatar-status-size: 0.56rem;
+    --rf-avatar-status-offset: 0.12rem;
   }
 
   .rf-avatar[data-size="lg"] {
     width: 2.75rem;
     height: 2.75rem;
     font-size: 0.95rem;
+    --rf-avatar-status-size: 0.64rem;
+    --rf-avatar-status-offset: 0.16rem;
   }
 
   .rf-avatar-image {
@@ -3034,6 +3053,8 @@
   }
 
   .rf-avatar-fallback {
+    width: 100%;
+    height: 100%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -3042,10 +3063,10 @@
   .rf-avatar[data-status]::after {
     content: "";
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 0.5rem;
-    height: 0.5rem;
+    right: var(--rf-avatar-status-offset);
+    bottom: var(--rf-avatar-status-offset);
+    width: var(--rf-avatar-status-size);
+    height: var(--rf-avatar-status-size);
     border: 2px solid var(--rf-surface-default);
     border-radius: 999px;
     background: color-mix(in srgb, var(--rf-text-default) 35%, transparent);

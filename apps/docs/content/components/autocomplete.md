@@ -8,13 +8,14 @@ Maturity: experimental
 
 ## Runtime notes
 
-Supports controlled and uncontrolled values and emits commit events for suggestions or free text.
+Requires a visible `label`, supports controlled and uncontrolled values, and emits commit events for suggestions or free text.
 
 ## Accessibility matrix
 
 | Requirement | Behavior |
 | --- | --- |
 | Input role | `role="combobox"` with listbox relationship |
+| Input labeling | visible label is required and bound to input `id` |
 | Option semantics | rendered as `role="option"` entries |
 | Keyboard support | arrow navigation, Enter commit, Tab suggestion commit, Escape close |
 

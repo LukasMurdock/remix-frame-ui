@@ -8,13 +8,14 @@ Maturity: experimental
 
 ## Runtime notes
 
-Supports controlled and uncontrolled value modes with keyboard and pointer selection.
+Requires a visible `label` and supports controlled and uncontrolled value modes with keyboard and pointer selection.
 
 ## Accessibility matrix
 
 | Requirement | Behavior |
 | --- | --- |
 | Input role | `role="combobox"` with listbox relationship |
+| Input labeling | visible label is required and bound to input `id` |
 | Option semantics | rendered as `role="option"` entries |
 | Keyboard support | arrow navigation, Enter select, Escape close |
 
