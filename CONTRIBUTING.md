@@ -25,8 +25,8 @@
 
 - Add a changeset for any pull request that changes public package behavior.
 - Create one with `pnpm changeset` and choose the appropriate bump level.
-- Merges to `main` run two release workflows:
-  - stable: opens/updates a version PR and publishes once merged
+- Merges to `main` run one release workflow that performs:
   - canary: publishes snapshot builds to npm under the `canary` tag
+  - stable: opens/updates a version PR and publishes once merged
 - Package publishing uses npm trusted publishers (OIDC) and does not require `NPM_TOKEN`.
 - Repository workflow permissions must allow GitHub Actions to create pull requests.

@@ -66,7 +66,7 @@ pnpm run docs:deploy
 This repo uses Changesets.
 
 - Add a changeset in pull requests that change public behavior.
-- Merging to `main` runs release workflows:
-  - stable: creates/updates a release PR and publishes after merge
+- Merging to `main` runs one release workflow with both tracks:
   - canary: publishes snapshot packages under the `canary` dist-tag
+  - stable: creates/updates a release PR and publishes after merge
 - Publishing uses npm trusted publishers (OIDC) with GitHub Actions.
