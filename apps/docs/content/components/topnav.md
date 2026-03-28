@@ -1,7 +1,7 @@
 # TopNav
 
 Maturity: experimental
-Platform: mobile
+Platform: universal
 
 ## When to use
 
