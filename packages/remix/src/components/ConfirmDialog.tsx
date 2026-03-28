@@ -12,14 +12,21 @@ export type ConfirmDialogProps = {
   onClose: (reason: ConfirmDialogCloseReason) => void
   onConfirm?: () => void
   onCancel?: () => void
+  /** @default "Confirm" */
   confirmLabel?: ComponentChildren
+  /** @default "Cancel" */
   cancelLabel?: ComponentChildren
+  /** @default false */
   confirmDisabled?: boolean
+  /** @default false */
   dismissOnBackdrop?: boolean
+  /** @default true */
   dismissOnEscape?: boolean
+  /** @default true */
   restoreFocus?: boolean
   container?: HTMLElement
   ariaLabel?: string
+  /** @default generated from title when present */
   ariaLabelledBy?: string
 }
 

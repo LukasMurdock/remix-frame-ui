@@ -7,8 +7,11 @@ export type ImageProps = {
   alt: string
   width?: number
   height?: number
+  /** @default "cover" */
   fit?: ImageFit
+  /** @default "lazy" */
   loading?: "lazy" | "eager"
+  /** @default "Image unavailable" */
   fallbackText?: string
 }
 

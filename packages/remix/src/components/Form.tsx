@@ -6,15 +6,19 @@ export type FormMethod = "get" | "post"
 export type FormProps = {
   children: ComponentChildren
   action?: string
+  /** @default "get" */
   method?: FormMethod
   encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain"
+  /** @default false */
   noValidate?: boolean
+  /** @default false */
   busy?: boolean
   "aria-describedby"?: string
 }
 
 export type FormErrorSummaryProps = {
   id: string
+  /** @default "Please fix the following errors" */
   title?: ComponentChildren
   errors: string[]
 }

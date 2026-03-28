@@ -8,6 +8,7 @@ export type TextareaProps = {
   disabled?: boolean
   required?: boolean
   placeholder?: string
+  /** @default 4 */
   rows?: number
   maxLength?: number
   minLength?: number

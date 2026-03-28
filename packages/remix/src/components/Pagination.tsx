@@ -5,6 +5,7 @@ export type PaginationItem = number | "ellipsis"
 export type PaginationProps = {
   page: number
   totalPages: number
+  /** @default 1 */
   siblingCount?: number
   onPageChange?: (page: number) => void
 }

@@ -10,6 +10,7 @@ export type CommandItem = {
 
 export type CommandPaletteProps = {
   open: boolean
+  /** @default "Command palette" */
   title?: ComponentChildren
   commands: CommandItem[]
   onClose: () => void

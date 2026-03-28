@@ -7,6 +7,7 @@ export type FormFieldsetProps = {
   legend: ComponentChildren
   description?: ComponentChildren
   children: ComponentChildren
+  /** @default 1 */
   columns?: FormFieldsetColumns
 }
 

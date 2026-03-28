@@ -4,10 +4,14 @@ import type { ComponentChildren } from "../types"
 export type ProgressTone = "neutral" | "success" | "warning" | "danger"
 
 export type ProgressProps = {
+  /** @default 0 */
   value?: number
+  /** @default 100 */
   max?: number
+  /** @default "neutral" */
   tone?: ProgressTone
   label?: ComponentChildren
+  /** @default false */
   showValue?: boolean
 }
 

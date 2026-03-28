@@ -10,7 +10,9 @@ export type DateRangePickerProps = {
   id?: string
   startName?: string
   endName?: string
+  /** @default {} */
   value?: DateRangeValue
+  /** @default {} */
   defaultValue?: DateRangeValue
   disabled?: boolean
   min?: string

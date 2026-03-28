@@ -5,7 +5,9 @@ import { focusInitial } from "../overlay/primitives"
 export type PopoverProps = {
   trigger: ComponentChildren
   content: ComponentChildren
+  /** @default false */
   open?: boolean
+  /** @default false */
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
 }

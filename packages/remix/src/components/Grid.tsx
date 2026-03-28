@@ -6,13 +6,17 @@ export type GridAlign = "start" | "center" | "end" | "stretch"
 
 export type GridProps = {
   children: ComponentChildren
+  /** @default 2 */
   columns?: GridColumns
+  /** @default "0.75rem" */
   gap?: string
+  /** @default "stretch" */
   align?: GridAlign
 }
 
 export type GridItemProps = {
   children: ComponentChildren
+  /** @default 1 */
   span?: GridColumns
 }
 

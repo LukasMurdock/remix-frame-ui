@@ -5,9 +5,12 @@ export type ButtonVariant = "solid" | "outline" | "ghost"
 export type ButtonSize = "sm" | "md" | "lg"
 
 export type ButtonProps = {
+  /** @default "button" */
   type?: "button" | "submit" | "reset"
   disabled?: boolean
+  /** @default "solid" */
   variant?: ButtonVariant
+  /** @default "md" */
   size?: ButtonSize
   name?: string
   value?: string

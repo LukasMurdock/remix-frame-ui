@@ -5,6 +5,7 @@ export type DatePickerProps = {
   name?: string
   value?: string
   defaultValue?: string
+  /** @default "YYYY-MM-DD" */
   placeholder?: string
   disabled?: boolean
   required?: boolean

@@ -3,8 +3,11 @@ import type { Handle } from "remix/component"
 export type DividerOrientation = "horizontal" | "vertical"
 
 export type DividerProps = {
+  /** @default "horizontal" */
   orientation?: DividerOrientation
+  /** @default true */
   decorative?: boolean
+  /** @default false */
   inset?: boolean
   ariaLabel?: string
 }

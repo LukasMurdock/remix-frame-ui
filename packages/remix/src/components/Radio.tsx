@@ -54,6 +54,7 @@ export type RadioGroupProps = {
   error?: ComponentChildren
   required?: boolean
   disabled?: boolean
+  /** @default "vertical" */
   orientation?: "vertical" | "horizontal"
   onValueChange?: (value: string) => void
 }

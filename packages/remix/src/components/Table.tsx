@@ -16,6 +16,7 @@ export type TableProps = {
   caption?: ComponentChildren
   columns: TableColumn[]
   rows: TableRow[]
+  /** @default "No rows" */
   emptyState?: ComponentChildren
 }
 

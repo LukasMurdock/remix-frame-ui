@@ -12,9 +12,13 @@ export type AppProviderNavigatePayload = {
 
 export type AppProviderProps = {
   children: ComponentChildren
+  /** @default "en-US" */
   locale?: string
+  /** @default "ltr" */
   direction?: AppProviderDirection
+  /** @default "light" */
   colorScheme?: AppProviderColorScheme
+  /** @default "no-preference" */
   reducedMotion?: AppProviderReducedMotion
   onNavigate?: (payload: AppProviderNavigatePayload) => void
 }

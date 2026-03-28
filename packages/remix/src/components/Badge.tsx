@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type BadgeTone = "neutral" | "success" | "warning" | "danger" | "info"
 
 export type BadgeProps = {
+  /** @default "neutral" */
   tone?: BadgeTone
   children: ComponentChildren
 }

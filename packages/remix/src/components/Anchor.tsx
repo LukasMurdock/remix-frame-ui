@@ -10,8 +10,11 @@ export type AnchorItem = {
 
 export type AnchorProps = {
   items: AnchorItem[]
+  /** @default "Anchor" */
   ariaLabel?: string
+  /** @default first enabled item href */
   activeHref?: string
+  /** @default first enabled item href */
   defaultActiveHref?: string
   onActiveHrefChange?: (href: string) => void
 }

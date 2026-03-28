@@ -12,14 +12,21 @@ export type TransferItem = {
 
 export type TransferProps = {
   items: TransferItem[]
+  /** @default [] */
   targetKeys?: string[]
+  /** @default [] */
   defaultTargetKeys?: string[]
+  /** @default [] */
   selectedKeys?: string[]
+  /** @default [] */
   defaultSelectedKeys?: string[]
   onChange?: (targetKeys: string[]) => void
   onSelectChange?: (selectedKeys: string[]) => void
+  /** @default "Available" */
   leftTitle?: ComponentChildren
+  /** @default "Selected" */
   rightTitle?: ComponentChildren
+  /** @default "No items" */
   emptyState?: ComponentChildren
 }
 

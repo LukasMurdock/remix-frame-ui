@@ -7,14 +7,18 @@ export type RangeSliderProps = {
   id?: string
   value?: RangeSliderValue
   defaultValue?: RangeSliderValue
+  /** @default 0 */
   min?: number
+  /** @default 100 */
   max?: number
   step?: number
   disabled?: boolean
   required?: boolean
   nameStart?: string
   nameEnd?: string
+  /** @default "Minimum value" */
   startLabel?: string
+  /** @default "Maximum value" */
   endLabel?: string
   onValueChange?: (value: RangeSliderValue) => void
   "aria-describedby"?: string

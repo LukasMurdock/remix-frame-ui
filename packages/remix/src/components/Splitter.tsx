@@ -6,13 +6,19 @@ export type SplitterOrientation = "horizontal" | "vertical"
 export type SplitterProps = {
   first: ComponentChildren
   second: ComponentChildren
+  /** @default "horizontal" */
   orientation?: SplitterOrientation
   size?: number
+  /** @default 50 */
   defaultSize?: number
+  /** @default 20 */
   minSize?: number
+  /** @default 80 */
   maxSize?: number
+  /** @default 5 */
   step?: number
   onSizeChange?: (size: number) => void
+  /** @default "Resize panels" */
   ariaLabel?: string
 }
 

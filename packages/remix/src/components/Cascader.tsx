@@ -10,13 +10,21 @@ export type CascaderOption = {
 
 export type CascaderProps = {
   options: CascaderOption[]
+  /** @default [] */
   value?: string[]
+  /** @default [] */
   defaultValue?: string[]
+  /** @default false */
   open?: boolean
+  /** @default false */
   defaultOpen?: boolean
+  /** @default "Select" */
   placeholder?: ComponentChildren
+  /** @default "No options" */
   emptyState?: ComponentChildren
+  /** @default false */
   changeOnSelect?: boolean
+  /** @default "Cascader" */
   ariaLabel?: string
   onChange?: (value: string[]) => void
   onOpenChange?: (open: boolean) => void

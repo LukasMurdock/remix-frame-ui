@@ -18,7 +18,9 @@ export type SideNavSection = {
 export type SideNavProps = {
   sections: SideNavSection[]
   activeId?: string
+  /** @default false */
   compact?: boolean
+  /** @default "Side navigation" */
   ariaLabel?: string
 }
 

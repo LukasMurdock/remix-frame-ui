@@ -16,6 +16,7 @@ export type LinkProps = {
   download?: boolean
   "aria-current"?: "page" | "step" | "location" | "date" | "time" | "true" | "false"
   onNavigate?: (payload: LinkNavigatePayload) => void
+  /** @default "internal" */
   navigateMode?: LinkNavigateMode
 }
 

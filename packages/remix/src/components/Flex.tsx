@@ -8,11 +8,17 @@ export type FlexWrap = "nowrap" | "wrap"
 
 export type FlexProps = {
   children: ComponentChildren
+  /** @default "row" */
   direction?: FlexDirection
+  /** @default "stretch" */
   align?: FlexAlign
+  /** @default "start" */
   justify?: FlexJustify
+  /** @default "nowrap" */
   wrap?: FlexWrap
+  /** @default "0.75rem" */
   gap?: string
+  /** @default false */
   inline?: boolean
 }
 

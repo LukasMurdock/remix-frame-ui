@@ -1,7 +1,9 @@
 import type { Handle } from "remix/component"
 
 export type SkeletonProps = {
+  /** @default 3 */
   lines?: number
+  /** @default true */
   animated?: boolean
 }
 

@@ -11,7 +11,9 @@ export type TopNavItem = {
 export type TopNavProps = {
   items: TopNavItem[]
   activeId?: string
+  /** @default false */
   compact?: boolean
+  /** @default "Top navigation" */
   ariaLabel?: string
 }
 

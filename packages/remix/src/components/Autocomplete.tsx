@@ -14,7 +14,9 @@ export type AutocompleteProps = {
   name?: string
   label: ComponentChildren
   options: AutocompleteOption[]
+  /** @default "" */
   value?: string
+  /** @default "" */
   defaultValue?: string
   disabled?: boolean
   required?: boolean

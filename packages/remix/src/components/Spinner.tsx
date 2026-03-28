@@ -3,7 +3,9 @@ import type { Handle } from "remix/component"
 export type SpinnerSize = "sm" | "md" | "lg"
 
 export type SpinnerProps = {
+  /** @default "Loading" */
   label?: string
+  /** @default "md" */
   size?: SpinnerSize
 }
 

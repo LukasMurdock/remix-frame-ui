@@ -11,11 +11,16 @@ export type SegmentedOption = {
 
 export type SegmentedProps = {
   options: SegmentedOption[]
+  /** @default first enabled option value */
   value?: string
+  /** @default first enabled option value */
   defaultValue?: string
   onChange?: (value: string) => void
+  /** @default "comfortable" */
   size?: SegmentedSize
+  /** @default false */
   fullWidth?: boolean
+  /** @default "Segmented control" */
   ariaLabel?: string
 }
 

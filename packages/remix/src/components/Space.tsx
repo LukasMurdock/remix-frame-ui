@@ -7,9 +7,13 @@ export type SpaceAlign = "start" | "center" | "end" | "baseline" | "stretch"
 
 export type SpaceProps = {
   children: ComponentChildren
+  /** @default "horizontal" */
   direction?: SpaceDirection
+  /** @default "md" */
   size?: SpaceSize
+  /** @default "center" */
   align?: SpaceAlign
+  /** @default false */
   wrap?: boolean
 }
 

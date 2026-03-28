@@ -10,12 +10,17 @@ export type TreeNode = {
 
 export type TreeProps = {
   nodes: TreeNode[]
+  /** @default first node id */
   selectedId?: string
+  /** @default first node id */
   defaultSelectedId?: string
+  /** @default [] */
   expandedIds?: string[]
+  /** @default [] */
   defaultExpandedIds?: string[]
   onSelect?: (id: string) => void
   onExpandedChange?: (ids: string[]) => void
+  /** @default "Tree" */
   ariaLabel?: string
 }
 

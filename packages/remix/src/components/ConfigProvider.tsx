@@ -17,10 +17,15 @@ export type ConfigProviderRouter = {
 
 export type ConfigProviderProps = {
   children: ComponentChildren
+  /** @default "en-US" */
   locale?: string
+  /** @default "ltr" */
   direction?: ConfigProviderDirection
+  /** @default "light" */
   colorScheme?: ConfigProviderColorScheme
+  /** @default "no-preference" */
   reducedMotion?: ConfigProviderReducedMotion
+  /** @default "internal" */
   navigateMode?: LinkNavigateMode
   router?: ConfigProviderRouter
   onNavigate?: (payload: ConfigProviderNavigatePayload) => void

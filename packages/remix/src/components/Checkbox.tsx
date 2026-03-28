@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type CheckboxProps = {
   id?: string
   name?: string
+  /** @default "on" */
   value?: string
   checked?: boolean
   defaultChecked?: boolean

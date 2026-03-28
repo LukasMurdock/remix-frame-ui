@@ -1,11 +1,15 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { applyGeneratedApiSection } from "./component-api-sections.js"
+import { requiredSections } from "./component-doc-sections.js"
+import { guideOrder } from "./guide-config.js"
 import { renderMarkdownToHtml } from "./render-markdown.js"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, "..")
 const contentDir = path.join(root, "content", "components")
+const guidesDir = path.join(root, "content", "guides")
 const outDir = path.join(root, "dist")
 const runtimeSourcePath = path.join(root, "src", "docs-runtime.js")
 const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", "component-metadata.json")
@@ -97,46 +101,119 @@ const demoByComponent = new Map([
 ])
 
 const files = (await readdir(contentDir)).filter((file) => file.endsWith(".md"))
+const guideFiles = await readMarkdownFiles(guidesDir)
 const metadata = JSON.parse(await readFile(metadataPath, "utf8"))
-const maturityByName = new Map(metadata.map((entry) => [entry.name.toLowerCase(), entry.maturity]))
-const requiredSections = ["## HTML parity", "## Runtime notes", "## Accessibility matrix"]
+const metadataByName = new Map(metadata.map((entry) => [entry.name.toLowerCase(), entry]))
+const maturitySortOrder = { stable: 0, experimental: 1 }
+const guideOrderRank = new Map(guideOrder.map((slug, index) => [slug, index]))
 
-const pages = []
+const componentPages = []
 for (const file of files) {
-  const markdown = await readFile(path.join(contentDir, file), "utf8")
+  const sourceMarkdown = await readFile(path.join(contentDir, file), "utf8")
   const componentName = file.replace(/\.md$/, "")
-  if (!maturityByName.has(componentName)) {
+  const metadataEntry = metadataByName.get(componentName)
+  if (!metadataEntry) {
     throw new Error(`${file} does not have a maturity entry in component metadata`)
   }
   for (const section of requiredSections) {
-    if (!markdown.includes(section)) {
+    if (!sourceMarkdown.includes(section)) {
       throw new Error(`${file} is missing required section: ${section}`)
     }
   }
+  const markdown = applyGeneratedApiSection(componentName, sourceMarkdown)
   const html = await renderMarkdownToHtml(markdown)
-  pages.push({ file, markdown: html, maturity: maturityByName.get(componentName) })
+  componentPages.push({ id: componentName, title: metadataEntry.name, html, maturity: metadataEntry.maturity })
 }
+
+componentPages.sort(
+  (a, b) => maturitySortOrder[a.maturity] - maturitySortOrder[b.maturity] || a.title.localeCompare(b.title),
+)
+
+const guidePages = []
+for (const file of guideFiles) {
+  const markdown = await readFile(path.join(guidesDir, file), "utf8")
+  const slug = file.replace(/\.md$/, "")
+  const html = await renderMarkdownToHtml(markdown)
+  guidePages.push({
+    slug,
+    id: `guide-${slug}`,
+    title: extractMarkdownTitle(markdown, titleFromSlug(slug)),
+    html,
+  })
+}
+
+guidePages.sort((a, b) => {
+  const rankA = guideOrderRank.get(a.slug) ?? Number.MAX_SAFE_INTEGER
+  const rankB = guideOrderRank.get(b.slug) ?? Number.MAX_SAFE_INTEGER
+  return rankA - rankB || a.title.localeCompare(b.title)
+})
 
 await mkdir(outDir, { recursive: true })
 
-const nav = pages
-  .map((page, index) => {
-    const name = page.file.replace(/\.md$/, "")
-    return `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${name}" ${index === 0 ? 'aria-current="page"' : ""}>${name}</a></li>`
-  })
+const firstPageId = guidePages[0]?.id ?? componentPages[0]?.id ?? ""
+
+const guideNav = guidePages
+  .map(
+    (page) =>
+      `<li class="rf-side-nav-item" data-doc-kind="guide" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
+  )
   .join("\n")
 
-const docsBody = pages
+const componentNav = componentPages
+  .map(
+    (page) =>
+      `<li class="rf-side-nav-item" data-doc-kind="component" data-maturity="${page.maturity}" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
+  )
+  .join("\n")
+
+const navSections = [
+  guidePages.length
+    ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Start Here</h2><ul class="rf-side-nav-list">${guideNav}</ul></section>`
+    : "",
+  componentPages.length
+    ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Components</h2><label class="docs-site-nav-filter"><input type="checkbox" data-docs-stable-only /> Stable only</label><ul class="rf-side-nav-list">${componentNav}</ul></section>`
+    : "",
+]
+  .filter(Boolean)
+  .join("\n")
+
+const guideBody = guidePages.map((page) => `<article id="${page.id}">${page.html}</article>`).join("\n")
+
+const componentBody = componentPages
   .map((page) => {
-    const name = page.file.replace(/\.md$/, "")
-    const demo = demoByComponent.get(name)
+    const demo = demoByComponent.get(page.id)
     const demoSection = demo
       ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
       : ""
 
-    return `<article id="${name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.markdown}</article>`
+    return `<article id="${page.id}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
   })
   .join("\n")
+
+const docsBody = [guideBody, componentBody].filter(Boolean).join("\n")
+
+function titleFromSlug(slug) {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ")
+}
+
+function extractMarkdownTitle(markdown, fallback) {
+  const match = /^#\s+(.+)$/m.exec(markdown)
+  return match?.[1]?.trim() || fallback
+}
+
+async function readMarkdownFiles(directory) {
+  try {
+    return (await readdir(directory)).filter((file) => file.endsWith(".md"))
+  } catch (error) {
+    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") {
+      return []
+    }
+    throw error
+  }
+}
 
 const html = `<!doctype html>
 <html lang="en">
@@ -181,6 +258,8 @@ const html = `<!doctype html>
       .docs-site-nav { display: grid; gap: 0.75rem; }
       .docs-site-nav-title { margin: 0; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
       .docs-site-nav .rf-side-nav-list { display: grid; gap: 0.2rem; margin: 0; padding: 0; list-style: none; }
+      .docs-site-nav-filter { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8125rem; color: #475569; }
+      .docs-site-nav-filter input { accent-color: #2563eb; }
       .docs-site-content article {
         margin-bottom: 2rem;
         scroll-margin-top: 5.25rem;
@@ -970,10 +1049,7 @@ const html = `<!doctype html>
       </header>
       <div class="rf-app-shell-body">
         <aside class="rf-app-shell-sidebar">
-          <nav class="rf-side-nav docs-site-nav" aria-label="Components">
-            <h2 class="docs-site-nav-title">Components</h2>
-            <ul class="rf-side-nav-list">${nav}</ul>
-          </nav>
+          <nav class="rf-side-nav docs-site-nav" aria-label="Documentation">${navSections}</nav>
         </aside>
         <main class="rf-app-shell-main docs-site-content">${docsBody}</main>
       </div>
@@ -983,20 +1059,59 @@ const html = `<!doctype html>
         const links = Array.from(document.querySelectorAll(".docs-site-nav .rf-side-nav-link"))
         if (links.length === 0) return
 
+        const stableOnlyToggle = document.querySelector("[data-docs-stable-only]")
+        const componentItems = Array.from(
+          document.querySelectorAll(".docs-site-nav .rf-side-nav-item[data-doc-kind='component']"),
+        )
+
+        const getVisibleLinks = () =>
+          links.filter((link) => {
+            if (!(link instanceof HTMLAnchorElement)) return false
+            const item = link.closest(".rf-side-nav-item")
+            return !(item instanceof HTMLElement && item.hidden)
+          })
+
+        const applyComponentFilter = () => {
+          const stableOnly = stableOnlyToggle instanceof HTMLInputElement ? stableOnlyToggle.checked : false
+          for (const item of componentItems) {
+            if (!(item instanceof HTMLElement)) continue
+            const maturity = item.dataset.maturity
+            item.hidden = stableOnly && maturity !== "stable"
+          }
+        }
+
         const update = () => {
-          const fallback = links[0]?.getAttribute("href") || ""
-          const target = (window.location.hash || fallback).replace(/^#/, "")
+          const visibleLinks = getVisibleLinks()
+          if (visibleLinks.length === 0) return
+
+          const fallback = visibleLinks[0]?.getAttribute("href") || ""
+          const requested = window.location.hash || fallback
+          const activeHref = visibleLinks.some((link) => link.getAttribute("href") === requested) ? requested : fallback
+
+          if (activeHref && window.location.hash !== activeHref) {
+            history.replaceState(null, "", activeHref)
+          }
+
           for (const link of links) {
             if (!(link instanceof HTMLAnchorElement)) continue
             const item = link.closest(".rf-side-nav-item")
-            const isActive = link.getAttribute("href") === "#" + target
+            const visible = !(item instanceof HTMLElement && item.hidden)
+            const isActive = visible && link.getAttribute("href") === activeHref
             if (item instanceof HTMLElement) item.dataset.active = isActive ? "true" : "false"
             if (isActive) link.setAttribute("aria-current", "page")
             else link.removeAttribute("aria-current")
           }
         }
 
+        if (stableOnlyToggle instanceof HTMLInputElement) {
+          stableOnlyToggle.addEventListener("change", () => {
+            applyComponentFilter()
+            update()
+          })
+        }
+
         window.addEventListener("hashchange", update)
+        applyComponentFilter()
         update()
       })()
     </script>
@@ -1006,4 +1121,4 @@ const html = `<!doctype html>
 
 await writeFile(path.join(outDir, "index.html"), html)
 await writeFile(path.join(outDir, "docs-runtime.js"), await readFile(runtimeSourcePath, "utf8"))
-console.log(`Built docs for ${pages.length} components`)
+console.log(`Built docs for ${componentPages.length} components and ${guidePages.length} guides`)

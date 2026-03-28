@@ -6,8 +6,11 @@ export type AvatarStatus = "online" | "offline" | "busy"
 export type AvatarProps = {
   name: string
   src?: string
+  /** @default name */
   alt?: string
+  /** @default "md" */
   size?: AvatarSize
+  /** @default false */
   square?: boolean
   status?: AvatarStatus
 }

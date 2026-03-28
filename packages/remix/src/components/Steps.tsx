@@ -11,7 +11,9 @@ export type StepStatus = "complete" | "current" | "upcoming"
 
 export type StepsProps = {
   items: StepItem[]
+  /** @default first item id */
   currentId?: string
+  /** @default "Progress" */
   ariaLabel?: string
 }
 

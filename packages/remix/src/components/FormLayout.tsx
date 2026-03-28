@@ -8,6 +8,7 @@ export type FormLayoutProps = {
   description?: ComponentChildren
   children: ComponentChildren
   actions?: ComponentChildren
+  /** @default 1 */
   columns?: FormLayoutColumns
 }
 

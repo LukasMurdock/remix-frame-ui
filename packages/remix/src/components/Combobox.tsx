@@ -13,7 +13,9 @@ export type ComboboxProps = {
   id?: string
   label: ComponentChildren
   options: ComboboxOption[]
+  /** @default "" */
   value?: string
+  /** @default "" */
   defaultValue?: string
   onValueChange?: (value: string) => void
 }
