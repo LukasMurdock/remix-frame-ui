@@ -34,7 +34,7 @@ import {
   createDataTableContainsFilter,
   createDataTableEqualsFilter,
   type DataTableRow,
-} from "@lukasmurdock/remix"
+} from "@lukasmurdock/remix-ui-components"
 
 type Filters = {
   query: string

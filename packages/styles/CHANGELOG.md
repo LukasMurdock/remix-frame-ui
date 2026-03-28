@@ -1,4 +1,4 @@
-# @lukasmurdock/styles
+# @lukasmurdock/remix-ui-styles
 
 ## 0.1.0
 

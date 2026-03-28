@@ -44,7 +44,7 @@ importers:
 
   apps/docs:
     dependencies:
-      '@lukasmurdock/remix':
+      '@lukasmurdock/remix-ui-components':
         specifier: workspace:*
         version: link:../../packages/remix
       rehype-stringify:
@@ -75,10 +75,10 @@ importers:
 
   packages/remix:
     dependencies:
-      '@lukasmurdock/core':
+      '@lukasmurdock/remix-ui-core':
         specifier: workspace:*
         version: link:../core
-      '@lukasmurdock/styles':
+      '@lukasmurdock/remix-ui-styles':
         specifier: workspace:*
         version: link:../styles
       remix:

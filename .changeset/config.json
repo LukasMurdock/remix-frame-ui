@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": false,
   "commit": false,
-  "fixed": [["@lukasmurdock/core", "@lukasmurdock/remix", "@lukasmurdock/styles"]],
+  "fixed": [["@lukasmurdock/remix-ui-core", "@lukasmurdock/remix-ui-components", "@lukasmurdock/remix-ui-styles"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",

@@ -5,27 +5,27 @@
 ## Install
 
 ```bash
-pnpm add @lukasmurdock/remix @lukasmurdock/styles
+pnpm add @lukasmurdock/remix-ui-components @lukasmurdock/remix-ui-styles
 ```
 
 ## Quick start
 
 ```tsx
-import "@lukasmurdock/styles/src/index.css"
-import { Button } from "@lukasmurdock/remix"
+import "@lukasmurdock/remix-ui-styles/src/index.css"
+import { Button } from "@lukasmurdock/remix-ui-components"
 
 export function Example() {
   return <Button variant="primary">Save</Button>
 }
 ```
 
-For low-level helpers, install `@lukasmurdock/core`.
+For low-level helpers, install `@lukasmurdock/remix-ui-core`.
 
 ## Packages
 
-- `@lukasmurdock/core`
-- `@lukasmurdock/styles`
-- `@lukasmurdock/remix`
+- `@lukasmurdock/remix-ui-core`
+- `@lukasmurdock/remix-ui-styles`
+- `@lukasmurdock/remix-ui-components`
 - `@lukasmurdock/docs`
 
 ## Browser baseline

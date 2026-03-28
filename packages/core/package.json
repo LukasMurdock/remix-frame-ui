@@ -1,5 +1,5 @@
 {
-  "name": "@lukasmurdock/core",
+  "name": "@lukasmurdock/remix-ui-core",
   "description": "Core accessibility and form primitives for Remix Frame UI.",
   "version": "0.1.0",
   "license": "MIT",
