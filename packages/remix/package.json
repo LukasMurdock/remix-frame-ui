@@ -1,6 +1,26 @@
 {
   "name": "@remix-frame-ui/remix",
+  "description": "Remix Frame UI component library for remix/component apps.",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasmurdock/remix-frame-ui.git"
+  },
+  "homepage": "https://github.com/lukasmurdock/remix-frame-ui#readme",
+  "bugs": {
+    "url": "https://github.com/lukasmurdock/remix-frame-ui/issues"
+  },
+  "keywords": [
+    "remix",
+    "ui",
+    "components",
+    "design-system",
+    "a11y"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,6 +41,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup src/index.ts src/server/index.ts src/client/index.ts --format esm --dts",
     "typecheck": "tsc -p tsconfig.json --noEmit",

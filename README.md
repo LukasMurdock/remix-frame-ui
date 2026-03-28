@@ -2,6 +2,25 @@
 
 `remix/component`-native UI primitives with layered CSS and strict HTML semantics.
 
+## Install
+
+```bash
+pnpm add @remix-frame-ui/remix @remix-frame-ui/styles
+```
+
+## Quick start
+
+```tsx
+import "@remix-frame-ui/styles/src/index.css"
+import { Button } from "@remix-frame-ui/remix"
+
+export function Example() {
+  return <Button variant="primary">Save</Button>
+}
+```
+
+For low-level helpers, install `@remix-frame-ui/core`.
+
 ## Packages
 
 - `@remix-frame-ui/core`
@@ -20,6 +39,7 @@
 
 ```bash
 pnpm install
+pnpm run format:check
 pnpm run tokens:build
 pnpm run check:css-order
 pnpm run typecheck
@@ -40,3 +60,12 @@ pnpm dlx wrangler login
 # Deploy docs static assets to Workers
 pnpm run docs:deploy
 ```
+
+## Releases
+
+This repo uses Changesets.
+
+- Add a changeset in pull requests that change public behavior.
+- Merging to `main` runs release workflows:
+  - stable: creates/updates a release PR and publishes after merge
+  - canary: publishes snapshot packages under the `canary` dist-tag

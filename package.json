@@ -4,6 +4,10 @@
   "version": "0.0.0",
   "packageManager": "pnpm@10.8.1",
   "scripts": {
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish",
+    "release:canary": "changeset version --snapshot canary && changeset publish --tag canary",
     "build": "pnpm -r --filter @remix-frame-ui/* --filter=!@remix-frame-ui/docs run build && pnpm --filter @remix-frame-ui/docs run build",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
@@ -21,6 +25,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.53.2",
     "@testing-library/dom": "^10.4.0",
