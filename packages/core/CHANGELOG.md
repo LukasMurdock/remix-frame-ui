@@ -1,4 +1,4 @@
-# @lukasmurdock/core
+# @lukasmurdock/remix-ui-core
 
 ## 0.1.0
 

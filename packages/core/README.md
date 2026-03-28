@@ -1,17 +1,17 @@
-# @lukasmurdock/core
+# @lukasmurdock/remix-ui-core
 
 Low-level accessibility and form helpers used by Remix Frame UI.
 
 ## Install
 
 ```bash
-pnpm add @lukasmurdock/core
+pnpm add @lukasmurdock/remix-ui-core
 ```
 
 ## Usage
 
 ```ts
-import { createFieldIds, createAriaFieldState } from "@lukasmurdock/core"
+import { createFieldIds, createAriaFieldState } from "@lukasmurdock/remix-ui-core"
 
 const ids = createFieldIds("email")
 const aria = createAriaFieldState({

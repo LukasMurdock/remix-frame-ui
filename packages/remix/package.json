@@ -1,5 +1,5 @@
 {
-  "name": "@lukasmurdock/remix",
+  "name": "@lukasmurdock/remix-ui-components",
   "description": "Remix Frame UI component library for remix/component apps.",
   "version": "0.1.0",
   "license": "MIT",
@@ -50,8 +50,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@lukasmurdock/core": "workspace:*",
-    "@lukasmurdock/styles": "workspace:*",
+    "@lukasmurdock/remix-ui-core": "workspace:*",
+    "@lukasmurdock/remix-ui-styles": "workspace:*",
     "remix": "3.0.0-alpha.4"
   },
   "devDependencies": {

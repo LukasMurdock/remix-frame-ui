@@ -1,4 +1,4 @@
-# @lukasmurdock/remix
+# @lukasmurdock/remix-ui-components
 
 ## 0.1.0
 

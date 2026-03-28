@@ -1,17 +1,17 @@
-# @lukasmurdock/styles
+# @lukasmurdock/remix-ui-styles
 
 Layered CSS tokens, primitives, patterns, and component styles.
 
 ## Install
 
 ```bash
-pnpm add @lukasmurdock/styles
+pnpm add @lukasmurdock/remix-ui-styles
 ```
 
 ## Usage
 
 ```ts
-import "@lukasmurdock/styles/src/index.css"
+import "@lukasmurdock/remix-ui-styles/src/index.css"
 ```
 
 ## Layers

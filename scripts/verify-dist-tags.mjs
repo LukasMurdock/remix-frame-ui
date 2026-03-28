@@ -7,7 +7,7 @@ if (!tag) {
   process.exit(1)
 }
 
-const packages = ["@lukasmurdock/core", "@lukasmurdock/remix", "@lukasmurdock/styles"]
+const packages = ["@lukasmurdock/remix-ui-core", "@lukasmurdock/remix-ui-components", "@lukasmurdock/remix-ui-styles"]
 
 function npmView(pkg, distTag) {
   const command = `npm view ${pkg}@${distTag} version --json`

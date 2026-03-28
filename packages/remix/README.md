@@ -1,18 +1,18 @@
-# @lukasmurdock/remix
+# @lukasmurdock/remix-ui-components
 
 Component library for `remix/component` applications.
 
 ## Install
 
 ```bash
-pnpm add @lukasmurdock/remix @lukasmurdock/styles
+pnpm add @lukasmurdock/remix-ui-components @lukasmurdock/remix-ui-styles
 ```
 
 ## Usage
 
 ```tsx
-import "@lukasmurdock/styles/src/index.css"
-import { Button, Input } from "@lukasmurdock/remix"
+import "@lukasmurdock/remix-ui-styles/src/index.css"
+import { Button, Input } from "@lukasmurdock/remix-ui-components"
 
 export function FormRow() {
   return (
@@ -26,5 +26,5 @@ export function FormRow() {
 
 ## Notes
 
-- Package exports include `@lukasmurdock/remix/server` and `@lukasmurdock/remix/client`.
+- Package exports include `@lukasmurdock/remix-ui-components/server` and `@lukasmurdock/remix-ui-components/client`.
 - Most components are currently marked `experimental`.
