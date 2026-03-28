@@ -40,7 +40,9 @@ export function Steps(_handle: Handle) {
             const current = status === "current"
             return (
               <li key={item.id} className="rf-steps-item" data-status={status}>
-                <span className="rf-steps-marker" aria-hidden="true">{index + 1}</span>
+                <span className="rf-steps-marker" aria-hidden="true">
+                  {index + 1}
+                </span>
                 <span className="rf-steps-content">
                   <span className="rf-steps-label" aria-current={current ? "step" : undefined}>
                     {item.label}

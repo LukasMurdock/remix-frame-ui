@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  resolveSpaceAlign,
-  resolveSpaceDirection,
-  resolveSpaceSize,
-  resolveSpaceWrap,
-} from "../src/components/Space"
+import { resolveSpaceAlign, resolveSpaceDirection, resolveSpaceSize, resolveSpaceWrap } from "../src/components/Space"
 
 describe("space helpers", () => {
   it("resolves defaults", () => {

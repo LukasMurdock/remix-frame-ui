@@ -128,7 +128,11 @@ export function CommandPalette(handle: Handle) {
               on("keydown", (event) => {
                 if (event.key === "ArrowDown") {
                   event.preventDefault()
-                  const next = findNextEnabledCommandIndex(filtered, highlighted < 0 ? filtered.length - 1 : highlighted, 1)
+                  const next = findNextEnabledCommandIndex(
+                    filtered,
+                    highlighted < 0 ? filtered.length - 1 : highlighted,
+                    1,
+                  )
                   if (next < 0) return
                   highlighted = next
                   handle.update()

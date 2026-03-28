@@ -60,7 +60,9 @@ export function Field(_handle: Handle) {
 }
 
 export function Label(_handle: Handle) {
-  return (props: { htmlFor?: string; children: ComponentChildren }) => <label htmlFor={props.htmlFor}>{props.children}</label>
+  return (props: { htmlFor?: string; children: ComponentChildren }) => (
+    <label htmlFor={props.htmlFor}>{props.children}</label>
+  )
 }
 
 export function Description(_handle: Handle) {

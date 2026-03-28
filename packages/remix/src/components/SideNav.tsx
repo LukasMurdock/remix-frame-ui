@@ -48,7 +48,11 @@ function renderSideNavItems(items: SideNavItem[], activeId: string | undefined):
             {item.label}
           </a>
         ) : (
-          <span className="rf-side-nav-link" aria-current={current ? "page" : undefined} data-disabled={item.disabled ? "true" : "false"}>
+          <span
+            className="rf-side-nav-link"
+            aria-current={current ? "page" : undefined}
+            data-disabled={item.disabled ? "true" : "false"}
+          >
             {item.label}
           </span>
         )}
@@ -67,7 +71,11 @@ export function SideNav(_handle: Handle) {
     const activeId = resolveSideNavActiveId(props.sections, props.activeId)
 
     return (
-      <nav className="rf-side-nav" data-compact={compact ? "true" : "false"} aria-label={props.ariaLabel ?? "Side navigation"}>
+      <nav
+        className="rf-side-nav"
+        data-compact={compact ? "true" : "false"}
+        aria-label={props.ariaLabel ?? "Side navigation"}
+      >
         {props.sections.map((section, index) => (
           <section key={section.id ?? `section-${index}`} className="rf-side-nav-section">
             {section.label ? <h3 className="rf-side-nav-heading">{section.label}</h3> : null}

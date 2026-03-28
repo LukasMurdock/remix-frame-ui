@@ -184,7 +184,9 @@ export function TreeSelect(handle: Handle) {
           aria-label={props.ariaLabel ?? "Tree select"}
           mix={[on("click", () => setOpen(!open))]}
         >
-          <span className="rf-tree-select-trigger-label">{resolveTreeSelectLabel(props.options, selectedId, placeholder)}</span>
+          <span className="rf-tree-select-trigger-label">
+            {resolveTreeSelectLabel(props.options, selectedId, placeholder)}
+          </span>
           <span className="rf-tree-select-trigger-icon" aria-hidden="true">
             {open ? "▴" : "▾"}
           </span>

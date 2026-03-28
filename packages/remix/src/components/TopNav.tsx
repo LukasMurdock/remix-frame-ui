@@ -35,7 +35,11 @@ export function TopNav(_handle: Handle) {
     const activeId = resolveTopNavActiveId(props.items, props.activeId)
 
     return (
-      <nav className="rf-top-nav" data-compact={compact ? "true" : "false"} aria-label={props.ariaLabel ?? "Top navigation"}>
+      <nav
+        className="rf-top-nav"
+        data-compact={compact ? "true" : "false"}
+        aria-label={props.ariaLabel ?? "Top navigation"}
+      >
         <ul className="rf-top-nav-list">
           {props.items.map((item) => {
             const active = item.id === activeId
@@ -46,7 +50,11 @@ export function TopNav(_handle: Handle) {
                     {item.label}
                   </a>
                 ) : (
-                  <span className="rf-top-nav-link" data-disabled={item.disabled ? "true" : "false"} aria-current={active ? "page" : undefined}>
+                  <span
+                    className="rf-top-nav-link"
+                    data-disabled={item.disabled ? "true" : "false"}
+                    aria-current={active ? "page" : undefined}
+                  >
                     {item.label}
                   </span>
                 )}

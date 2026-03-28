@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  joinDateTimeLocal,
-  normalizeDateTimeLocal,
-  splitDateTimeLocal,
-} from "../src/components/DateTimePicker"
+import { joinDateTimeLocal, normalizeDateTimeLocal, splitDateTimeLocal } from "../src/components/DateTimePicker"
 
 describe("date time picker helpers", () => {
   it("splits and joins local datetime strings", () => {

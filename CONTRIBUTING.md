@@ -14,3 +14,9 @@
 
 - Typecheck, tests, build, and docs build must pass before release.
 - Accessibility keyboard and screen reader checks are release-blocking.
+
+## Formatting
+
+- Install dependencies with `pnpm install` to enable git hooks via Husky.
+- Pre-commit runs `lint-staged` and formats staged code/config files with Prettier.
+- Run `pnpm run format` to format supported files manually.

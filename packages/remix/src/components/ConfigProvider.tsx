@@ -38,7 +38,9 @@ export function resolveConfigProviderColorScheme(colorScheme?: ConfigProviderCol
   return colorScheme ?? "light"
 }
 
-export function resolveConfigProviderReducedMotion(reducedMotion?: ConfigProviderReducedMotion): ConfigProviderReducedMotion {
+export function resolveConfigProviderReducedMotion(
+  reducedMotion?: ConfigProviderReducedMotion,
+): ConfigProviderReducedMotion {
   return reducedMotion ?? "no-preference"
 }
 

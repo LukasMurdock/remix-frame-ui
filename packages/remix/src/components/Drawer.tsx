@@ -1,6 +1,12 @@
 import { on, ref, type Handle } from "remix/component"
 import type { ComponentChildren } from "../types"
-import { focusInitial, isolateModalTree, lockDocumentScroll, mountInContainer, trapTabNavigation } from "../overlay/primitives"
+import {
+  focusInitial,
+  isolateModalTree,
+  lockDocumentScroll,
+  mountInContainer,
+  trapTabNavigation,
+} from "../overlay/primitives"
 
 export type DrawerPosition = "left" | "right"
 

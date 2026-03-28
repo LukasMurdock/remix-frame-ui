@@ -1,19 +1,17 @@
 import type { Handle } from "remix/component"
 import type { ComponentChildren } from "../types"
-import {
-  resolveBreadcrumbCurrentIndex,
-  resolveBreadcrumbSeparator,
-  type BreadcrumbItem,
-} from "./Breadcrumbs"
+import { resolveBreadcrumbCurrentIndex, resolveBreadcrumbSeparator, type BreadcrumbItem } from "./Breadcrumbs"
 
-export type BreadcrumbOverflowEntry = {
-  kind: "item"
-  item: BreadcrumbItem
-  current: boolean
-} | {
-  kind: "ellipsis"
-  hiddenCount: number
-}
+export type BreadcrumbOverflowEntry =
+  | {
+      kind: "item"
+      item: BreadcrumbItem
+      current: boolean
+    }
+  | {
+      kind: "ellipsis"
+      hiddenCount: number
+    }
 
 export type BreadcrumbOverflowProps = {
   items: BreadcrumbItem[]
@@ -80,7 +78,10 @@ export function BreadcrumbOverflow(_handle: Handle) {
                   </span>
                 )
               ) : (
-                <span className="rf-breadcrumbs-overflow" aria-label={props.ellipsisLabel ?? `${entry.hiddenCount} hidden breadcrumb items`}>
+                <span
+                  className="rf-breadcrumbs-overflow"
+                  aria-label={props.ellipsisLabel ?? `${entry.hiddenCount} hidden breadcrumb items`}
+                >
                   ...
                 </span>
               )}

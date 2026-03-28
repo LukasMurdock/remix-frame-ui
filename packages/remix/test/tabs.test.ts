@@ -32,12 +32,7 @@ describe("tabs overflow helpers", () => {
 
   it("partitions tabs and keeps selected tab visible", () => {
     const partition = partitionTabsForOverflow(items, "settings", 4)
-    expect(partition.visible.map((item) => item.id)).toEqual([
-      "overview",
-      "deployments",
-      "incidents",
-      "settings",
-    ])
+    expect(partition.visible.map((item) => item.id)).toEqual(["overview", "deployments", "incidents", "settings"])
     expect(partition.overflow.map((item) => item.id)).toEqual(["alerts"])
   })
 

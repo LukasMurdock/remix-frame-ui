@@ -37,7 +37,13 @@ export function Space(_handle: Handle) {
     const wrap = resolveSpaceWrap(props.wrap)
 
     return (
-      <div className="rf-space" data-direction={direction} data-size={size} data-align={align} data-wrap={wrap ? "true" : "false"}>
+      <div
+        className="rf-space"
+        data-direction={direction}
+        data-size={size}
+        data-align={align}
+        data-wrap={wrap ? "true" : "false"}
+      >
         {props.children}
       </div>
     )

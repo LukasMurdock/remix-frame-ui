@@ -70,7 +70,8 @@ export function AppProvider(_handle: Handle) {
           on("click", (event) => {
             if (!props.onNavigate) return
             const target = event.target
-            const elementTarget = target instanceof Element ? target : target instanceof Node ? target.parentElement : null
+            const elementTarget =
+              target instanceof Element ? target : target instanceof Node ? target.parentElement : null
             if (!(elementTarget instanceof Element)) return
 
             const anchor = elementTarget.closest("a[href]")

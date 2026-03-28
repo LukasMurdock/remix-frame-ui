@@ -60,10 +60,7 @@ export function paginateDataTableRows(rows: DataTableRow[], page: number, pageSi
   return rows.slice(start, start + pageSize)
 }
 
-export function filterDataTableRows(
-  rows: DataTableRow[],
-  rowFilter?: DataTableRowFilter,
-): DataTableRow[] {
+export function filterDataTableRows(rows: DataTableRow[], rowFilter?: DataTableRowFilter): DataTableRow[] {
   if (!rowFilter) return rows
   return rows.filter((row) => rowFilter(row))
 }
@@ -268,7 +265,9 @@ export function DataTable(handle: Handle) {
         </table>
 
         <footer className="rf-data-table-footer">
-          <span className="rf-data-table-pagination-status">Page {page} of {totalPages}</span>
+          <span className="rf-data-table-pagination-status">
+            Page {page} of {totalPages}
+          </span>
           <div className="rf-data-table-pagination-actions">
             <button
               type="button"

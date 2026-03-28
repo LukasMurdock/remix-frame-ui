@@ -28,11 +28,7 @@ const options: CascaderOption[] = [
 
 describe("cascader helpers", () => {
   it("resolves valid path segments", () => {
-    expect(resolveCascaderPath(options, ["engineering", "platform", "api"])).toEqual([
-      "engineering",
-      "platform",
-      "api",
-    ])
+    expect(resolveCascaderPath(options, ["engineering", "platform", "api"])).toEqual(["engineering", "platform", "api"])
     expect(resolveCascaderPath(options, ["engineering", "unknown", "api"])).toEqual(["engineering"])
   })
 
@@ -54,10 +50,7 @@ describe("cascader helpers", () => {
       shouldCascaderCommitSelection({ value: "parent", label: "Parent", children: [{ value: "x", label: "X" }] }),
     ).toEqual({ commit: false, close: false })
     expect(
-      shouldCascaderCommitSelection(
-        { value: "parent", label: "Parent", children: [{ value: "x", label: "X" }] },
-        true,
-      ),
+      shouldCascaderCommitSelection({ value: "parent", label: "Parent", children: [{ value: "x", label: "X" }] }, true),
     ).toEqual({ commit: true, close: false })
   })
 

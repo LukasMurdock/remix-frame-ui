@@ -58,11 +58,7 @@ export function addDays(date: Date, days: number): Date {
 
 export function addMonths(date: Date, months: number): Date {
   const targetMonthStart = new Date(date.getFullYear(), date.getMonth() + months, 1)
-  const lastDayOfTargetMonth = new Date(
-    targetMonthStart.getFullYear(),
-    targetMonthStart.getMonth() + 1,
-    0,
-  ).getDate()
+  const lastDayOfTargetMonth = new Date(targetMonthStart.getFullYear(), targetMonthStart.getMonth() + 1, 0).getDate()
 
   return new Date(
     targetMonthStart.getFullYear(),
@@ -285,7 +281,11 @@ export function DatePicker(handle: Handle) {
 
             <table className="rf-date-picker-grid">
               <thead>
-                <tr>{weekDays.map((day) => <th key={day}>{day}</th>)}</tr>
+                <tr>
+                  {weekDays.map((day) => (
+                    <th key={day}>{day}</th>
+                  ))}
+                </tr>
               </thead>
               <tbody>
                 {Array.from({ length: 6 }).map((_, weekIndex) => (

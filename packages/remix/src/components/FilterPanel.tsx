@@ -4,10 +4,7 @@ import { Drawer, type DrawerCloseReason, type DrawerProps } from "./Drawer"
 
 export type FilterPanelCloseReason = DrawerCloseReason | "apply" | "clear"
 
-type FilterPanelDrawerOptions = Omit<
-  DrawerProps,
-  "children" | "title" | "onClose"
->
+type FilterPanelDrawerOptions = Omit<DrawerProps, "children" | "title" | "onClose">
 
 export type FilterPanelProps = FilterPanelDrawerOptions & {
   open: boolean

@@ -30,21 +30,15 @@ export function createAriaFieldState(params: {
   }
 }
 
-export type ControlledValue<T> =
-  | { mode: "controlled"; value: T }
-  | { mode: "uncontrolled"; defaultValue?: T }
+export type ControlledValue<T> = { mode: "controlled"; value: T } | { mode: "uncontrolled"; defaultValue?: T }
 
 export function getCheckboxSubmissionValue(value?: string): string {
   return value ?? "on"
 }
 
-export function assertNativeInputType(type: string): asserts type is
-  | "text"
-  | "email"
-  | "password"
-  | "search"
-  | "url"
-  | "tel" {
+export function assertNativeInputType(
+  type: string,
+): asserts type is "text" | "email" | "password" | "search" | "url" | "tel" {
   const allowed = new Set(["text", "email", "password", "search", "url", "tel"])
   if (!allowed.has(type)) {
     throw new Error(`Unsupported input type: ${type}`)

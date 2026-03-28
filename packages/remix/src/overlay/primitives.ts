@@ -133,7 +133,8 @@ export function focusMenuStep(root: HTMLElement, step: 1 | -1): void {
 
   const active = document.activeElement
   const currentIndex = items.findIndex((item) => item === active)
-  const nextIndex = currentIndex === -1 ? (step === 1 ? 0 : items.length - 1) : (currentIndex + step + items.length) % items.length
+  const nextIndex =
+    currentIndex === -1 ? (step === 1 ? 0 : items.length - 1) : (currentIndex + step + items.length) % items.length
   const next = items[nextIndex]
   next?.focus()
 }

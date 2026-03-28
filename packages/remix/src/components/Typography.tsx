@@ -42,12 +42,41 @@ export function Heading(_handle: Handle) {
     const level = resolveHeadingLevel(props.level)
     const className = "rf-typography-heading"
 
-    if (level === 1) return <h1 id={props.id} className={className}>{props.children}</h1>
-    if (level === 2) return <h2 id={props.id} className={className}>{props.children}</h2>
-    if (level === 3) return <h3 id={props.id} className={className}>{props.children}</h3>
-    if (level === 4) return <h4 id={props.id} className={className}>{props.children}</h4>
-    if (level === 5) return <h5 id={props.id} className={className}>{props.children}</h5>
-    return <h6 id={props.id} className={className}>{props.children}</h6>
+    if (level === 1)
+      return (
+        <h1 id={props.id} className={className}>
+          {props.children}
+        </h1>
+      )
+    if (level === 2)
+      return (
+        <h2 id={props.id} className={className}>
+          {props.children}
+        </h2>
+      )
+    if (level === 3)
+      return (
+        <h3 id={props.id} className={className}>
+          {props.children}
+        </h3>
+      )
+    if (level === 4)
+      return (
+        <h4 id={props.id} className={className}>
+          {props.children}
+        </h4>
+      )
+    if (level === 5)
+      return (
+        <h5 id={props.id} className={className}>
+          {props.children}
+        </h5>
+      )
+    return (
+      <h6 id={props.id} className={className}>
+        {props.children}
+      </h6>
+    )
   }
 }
 
@@ -57,11 +86,35 @@ export function Text(_handle: Handle) {
     const truncate = resolveTextTruncate(props.truncate)
     const className = "rf-typography-text"
 
-    if (as === "span") return <span className={className} data-truncate={truncate ? "true" : "false"}>{props.children}</span>
-    if (as === "strong") return <strong className={className} data-truncate={truncate ? "true" : "false"}>{props.children}</strong>
-    if (as === "em") return <em className={className} data-truncate={truncate ? "true" : "false"}>{props.children}</em>
-    if (as === "small") return <small className={className} data-truncate={truncate ? "true" : "false"}>{props.children}</small>
-    return <p className={className} data-truncate={truncate ? "true" : "false"}>{props.children}</p>
+    if (as === "span")
+      return (
+        <span className={className} data-truncate={truncate ? "true" : "false"}>
+          {props.children}
+        </span>
+      )
+    if (as === "strong")
+      return (
+        <strong className={className} data-truncate={truncate ? "true" : "false"}>
+          {props.children}
+        </strong>
+      )
+    if (as === "em")
+      return (
+        <em className={className} data-truncate={truncate ? "true" : "false"}>
+          {props.children}
+        </em>
+      )
+    if (as === "small")
+      return (
+        <small className={className} data-truncate={truncate ? "true" : "false"}>
+          {props.children}
+        </small>
+      )
+    return (
+      <p className={className} data-truncate={truncate ? "true" : "false"}>
+        {props.children}
+      </p>
+    )
   }
 }
 

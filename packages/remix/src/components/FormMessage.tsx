@@ -28,13 +28,7 @@ export function FormMessage(_handle: Handle) {
     const a11y = resolveFormMessageA11y(tone)
 
     return (
-      <p
-        id={props.id}
-        className="rf-form-message"
-        data-tone={tone}
-        role={a11y.role}
-        aria-live={a11y.live}
-      >
+      <p id={props.id} className="rf-form-message" data-tone={tone} role={a11y.role} aria-live={a11y.live}>
         {props.children}
       </p>
     )

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  nextSort,
-  sortRows,
-  type DataGridRow,
-  type DataGridSort,
-} from "../src/components/DataGridLite"
+import { nextSort, sortRows, type DataGridRow, type DataGridSort } from "../src/components/DataGridLite"
 
 const rows: DataGridRow[] = [
   { key: "a", cells: { name: "Deploy 3", duration: "91s" }, sortValues: { duration: 91 } },

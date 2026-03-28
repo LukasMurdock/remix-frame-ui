@@ -70,11 +70,7 @@ export function Splitter(handle: Handle) {
     }
 
     return (
-      <section
-        className="rf-splitter"
-        data-orientation={orientation}
-        style={`--rf-splitter-size: ${currentSize}%;`}
-      >
+      <section className="rf-splitter" data-orientation={orientation} style={`--rf-splitter-size: ${currentSize}%;`}>
         <div className="rf-splitter-pane" data-pane="first">
           {props.first}
         </div>

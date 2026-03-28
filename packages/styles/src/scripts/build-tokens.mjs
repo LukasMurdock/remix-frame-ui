@@ -49,7 +49,7 @@ for (const [name, value] of Object.entries(semantic)) {
 
 lines.push("  }")
 lines.push("")
-lines.push("  [data-theme=\"dark\"] {")
+lines.push('  [data-theme="dark"] {')
 lines.push("    --rf-surface-default: var(--rf-color-gray-900);")
 lines.push("    --rf-surface-inverse: var(--rf-color-gray-50);")
 lines.push("    --rf-text-default: var(--rf-color-gray-50);")

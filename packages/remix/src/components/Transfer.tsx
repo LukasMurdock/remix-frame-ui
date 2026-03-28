@@ -49,7 +49,10 @@ export function resolveTransferSelectedKeys(items: TransferItem[], selectedKeys?
   return [...unique]
 }
 
-export function partitionTransferItems(items: TransferItem[], targetKeys: string[]): {
+export function partitionTransferItems(
+  items: TransferItem[],
+  targetKeys: string[],
+): {
   sourceItems: TransferItem[]
   targetItems: TransferItem[]
 } {

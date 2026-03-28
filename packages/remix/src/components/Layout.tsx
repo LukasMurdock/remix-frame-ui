@@ -37,7 +37,11 @@ export function resolveLayoutSiderCollapsed(collapsed?: boolean): boolean {
 
 export function Layout(_handle: Handle) {
   return (props: LayoutProps) => (
-    <section className="rf-layout" data-direction={resolveLayoutDirection(props.direction)} data-has-sider={resolveLayoutHasSider(props.hasSider) ? "true" : "false"}>
+    <section
+      className="rf-layout"
+      data-direction={resolveLayoutDirection(props.direction)}
+      data-has-sider={resolveLayoutHasSider(props.hasSider) ? "true" : "false"}
+    >
       {props.children}
     </section>
   )
@@ -61,7 +65,12 @@ export function LayoutSider(_handle: Handle) {
     const width = resolveLayoutSiderWidth(props.width)
 
     return (
-      <aside className="rf-layout-sider" data-collapsed={collapsed ? "true" : "false"} style={`--rf-layout-sider-width: ${width};`} hidden={collapsed}>
+      <aside
+        className="rf-layout-sider"
+        data-collapsed={collapsed ? "true" : "false"}
+        style={`--rf-layout-sider-width: ${width};`}
+        hidden={collapsed}
+      >
         {props.children}
       </aside>
     )

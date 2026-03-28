@@ -24,11 +24,7 @@ export function isExternalLinkHref(href: string): boolean {
   return !(trimmed.startsWith("/") || trimmed.startsWith("#"))
 }
 
-export function resolveLinkRel(params: {
-  target?: string
-  rel?: string
-  href: string
-}): string | undefined {
+export function resolveLinkRel(params: { target?: string; rel?: string; href: string }): string | undefined {
   const rel = params.rel?.trim()
   const opensNewTab = params.target?.toLowerCase() === "_blank"
   if (!opensNewTab) return rel || undefined

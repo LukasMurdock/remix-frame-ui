@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  assertNativeInputType,
-  createAriaFieldState,
-  createFieldIds,
-  getCheckboxSubmissionValue,
-} from "../src/index"
+import { assertNativeInputType, createAriaFieldState, createFieldIds, getCheckboxSubmissionValue } from "../src/index"
 
 describe("core helpers", () => {
   it("creates stable field ids", () => {

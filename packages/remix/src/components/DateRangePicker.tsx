@@ -1,12 +1,5 @@
 import { on, ref, type Handle } from "remix/component"
-import {
-  addDays,
-  addMonths,
-  buildCalendarCells,
-  formatISODate,
-  monthStart,
-  parseISODate,
-} from "./DatePicker"
+import { addDays, addMonths, buildCalendarCells, formatISODate, monthStart, parseISODate } from "./DatePicker"
 
 export type DateRangeValue = {
   start?: string
@@ -177,7 +170,12 @@ export function DateRangePicker(handle: Handle) {
         {props.endName ? <input type="hidden" name={props.endName} value={selectedEnd ?? ""} /> : null}
 
         {open ? (
-          <section id={`${handle.id}-range`} role="dialog" aria-label="Choose date range" className="rf-date-picker-panel">
+          <section
+            id={`${handle.id}-range`}
+            role="dialog"
+            aria-label="Choose date range"
+            className="rf-date-picker-panel"
+          >
             <header className="rf-date-picker-header">
               <button
                 type="button"
@@ -212,7 +210,11 @@ export function DateRangePicker(handle: Handle) {
 
             <table className="rf-date-picker-grid">
               <thead>
-                <tr>{["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => <th key={day}>{day}</th>)}</tr>
+                <tr>
+                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                    <th key={day}>{day}</th>
+                  ))}
+                </tr>
               </thead>
               <tbody>
                 {Array.from({ length: 6 }).map((_, weekIndex) => (

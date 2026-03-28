@@ -32,7 +32,7 @@ export function AppHeader(_handle: Handle) {
         <div className="rf-app-header-top">
           <div className="rf-app-header-branding">
             {props.brand ? <div className="rf-app-header-brand">{props.brand}</div> : null}
-            {(props.title || props.subtitle) ? (
+            {props.title || props.subtitle ? (
               <div className="rf-app-header-text">
                 {props.title ? <h1 className="rf-app-header-title">{props.title}</h1> : null}
                 {props.subtitle ? <p className="rf-app-header-subtitle">{props.subtitle}</p> : null}
@@ -40,7 +40,7 @@ export function AppHeader(_handle: Handle) {
             ) : null}
           </div>
 
-          {(props.actions || props.account) ? (
+          {props.actions || props.account ? (
             <div className="rf-app-header-right">
               {props.actions ? <div className="rf-app-header-actions">{props.actions}</div> : null}
               {props.account ? <div className="rf-app-header-account">{props.account}</div> : null}

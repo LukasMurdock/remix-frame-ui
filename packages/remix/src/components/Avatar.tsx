@@ -21,11 +21,7 @@ export function resolveAvatarSquare(square?: boolean): boolean {
 }
 
 export function getAvatarInitials(name: string): string {
-  const parts = name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
+  const parts = name.trim().split(/\s+/).filter(Boolean).slice(0, 2)
 
   if (parts.length === 0) return "?"
   return parts.map((part) => part[0]?.toUpperCase() ?? "").join("")
@@ -40,7 +36,11 @@ export function Avatar(_handle: Handle) {
 
     return (
       <span className="rf-avatar" data-size={size} data-shape={square ? "square" : "circle"} data-status={props.status}>
-        {props.src ? <img src={props.src} alt={alt} className="rf-avatar-image" /> : <span className="rf-avatar-fallback">{initials}</span>}
+        {props.src ? (
+          <img src={props.src} alt={alt} className="rf-avatar-image" />
+        ) : (
+          <span className="rf-avatar-fallback">{initials}</span>
+        )}
       </span>
     )
   }

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  flattenTreeNodeIds,
-  resolveTreeSelectedId,
-  toggleTreeExpanded,
-  type TreeNode,
-} from "../src/components/Tree"
+import { flattenTreeNodeIds, resolveTreeSelectedId, toggleTreeExpanded, type TreeNode } from "../src/components/Tree"
 
 const nodes: TreeNode[] = [
   {

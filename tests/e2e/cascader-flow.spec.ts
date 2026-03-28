@@ -77,7 +77,9 @@ test("cascader demo supports keyboard navigation and escape close", async ({ pag
 })
 
 test("cascader demo closes on outside click and focus leave", async ({ page }) => {
-  await page.setContent('<button id="outside">Outside</button><div class="demo-mount" data-demo="cascader-basic"></div>')
+  await page.setContent(
+    '<button id="outside">Outside</button><div class="demo-mount" data-demo="cascader-basic"></div>',
+  )
 
   const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
   const runtimeSource = fs.readFileSync(runtimePath, "utf8")

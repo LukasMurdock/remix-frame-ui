@@ -128,7 +128,11 @@ export function Tree(handle: Handle) {
               </button>
             </div>
 
-            {hasChildren && isExpanded ? <ul className="rf-tree-group" role="group">{renderNodes(node.children!)}</ul> : null}
+            {hasChildren && isExpanded ? (
+              <ul className="rf-tree-group" role="group">
+                {renderNodes(node.children!)}
+              </ul>
+            ) : null}
           </li>
         )
       })

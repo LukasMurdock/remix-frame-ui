@@ -8,21 +8,31 @@
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "test:e2e": "playwright test",
+    "docs:dev": "pnpm --filter @remix-frame-ui/docs run dev",
     "tokens:build": "pnpm --filter @remix-frame-ui/styles run tokens:build",
     "check:css-order": "pnpm --filter @remix-frame-ui/styles run check:css-order",
     "check:bundle": "node scripts/check-bundle-size.mjs",
     "docs:build": "pnpm --filter @remix-frame-ui/docs run build",
     "docs:deploy": "pnpm --filter @remix-frame-ui/docs run cf:deploy",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,cjs,css,json,yml,yaml,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,cjs,css,json,yml,yaml,html}\"",
     "license:report": "node scripts/license-report.mjs",
-    "ci": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundle && pnpm run docs:build && pnpm run test:e2e && (pnpm run license:report || true)"
+    "ci": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundle && pnpm run docs:build && pnpm run test:e2e && (pnpm run license:report || true)",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.53.2",
     "@testing-library/dom": "^10.4.0",
     "@types/node": "^22.16.3",
+    "husky": "^9.1.7",
     "jsdom": "^29.0.1",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs,css,json,yml,yaml,html}": "prettier --write --ignore-unknown"
   }
 }
