@@ -1,6 +1,7 @@
 # Drawer
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -48,11 +49,11 @@ Controlled-only API (`open` + `onClose`) with focus trap and escape/backdrop dis
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Modal semantics | uses `role="dialog"` with `aria-modal="true"` |
-| Focus safety | traps tab focus while open and restores previous focus on close |
-| Dismiss controls | supports escape key, backdrop click, and close button reasons |
+| Requirement      | Behavior                                                        |
+| ---------------- | --------------------------------------------------------------- |
+| Modal semantics  | uses `role="dialog"` with `aria-modal="true"`                   |
+| Focus safety     | traps tab focus while open and restores previous focus on close |
+| Dismiss controls | supports escape key, backdrop click, and close button reasons   |
 
 ## Keymap spec
 

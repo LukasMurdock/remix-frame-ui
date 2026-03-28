@@ -1,6 +1,7 @@
 # FilterPanel
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -53,11 +54,11 @@ Built on `Drawer`; supports controlled open state, apply/clear callbacks, and co
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Dialog semantics | inherits modal dialog and focus management from `Drawer` |
-| Grouped controls | filter fields are grouped with optional description and labels |
-| Action behavior | clear/apply actions can run callbacks and optionally close the panel |
+| Requirement      | Behavior                                                             |
+| ---------------- | -------------------------------------------------------------------- |
+| Dialog semantics | inherits modal dialog and focus management from `Drawer`             |
+| Grouped controls | filter fields are grouped with optional description and labels       |
+| Action behavior  | clear/apply actions can run callbacks and optionally close the panel |
 
 ## Keymap spec
 

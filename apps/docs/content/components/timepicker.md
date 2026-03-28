@@ -1,6 +1,7 @@
 # TimePicker
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -47,11 +48,11 @@ Hydration optional for basic usage. Add hydration for `onValueChange`/`onValueCo
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Label association | via native `<label for>` and `id` |
-| Constraints | native `min`, `max`, and `step` semantics |
-| Error wiring | supports `aria-describedby` and `aria-invalid` |
+| Requirement       | Behavior                                       |
+| ----------------- | ---------------------------------------------- |
+| Label association | via native `<label for>` and `id`              |
+| Constraints       | native `min`, `max`, and `step` semantics      |
+| Error wiring      | supports `aria-describedby` and `aria-invalid` |
 
 ## Keymap spec
 

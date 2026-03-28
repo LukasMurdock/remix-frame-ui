@@ -1,5 +1,6 @@
 const registry = {
   "alert-basic": mountAlertDemo,
+  "action-sheet-basic": mountActionSheetDemo,
   "anchor-basic": mountAnchorDemo,
   "anchor-controlled": mountAnchorControlledDemo,
   "app-header-basic": mountAppHeaderDemo,
@@ -44,8 +45,11 @@ const registry = {
   "checkbox-basic": mountCheckboxDemo,
   "filter-bar-basic": mountFilterBarDemo,
   "filter-panel-basic": mountFilterPanelDemo,
+  "floating-panel-basic": mountFloatingPanelDemo,
   "inline-alert-basic": mountInlineAlertDemo,
   "image-basic": mountImageDemo,
+  "image-uploader-basic": mountImageUploaderDemo,
+  "image-viewer-basic": mountImageViewerDemo,
   "radio-group": mountRadioDemo,
   "range-slider-basic": mountRangeSliderDemo,
   "result-basic": mountResultDemo,
@@ -53,6 +57,8 @@ const registry = {
   "page-header-basic": mountPageHeaderDemo,
   "popover-basic": mountPopoverDemo,
   "progress-basic": mountProgressDemo,
+  "infinite-scroll-basic": mountInfiniteScrollDemo,
+  "pull-to-refresh-basic": mountPullToRefreshDemo,
   "select-basic": mountSelectDemo,
   "side-nav-basic": mountSideNavDemo,
   "top-nav-basic": mountTopNavDemo,
@@ -66,6 +72,8 @@ const registry = {
   "statistic-basic": mountStatisticDemo,
   "steps-basic": mountStepsDemo,
   "switch-basic": mountSwitchDemo,
+  "tab-bar-basic": mountTabBarDemo,
+  "swipe-action-basic": mountSwipeActionDemo,
   "table-basic": mountTableDemo,
   "tag-basic": mountTagDemo,
   "tabs-basic": mountTabsDemo,
@@ -382,6 +390,95 @@ function mountAlertDemo(mount) {
   dismiss.addEventListener("click", () => {
     alert.remove()
   })
+}
+
+function mountActionSheetDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <button class="docs-button" type="button" data-variant="outline" id="action-sheet-open">Open actions</button>
+      <p id="action-sheet-state" style="margin:0;font-size:.85rem;color:#475569;">Last close reason: none</p>
+      <div class="docs-overlay" id="action-sheet-overlay" hidden style="place-items:end center;padding:.75rem;">
+        <section
+          id="action-sheet-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="action-sheet-title"
+          aria-describedby="action-sheet-description"
+          tabindex="-1"
+          style="width:min(100%,32rem);display:grid;gap:.55rem;"
+        >
+          <div style="border:1px solid #cbd5e1;border-radius:14px;background:#fff;overflow:hidden;box-shadow:0 20px 42px rgba(15,23,42,.22);">
+            <header style="display:grid;gap:.2rem;padding:.85rem 1rem;border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+              <h3 id="action-sheet-title" style="margin:0;font-size:1rem;">Project actions</h3>
+              <p id="action-sheet-description" style="margin:0;font-size:.86rem;color:#475569;">Choose what to do with this project.</p>
+            </header>
+            <div style="display:grid;">
+              <button class="docs-button" data-variant="outline" data-action="share" style="border:0;border-top:1px solid #e2e8f0;border-radius:0;justify-content:flex-start;background:#fff;color:#0f172a;">Share</button>
+              <button class="docs-button" data-variant="outline" data-action="duplicate" style="border:0;border-top:1px solid #e2e8f0;border-radius:0;justify-content:flex-start;background:#fff;color:#0f172a;">Duplicate</button>
+              <button class="docs-button" data-variant="outline" data-action="archive" disabled style="border:0;border-top:1px solid #e2e8f0;border-radius:0;justify-content:flex-start;background:#fff;color:#64748b;">Archive (disabled)</button>
+              <button class="docs-button" data-variant="outline" data-action="delete" style="border:0;border-top:1px solid #e2e8f0;border-radius:0;justify-content:flex-start;background:#fff;color:#b91c1c;">Delete</button>
+            </div>
+          </div>
+          <button class="docs-button" type="button" id="action-sheet-cancel" data-variant="outline" style="background:#fff;">Cancel</button>
+        </section>
+      </div>
+    </div>
+  `
+
+  const open = mount.querySelector("#action-sheet-open")
+  const overlay = mount.querySelector("#action-sheet-overlay")
+  const panel = mount.querySelector("#action-sheet-panel")
+  const cancel = mount.querySelector("#action-sheet-cancel")
+  const state = mount.querySelector("#action-sheet-state")
+
+  if (
+    !(
+      open instanceof HTMLButtonElement &&
+      overlay instanceof HTMLElement &&
+      panel instanceof HTMLElement &&
+      cancel instanceof HTMLButtonElement &&
+      state instanceof HTMLElement
+    )
+  ) {
+    return
+  }
+
+  let previousFocus = null
+
+  const setOpen = (next) => {
+    overlay.hidden = !next
+    if (next) panel.focus()
+  }
+
+  const close = (reason) => {
+    setOpen(false)
+    state.textContent = `Last close reason: ${reason}`
+    if (previousFocus instanceof HTMLElement) previousFocus.focus()
+  }
+
+  open.addEventListener("click", () => {
+    previousFocus = document.activeElement
+    setOpen(true)
+  })
+
+  cancel.addEventListener("click", () => close("cancel"))
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) close("backdrop")
+  })
+
+  panel.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") close("escape")
+  })
+
+  for (const action of mount.querySelectorAll("button[data-action]")) {
+    if (!(action instanceof HTMLButtonElement)) continue
+    action.addEventListener("click", () => {
+      if (action.disabled) return
+      const id = action.dataset.action
+      if (!id) return
+      close(`action:${id}`)
+    })
+  }
 }
 
 function mountAnchorDemo(mount) {
@@ -1662,6 +1759,207 @@ function mountFilterPanelDemo(mount) {
     state.textContent = `Applied: ${queryValue} / ${status.value}`
     setOpen(false)
   })
+}
+
+function mountFloatingPanelDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.6rem;max-width:34rem;">
+      <section style="position:relative;height:22rem;border:1px solid #cbd5e1;border-radius:12px;overflow:hidden;background:linear-gradient(145deg,#dbeafe,#cffafe 52%,#f0f9ff);">
+        <div style="position:absolute;inset:0;padding:.9rem 1rem;color:#0f172a;display:grid;align-content:start;gap:.2rem;">
+          <strong style="font-size:.9rem;">Route preview</strong>
+          <p style="margin:0;font-size:.8rem;color:#334155;">Drag the floating panel to inspect nearby stops.</p>
+        </div>
+
+        <section
+          id="floating-panel-demo"
+          role="region"
+          aria-label="Nearby stops panel"
+          style="position:absolute;left:0;right:0;bottom:0;--docs-floating-height:190px;height:var(--docs-floating-height);background:#fff;border-top:1px solid #cbd5e1;border-top-left-radius:14px;border-top-right-radius:14px;display:grid;grid-template-rows:auto 1fr;box-shadow:0 -12px 28px rgba(15,23,42,.18);transition:height 180ms ease;overscroll-behavior:contain;"
+        >
+          <button
+            id="floating-panel-handle"
+            class="rf-focus-ring"
+            type="button"
+            aria-label="Resize panel"
+            style="min-height:1.8rem;border:0;border-bottom:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:center;cursor:ns-resize;touch-action:none;"
+          >
+            <span aria-hidden="true" style="width:2.2rem;height:.3rem;border-radius:999px;background:#94a3b8;"></span>
+          </button>
+
+          <div id="floating-panel-body" style="padding:.8rem 1rem 1rem;overflow:auto;display:grid;gap:.55rem;touch-action:pan-y;">
+            <h3 style="margin:0;font-size:.95rem;">Nearby stops</h3>
+            <ul style="margin:0;padding-left:1.1rem;display:grid;gap:.35rem;">
+              <li>Warehouse A - 3 min</li>
+              <li>Warehouse B - 8 min</li>
+              <li>Warehouse C - 12 min</li>
+              <li>Warehouse D - 16 min</li>
+              <li>Warehouse E - 22 min</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <div style="display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;">
+        <button class="docs-button" type="button" data-anchored-height="96">Collapsed</button>
+        <button class="docs-button" type="button" data-anchored-height="190" data-variant="outline">Half</button>
+        <button class="docs-button" type="button" data-anchored-height="300" data-variant="outline">Expanded</button>
+        <span style="font-size:.85rem;color:#475569;">Height: <strong id="floating-panel-height">190px</strong></span>
+      </div>
+    </div>
+  `
+
+  const panel = mount.querySelector("#floating-panel-demo")
+  const handle = mount.querySelector("#floating-panel-handle")
+  const body = mount.querySelector("#floating-panel-body")
+  const value = mount.querySelector("#floating-panel-height")
+
+  if (!(panel instanceof HTMLElement && handle instanceof HTMLButtonElement && body instanceof HTMLElement && value)) {
+    return
+  }
+
+  const anchors = [96, 190, 300]
+  const interactiveSelector = "a[href],button,input,select,textarea,label,[role='button'],[contenteditable='true']"
+
+  let height = anchors[1] ?? 190
+  let activePointerId = null
+  let releaseDragListeners = null
+  let disposed = false
+  let disconnectObserver = null
+
+  const clamp = (next) => {
+    const min = anchors[0] ?? 96
+    const max = anchors[anchors.length - 1] ?? 300
+    return Math.min(max, Math.max(min, Math.round(next)))
+  }
+
+  const nearest = (next) => {
+    const clamped = clamp(next)
+    let best = anchors[0] ?? clamped
+
+    for (const anchor of anchors) {
+      if (Math.abs(anchor - clamped) < Math.abs(best - clamped)) {
+        best = anchor
+      }
+    }
+
+    return best
+  }
+
+  const setHeight = (next, animating = true) => {
+    if (disposed) return
+    height = clamp(next)
+    panel.style.setProperty("--docs-floating-height", `${height}px`)
+    panel.style.transition = animating ? "height 180ms ease" : "none"
+    value.textContent = `${height}px`
+  }
+
+  const clearDrag = () => {
+    if (typeof releaseDragListeners === "function") releaseDragListeners()
+    releaseDragListeners = null
+    activePointerId = null
+  }
+
+  const cleanup = () => {
+    if (disposed) return
+    disposed = true
+    clearDrag()
+    if (typeof disconnectObserver === "function") disconnectObserver()
+    disconnectObserver = null
+  }
+
+  const beginDrag = (event) => {
+    if (disposed) return
+    if (event.pointerType === "mouse" && event.button !== 0) return
+    if (activePointerId !== null && event.pointerId !== activePointerId) return
+    event.preventDefault()
+    clearDrag()
+    activePointerId = event.pointerId
+
+    const source = event.currentTarget
+    if (source instanceof Element && "setPointerCapture" in source && typeof source.setPointerCapture === "function") {
+      try {
+        source.setPointerCapture(event.pointerId)
+      } catch {}
+    }
+
+    const startY = event.clientY
+    const startHeight = height
+
+    const onMove = (moveEvent) => {
+      if (disposed) return
+      if (moveEvent.pointerId !== activePointerId) return
+      const next = startHeight + (startY - moveEvent.clientY)
+      setHeight(next, false)
+      if (moveEvent.cancelable) moveEvent.preventDefault()
+    }
+
+    const onStop = (stopEvent) => {
+      if (disposed) return
+      if (stopEvent.pointerId !== activePointerId) return
+      clearDrag()
+      setHeight(nearest(height), true)
+    }
+
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onStop)
+    window.addEventListener("pointercancel", onStop)
+
+    releaseDragListeners = () => {
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onStop)
+      window.removeEventListener("pointercancel", onStop)
+    }
+  }
+
+  const stepHeight = (key) => {
+    const current = nearest(height)
+    const index = Math.max(0, anchors.indexOf(current))
+    const last = anchors.length - 1
+
+    if (key === "Home") return anchors[0]
+    if (key === "End") return anchors[last]
+    if (key === "ArrowUp") return anchors[Math.min(last, index + 1)]
+    if (key === "ArrowDown") return anchors[Math.max(0, index - 1)]
+    return undefined
+  }
+
+  handle.addEventListener("pointerdown", beginDrag)
+
+  body.addEventListener("pointerdown", (event) => {
+    if (body.scrollTop > 0) return
+    const target = event.target
+    if (target instanceof Element && target.closest(interactiveSelector)) return
+    beginDrag(event)
+  })
+
+  handle.addEventListener("keydown", (event) => {
+    const next = stepHeight(event.key)
+    if (next === undefined) return
+    event.preventDefault()
+    setHeight(next, true)
+  })
+
+  for (const button of mount.querySelectorAll("button[data-anchored-height]")) {
+    if (!(button instanceof HTMLButtonElement)) continue
+    button.addEventListener("click", () => {
+      const next = Number(button.dataset.anchoredHeight)
+      if (!Number.isFinite(next)) return
+      setHeight(next, true)
+    })
+  }
+
+  if (typeof MutationObserver !== "undefined" && mount.parentNode instanceof Node) {
+    const observer = new MutationObserver(() => {
+      if (mount.isConnected) return
+      cleanup()
+    })
+    observer.observe(mount.parentNode, { childList: true, subtree: true })
+    disconnectObserver = () => {
+      observer.disconnect()
+    }
+  }
+
+  setHeight(height, true)
 }
 
 function mountDataListDemo(mount) {
@@ -3069,6 +3367,330 @@ function mountProgressDemo(mount) {
   sync()
 }
 
+function mountInfiniteScrollDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <section class="rf-infinite-scroll" data-role="infinite-root" data-state="idle">
+        <div class="rf-infinite-scroll-viewport" data-role="infinite-viewport">
+          <h3 style="margin:0;font-size:.95rem;">Activity feed</h3>
+          <ul data-role="infinite-list" style="margin:0;padding-left:1.1rem;display:grid;gap:.35rem;"></ul>
+        </div>
+        <div class="rf-infinite-scroll-footer" aria-live="polite" aria-atomic="true">
+          <span class="rf-infinite-scroll-status" data-role="infinite-status">Scroll for more</span>
+        </div>
+      </section>
+      <p data-role="infinite-meta" style="margin:0;font-size:.85rem;color:#475569;">Loaded batches: 0 / 4</p>
+    </div>
+  `
+
+  const root = mount.querySelector("[data-role='infinite-root']")
+  const viewport = mount.querySelector("[data-role='infinite-viewport']")
+  const list = mount.querySelector("[data-role='infinite-list']")
+  const status = mount.querySelector("[data-role='infinite-status']")
+  const meta = mount.querySelector("[data-role='infinite-meta']")
+
+  if (
+    !(
+      root instanceof HTMLElement &&
+      viewport instanceof HTMLElement &&
+      list instanceof HTMLElement &&
+      status instanceof HTMLElement &&
+      meta
+    )
+  ) {
+    return
+  }
+
+  const threshold = 120
+  const maxBatches = 4
+  const rowsPerBatch = 6
+
+  let batch = 0
+  let loading = false
+  let hasMore = true
+  let loadTimer = null
+  let bootstrapTimer = null
+
+  const isMounted = () => root.isConnected && mount.contains(root)
+
+  const clearLoadTimer = () => {
+    if (!loadTimer) return
+    clearTimeout(loadTimer)
+    loadTimer = null
+  }
+
+  const clearBootstrapTimer = () => {
+    if (!bootstrapTimer) return
+    clearTimeout(bootstrapTimer)
+    bootstrapTimer = null
+  }
+
+  const clearTimers = () => {
+    clearLoadTimer()
+    clearBootstrapTimer()
+  }
+
+  const renderStatus = () => {
+    const state = loading ? "loading" : hasMore ? "idle" : "complete"
+    root.dataset.state = state
+
+    if (state === "loading") status.textContent = "Loading more..."
+    else if (state === "complete") status.textContent = "No more items"
+    else status.textContent = "Scroll for more"
+
+    meta.textContent = `Loaded batches: ${batch} / ${maxBatches}`
+  }
+
+  const appendBatch = () => {
+    batch += 1
+
+    for (let index = 0; index < rowsPerBatch; index += 1) {
+      const item = document.createElement("li")
+      const rowNumber = (batch - 1) * rowsPerBatch + index + 1
+      item.textContent = `Event #${rowNumber}: pipeline checkpoint recorded`
+      list.append(item)
+    }
+
+    if (batch >= maxBatches) {
+      hasMore = false
+    }
+
+    renderStatus()
+  }
+
+  const maybeLoad = () => {
+    if (!isMounted()) {
+      clearTimers()
+      viewport.removeEventListener("scroll", maybeLoad)
+      return
+    }
+
+    if (!hasMore || loading) return
+
+    const remaining = viewport.scrollHeight - (viewport.scrollTop + viewport.clientHeight)
+    if (remaining > threshold) return
+
+    loading = true
+    renderStatus()
+    clearTimers()
+
+    loadTimer = setTimeout(() => {
+      if (!isMounted()) {
+        clearTimers()
+        viewport.removeEventListener("scroll", maybeLoad)
+        return
+      }
+
+      loadTimer = null
+      loading = false
+      appendBatch()
+      maybeLoad()
+    }, 280)
+  }
+
+  appendBatch()
+  viewport.addEventListener("scroll", maybeLoad)
+  bootstrapTimer = setTimeout(() => {
+    bootstrapTimer = null
+    maybeLoad()
+  }, 0)
+}
+
+function mountPullToRefreshDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <section class="rf-pull-to-refresh" data-role="ptr-root" data-status="idle" style="--rf-pull-to-refresh-threshold:72px;">
+        <div class="rf-pull-to-refresh-indicator" aria-live="polite" aria-atomic="true">
+          <span class="rf-pull-to-refresh-label" data-role="ptr-label">Pull to refresh</span>
+        </div>
+        <div class="rf-pull-to-refresh-scroll" data-role="ptr-scroll">
+          <h3 style="margin:0;font-size:.95rem;">Release feed</h3>
+          <ul style="margin:0;padding-left:1.1rem;display:grid;gap:.35rem;">
+            <li>v2.4.0 deployed</li>
+            <li>Background jobs stabilized</li>
+            <li>Billing webhooks retried</li>
+            <li>Search index backfilled</li>
+            <li>Queue latency normalized</li>
+            <li>v2.3.9 rolled back</li>
+            <li>Cache warmup complete</li>
+            <li>Incident summary posted</li>
+            <li>Recovery playbook updated</li>
+            <li>API error budget reset</li>
+            <li>Build pipeline green</li>
+            <li>Audit log exported</li>
+          </ul>
+        </div>
+      </section>
+      <p data-role="ptr-count" style="margin:0;font-size:.85rem;color:#475569;">Refresh count: 0</p>
+    </div>
+  `
+
+  const root = mount.querySelector("[data-role='ptr-root']")
+  const scroll = mount.querySelector("[data-role='ptr-scroll']")
+  const label = mount.querySelector("[data-role='ptr-label']")
+  const count = mount.querySelector("[data-role='ptr-count']")
+
+  if (!(root instanceof HTMLElement && scroll instanceof HTMLElement && label instanceof HTMLElement && count)) {
+    return
+  }
+
+  const threshold = 72
+  const maxOffset = Math.round(threshold * 1.6)
+  const interactiveSelector = "a[href],button,input,select,textarea,label,[role='button'],[contenteditable='true']"
+
+  let refreshCount = 0
+  let refreshing = false
+  let offset = 0
+  let activePointerId = null
+  let refreshTimer = null
+  let completeTimer = null
+  let releaseDragListeners = null
+
+  const isMounted = () => mount.isConnected
+
+  const clearRefreshTimer = () => {
+    if (!refreshTimer) return
+    clearTimeout(refreshTimer)
+    refreshTimer = null
+  }
+
+  const clearCompleteTimer = () => {
+    if (!completeTimer) return
+    clearTimeout(completeTimer)
+    completeTimer = null
+  }
+
+  const clearAsyncTimers = () => {
+    clearRefreshTimer()
+    clearCompleteTimer()
+  }
+
+  const clearDragListeners = () => {
+    if (typeof releaseDragListeners === "function") releaseDragListeners()
+    releaseDragListeners = null
+    activePointerId = null
+  }
+
+  const setStatus = (status, nextOffset, animating = true) => {
+    root.dataset.status = status
+    root.style.setProperty("--rf-pull-to-refresh-offset", `${nextOffset}px`)
+    scroll.style.transition = animating ? "transform 180ms ease" : "none"
+    if (status === "refreshing") label.textContent = "Refreshing..."
+    else if (status === "complete") label.textContent = "Refresh complete"
+    else if (status === "can-release") label.textContent = "Release to refresh"
+    else label.textContent = "Pull to refresh"
+  }
+
+  const setOffset = (next, animating = false) => {
+    offset = Math.max(0, Math.min(maxOffset, Math.round(next)))
+    if (offset <= 0) {
+      setStatus("idle", 0, animating)
+      return
+    }
+
+    setStatus(offset >= threshold ? "can-release" : "pulling", offset, animating)
+  }
+
+  const completeRefresh = () => {
+    if (!isMounted()) {
+      clearAsyncTimers()
+      clearDragListeners()
+      return
+    }
+
+    refreshing = false
+    refreshCount += 1
+    count.textContent = `Refresh count: ${refreshCount}`
+    setStatus("complete", Math.round(threshold * 0.55), true)
+
+    clearAsyncTimers()
+    completeTimer = setTimeout(() => {
+      if (!isMounted()) {
+        clearAsyncTimers()
+        clearDragListeners()
+        return
+      }
+      setStatus("idle", 0, true)
+    }, 520)
+  }
+
+  const startRefresh = () => {
+    if (refreshing) return
+    refreshing = true
+    offset = 0
+    clearAsyncTimers()
+    setStatus("refreshing", threshold, true)
+    refreshTimer = setTimeout(completeRefresh, 360)
+  }
+
+  const beginDrag = (event) => {
+    if (refreshing) return
+    if (event.pointerType === "mouse" && event.button !== 0) return
+    if (scroll.scrollTop > 0) return
+    if (activePointerId !== null && event.pointerId !== activePointerId) return
+
+    const target = event.target
+    if (target instanceof Element && target.closest(interactiveSelector)) return
+
+    event.preventDefault()
+    clearDragListeners()
+
+    activePointerId = event.pointerId
+    const dragSource = event.currentTarget
+    if (dragSource instanceof Element && typeof dragSource.setPointerCapture === "function") {
+      try {
+        dragSource.setPointerCapture(event.pointerId)
+      } catch {}
+    }
+
+    const startY = event.clientY
+
+    const onMove = (moveEvent) => {
+      if (!isMounted()) {
+        clearDragListeners()
+        clearAsyncTimers()
+        return
+      }
+      if (moveEvent.pointerId !== activePointerId) return
+      const delta = (moveEvent.clientY - startY) * 0.6
+      setOffset(delta, false)
+      if (moveEvent.cancelable) moveEvent.preventDefault()
+    }
+
+    const onStop = (stopEvent) => {
+      if (!isMounted()) {
+        clearDragListeners()
+        clearAsyncTimers()
+        return
+      }
+      if (stopEvent.pointerId !== activePointerId) return
+      const shouldRefresh = offset >= threshold
+      clearDragListeners()
+
+      if (shouldRefresh) {
+        startRefresh()
+        return
+      }
+
+      offset = 0
+      setStatus("idle", 0, true)
+    }
+
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onStop)
+    window.addEventListener("pointercancel", onStop)
+
+    releaseDragListeners = () => {
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onStop)
+      window.removeEventListener("pointercancel", onStop)
+    }
+  }
+
+  scroll.addEventListener("pointerdown", beginDrag)
+  setStatus("idle", 0, true)
+}
+
 function mountSkeletonDemo(mount) {
   mount.innerHTML = `
     <div class="rf-skeleton" data-animated="true" aria-hidden="true" style="max-width:20rem;">
@@ -3258,6 +3880,285 @@ function mountSwitchDemo(mount) {
 
   input.addEventListener("change", sync)
   sync()
+}
+
+function mountTabBarDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <nav class="rf-tab-bar" data-role="tab-bar" aria-label="Demo tab bar" style="--rf-tab-bar-count: 5;">
+        <ul class="rf-tab-bar-list" role="list">
+          <li class="rf-tab-bar-item" data-active="true" data-disabled="false">
+            <button class="rf-tab-bar-button rf-focus-ring" type="button" data-tab-value="home" aria-current="page">
+              <span class="rf-tab-bar-icon" aria-hidden="true">🏠</span>
+              <span class="rf-tab-bar-label">Home</span>
+            </button>
+          </li>
+          <li class="rf-tab-bar-item" data-active="false" data-disabled="false">
+            <button class="rf-tab-bar-button rf-focus-ring" type="button" data-tab-value="search">
+              <span class="rf-tab-bar-icon" aria-hidden="true">🔎</span>
+              <span class="rf-tab-bar-label">Search</span>
+            </button>
+          </li>
+          <li class="rf-tab-bar-item" data-active="false" data-disabled="false">
+            <button class="rf-tab-bar-button rf-focus-ring" type="button" data-tab-value="alerts">
+              <span class="rf-tab-bar-icon" aria-hidden="true">🔔</span>
+              <span class="rf-tab-bar-label">Alerts</span>
+              <span class="rf-tab-bar-badge" aria-hidden="true">3</span>
+            </button>
+          </li>
+          <li class="rf-tab-bar-item" data-active="false" data-disabled="true">
+            <button class="rf-tab-bar-button rf-focus-ring" type="button" data-tab-value="settings" disabled>
+              <span class="rf-tab-bar-icon" aria-hidden="true">⚙️</span>
+              <span class="rf-tab-bar-label">Settings</span>
+            </button>
+          </li>
+          <li class="rf-tab-bar-item" data-active="false" data-disabled="false">
+            <button class="rf-tab-bar-button rf-focus-ring" type="button" data-tab-value="profile">
+              <span class="rf-tab-bar-icon" aria-hidden="true">👤</span>
+              <span class="rf-tab-bar-label">Profile</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <p data-role="tab-bar-state" style="margin:0;font-size:.85rem;color:#475569;">Active tab: home</p>
+    </div>
+  `
+
+  const buttons = Array.from(mount.querySelectorAll("button[data-tab-value]"))
+  const state = mount.querySelector("[data-role='tab-bar-state']")
+
+  if (!(state instanceof HTMLElement)) return
+
+  const values = buttons
+    .filter((button) => button instanceof HTMLButtonElement)
+    .map((button) => (button instanceof HTMLButtonElement ? (button.dataset.tabValue ?? "") : ""))
+
+  const enabledValues = () =>
+    buttons
+      .filter((button) => button instanceof HTMLButtonElement && !button.disabled)
+      .map((button) => (button instanceof HTMLButtonElement ? (button.dataset.tabValue ?? "") : ""))
+
+  const setValue = (next) => {
+    for (const button of buttons) {
+      if (!(button instanceof HTMLButtonElement)) continue
+      const current = button.dataset.tabValue === next
+      const item = button.closest(".rf-tab-bar-item")
+      if (item instanceof HTMLElement) item.dataset.active = current ? "true" : "false"
+      if (current) button.setAttribute("aria-current", "page")
+      else button.removeAttribute("aria-current")
+    }
+
+    state.textContent = `Active tab: ${next}`
+  }
+
+  const resolveAdjacentEnabled = (currentValue, direction) => {
+    const enabled = enabledValues()
+    if (enabled.length === 0) return null
+    const currentIndex = enabled.indexOf(currentValue)
+    const start = currentIndex >= 0 ? currentIndex : 0
+    if (direction === 0) return enabled[0] ?? null
+    if (direction === 2) return enabled[enabled.length - 1] ?? null
+    const delta = direction > 0 ? 1 : -1
+    return enabled[(start + delta + enabled.length) % enabled.length] ?? null
+  }
+
+  for (const button of buttons) {
+    if (!(button instanceof HTMLButtonElement)) continue
+
+    button.addEventListener("click", () => {
+      if (button.disabled) return
+      const value = button.dataset.tabValue
+      if (!value) return
+      setValue(value)
+    })
+
+    button.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") {
+        return
+      }
+
+      event.preventDefault()
+      const currentValue = button.dataset.tabValue ?? values[0]
+      if (!currentValue) return
+
+      let next = null
+      if (event.key === "ArrowRight") next = resolveAdjacentEnabled(currentValue, 1)
+      if (event.key === "ArrowLeft") next = resolveAdjacentEnabled(currentValue, -1)
+      if (event.key === "Home") next = resolveAdjacentEnabled(currentValue, 0)
+      if (event.key === "End") next = resolveAdjacentEnabled(currentValue, 2)
+      if (!next) return
+
+      setValue(next)
+      const nextButton = mount.querySelector(`button[data-tab-value='${next}']`)
+      if (nextButton instanceof HTMLButtonElement) nextButton.focus()
+    })
+  }
+}
+
+function mountSwipeActionDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:34rem;">
+      <section class="rf-swipe-action" data-role="swipe-root" data-open-side="none" style="--rf-swipe-action-width:72px;--rf-swipe-action-offset:0px;">
+        <div class="rf-swipe-action-actions" data-side="start" role="group" aria-label="Start actions">
+          <button class="rf-swipe-action-button rf-focus-ring" type="button" data-action-id="pin" data-action-side="start">Pin</button>
+        </div>
+        <div class="rf-swipe-action-actions" data-side="end" role="group" aria-label="End actions">
+          <button class="rf-swipe-action-button rf-focus-ring" type="button" data-action-id="archive" data-action-side="end">Archive</button>
+          <button class="rf-swipe-action-button rf-focus-ring" type="button" data-action-id="delete" data-action-side="end" data-destructive="true">Delete</button>
+        </div>
+        <article class="rf-swipe-action-content" data-role="swipe-content" role="group" aria-label="Order row" style="padding:.8rem 1rem;display:grid;gap:.2rem;">
+          <strong>Order #1042</strong>
+          <span style="font-size:.84rem;color:#475569;">Swipe left for archive/delete or right to pin.</span>
+        </article>
+      </section>
+      <p data-role="swipe-state" style="margin:0;font-size:.85rem;color:#475569;">Last action: none</p>
+    </div>
+  `
+
+  const root = mount.querySelector("[data-role='swipe-root']")
+  const content = mount.querySelector("[data-role='swipe-content']")
+  const state = mount.querySelector("[data-role='swipe-state']")
+
+  if (!(root instanceof HTMLElement && content instanceof HTMLElement && state instanceof HTMLElement)) return
+
+  const startWidth = 72
+  const endWidth = 144
+  const threshold = 56
+
+  let openSide = "none"
+  let offset = 0
+  let activePointerId = null
+  let releaseDragListeners = null
+
+  const isMounted = () => mount.isConnected
+
+  const clearDragListeners = () => {
+    if (typeof releaseDragListeners === "function") releaseDragListeners()
+    releaseDragListeners = null
+    activePointerId = null
+  }
+
+  const clampOffset = (next) => Math.min(startWidth, Math.max(-endWidth, Math.round(next)))
+
+  const setOffset = (next, animating = true) => {
+    offset = clampOffset(next)
+    content.style.transform = `translateX(${offset}px)`
+    content.style.transition = animating ? "transform 180ms ease" : "none"
+  }
+
+  const setOpenSide = (nextSide) => {
+    openSide = nextSide
+    root.dataset.openSide = nextSide
+    const targetOffset = nextSide === "start" ? startWidth : nextSide === "end" ? -endWidth : 0
+    setOffset(targetOffset, true)
+  }
+
+  const resolveReleaseSide = (releasedOffset, startOpenSide) => {
+    if (startOpenSide === "none") {
+      if (releasedOffset >= threshold) return "start"
+      if (releasedOffset <= -threshold) return "end"
+      return "none"
+    }
+
+    if (startOpenSide === "start") {
+      if (releasedOffset <= -threshold) return "end"
+      if (releasedOffset >= startWidth - threshold / 2) return "start"
+      return "none"
+    }
+
+    if (releasedOffset >= threshold) return "start"
+    if (releasedOffset <= -(endWidth - threshold / 2)) return "end"
+    return "none"
+  }
+
+  const beginDrag = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return
+    if (activePointerId !== null && event.pointerId !== activePointerId) return
+
+    const target = event.target
+    if (target instanceof Element && target.closest("a[href],button,input,select,textarea,label,[role='button']")) {
+      return
+    }
+
+    event.preventDefault()
+    clearDragListeners()
+
+    activePointerId = event.pointerId
+    const source = event.currentTarget
+    if (source instanceof Element && typeof source.setPointerCapture === "function") {
+      try {
+        source.setPointerCapture(event.pointerId)
+      } catch {}
+    }
+
+    const startX = event.clientX
+    const startY = event.clientY
+    const startOffset = offset
+    const startOpenSide = openSide
+    let axis = "undecided"
+
+    const onMove = (moveEvent) => {
+      if (!isMounted()) {
+        clearDragListeners()
+        return
+      }
+
+      if (moveEvent.pointerId !== activePointerId) return
+
+      const deltaX = moveEvent.clientX - startX
+      const deltaY = moveEvent.clientY - startY
+
+      if (axis === "undecided") {
+        if (Math.abs(deltaX) < 4 && Math.abs(deltaY) < 4) return
+        axis = Math.abs(deltaX) >= Math.abs(deltaY) ? "horizontal" : "vertical"
+        if (axis === "vertical") {
+          clearDragListeners()
+          setOffset(startOffset, false)
+          return
+        }
+      }
+
+      setOffset(startOffset + deltaX, false)
+      if (moveEvent.cancelable) moveEvent.preventDefault()
+    }
+
+    const onStop = (stopEvent) => {
+      if (!isMounted()) {
+        clearDragListeners()
+        return
+      }
+
+      if (stopEvent.pointerId !== activePointerId) return
+      const releasedOffset = offset
+      clearDragListeners()
+      const nextOpenSide = resolveReleaseSide(releasedOffset, startOpenSide)
+      setOpenSide(nextOpenSide)
+    }
+
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onStop)
+    window.addEventListener("pointercancel", onStop)
+
+    releaseDragListeners = () => {
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onStop)
+      window.removeEventListener("pointercancel", onStop)
+    }
+  }
+
+  for (const action of mount.querySelectorAll("button[data-action-id]")) {
+    if (!(action instanceof HTMLButtonElement)) continue
+    action.addEventListener("click", () => {
+      const id = action.dataset.actionId
+      const side = action.dataset.actionSide
+      if (!id || !side) return
+      state.textContent = `Last action: ${id} (${side})`
+      setOpenSide("none")
+    })
+  }
+
+  content.addEventListener("pointerdown", beginDrag)
+  setOpenSide("none")
 }
 
 function mountTransferDemo(mount) {
@@ -3849,6 +4750,309 @@ function mountImageDemo(mount) {
       <p style="margin:0;font-size:.85rem;color:#475569;">Image: lazy-loaded cover fit.</p>
     </div>
   `
+}
+
+function mountImageUploaderDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:32rem;">
+      <section class="rf-image-uploader" aria-label="Image uploader demo">
+        <ul class="rf-image-uploader-list" data-role="image-uploader-list" role="list"></ul>
+      </section>
+      <p data-role="image-uploader-state" style="margin:0;font-size:.85rem;color:#475569;">No images selected</p>
+    </div>
+  `
+
+  const list = mount.querySelector("[data-role='image-uploader-list']")
+  const state = mount.querySelector("[data-role='image-uploader-state']")
+  if (!(list instanceof HTMLElement && state instanceof HTMLElement)) return
+
+  const maxCount = 4
+  let sequence = 0
+  const items = []
+  const objectUrls = new Map()
+  let disposed = false
+  let disconnectObserver = null
+
+  const revoke = (itemId) => {
+    if (disposed) return
+    const url = objectUrls.get(itemId)
+    if (!url) return
+    objectUrls.delete(itemId)
+    if (typeof URL !== "undefined" && typeof URL.revokeObjectURL === "function") {
+      URL.revokeObjectURL(url)
+    }
+  }
+
+  const syncState = () => {
+    if (disposed) return
+    if (items.length === 0) {
+      state.textContent = "No images selected"
+      return
+    }
+    state.textContent = `${items.length} selected`
+  }
+
+  const render = () => {
+    if (disposed) return
+    const showAdd = items.length < maxCount
+
+    const rows = items
+      .map(
+        (item, index) => `
+      <li class="rf-image-uploader-item" data-uploading="false" data-error="false" data-item-id="${item.id}">
+        <figure class="rf-image-uploader-thumb">
+          <img class="rf-image-uploader-image" src="${item.src}" alt="${item.alt}" />
+        </figure>
+        <p class="rf-image-uploader-name">${item.fileName}</p>
+        <p class="rf-image-uploader-status">Ready</p>
+        <button class="rf-image-uploader-remove rf-focus-ring" type="button" data-remove-id="${item.id}" aria-label="Remove ${item.fileName || `image ${index + 1}`}">Remove</button>
+      </li>`,
+      )
+      .join("")
+
+    const addTile = showAdd
+      ? `
+      <li class="rf-image-uploader-item rf-image-uploader-add-wrap" data-hidden="false">
+        <label class="rf-image-uploader-add rf-focus-ring" data-disabled="false">
+          <input class="rf-image-uploader-input" data-role="image-uploader-input" type="file" accept="image/*" multiple />
+          <span class="rf-image-uploader-add-label">Add image</span>
+          <span class="rf-image-uploader-count" aria-hidden="true">${items.length}/${maxCount}</span>
+        </label>
+      </li>
+    `
+      : ""
+
+    list.innerHTML = `${rows}${addTile}`
+
+    const input = list.querySelector("[data-role='image-uploader-input']")
+    if (input instanceof HTMLInputElement) {
+      input.addEventListener("change", () => {
+        if (disposed) return
+        const files = input.files ? Array.from(input.files) : []
+        const remaining = Math.max(0, maxCount - items.length)
+        const selected = files.slice(0, remaining)
+
+        for (const file of selected) {
+          const id = `demo-image-${Date.now()}-${sequence}`
+          sequence += 1
+
+          let src = ""
+          if (typeof URL !== "undefined" && typeof URL.createObjectURL === "function") {
+            src = URL.createObjectURL(file)
+            objectUrls.set(id, src)
+          }
+
+          items.push({
+            id,
+            src,
+            alt: file.name,
+            fileName: file.name,
+          })
+        }
+
+        input.value = ""
+        syncState()
+        render()
+      })
+    }
+
+    for (const button of list.querySelectorAll("button[data-remove-id]")) {
+      if (!(button instanceof HTMLButtonElement)) continue
+      button.addEventListener("click", () => {
+        if (disposed) return
+        const removeId = button.dataset.removeId
+        if (!removeId) return
+        const index = items.findIndex((item) => item.id === removeId)
+        if (index < 0) return
+        items.splice(index, 1)
+        revoke(removeId)
+        syncState()
+        render()
+      })
+    }
+  }
+
+  const cleanup = () => {
+    if (disposed) return
+    disposed = true
+    for (const itemId of objectUrls.keys()) {
+      const url = objectUrls.get(itemId)
+      if (!url) continue
+      if (typeof URL !== "undefined" && typeof URL.revokeObjectURL === "function") {
+        URL.revokeObjectURL(url)
+      }
+    }
+    objectUrls.clear()
+    if (typeof disconnectObserver === "function") disconnectObserver()
+    disconnectObserver = null
+  }
+
+  if (typeof MutationObserver !== "undefined" && mount.parentNode instanceof Node) {
+    const observer = new MutationObserver(() => {
+      if (mount.isConnected) return
+      cleanup()
+    })
+    observer.observe(mount.parentNode, { childList: true, subtree: true })
+    disconnectObserver = () => {
+      observer.disconnect()
+    }
+  }
+
+  render()
+  syncState()
+}
+
+function mountImageViewerDemo(mount) {
+  mount.innerHTML = `
+    <div style="display:grid;gap:.55rem;max-width:28rem;">
+      <button class="docs-button" type="button" data-role="image-viewer-open">Open image viewer</button>
+      <p style="margin:0;font-size:.85rem;color:#475569;">Last close reason: <strong data-role="image-viewer-state">none</strong></p>
+      <div class="rf-image-viewer-backdrop" data-role="image-viewer-overlay" hidden>
+        <section class="rf-image-viewer" role="dialog" aria-modal="true" aria-label="Image viewer demo" tabindex="-1">
+          <header class="rf-image-viewer-header">
+            <p class="rf-image-viewer-counter" data-role="image-viewer-counter">1 / 3</p>
+            <button class="rf-image-viewer-close rf-focus-ring" type="button" data-role="image-viewer-close">Close</button>
+          </header>
+          <div class="rf-image-viewer-stage">
+            <button class="rf-image-viewer-nav rf-focus-ring" type="button" data-role="image-viewer-prev" aria-label="Previous image">Prev</button>
+            <figure class="rf-image-viewer-frame"><img class="rf-image-viewer-image" data-role="image-viewer-image" alt="" loading="eager" /></figure>
+            <button class="rf-image-viewer-nav rf-focus-ring" type="button" data-role="image-viewer-next" aria-label="Next image">Next</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  `
+
+  const open = mount.querySelector("[data-role='image-viewer-open']")
+  const state = mount.querySelector("[data-role='image-viewer-state']")
+  const overlay = mount.querySelector("[data-role='image-viewer-overlay']")
+  const panel = mount.querySelector(".rf-image-viewer")
+  const counter = mount.querySelector("[data-role='image-viewer-counter']")
+  const close = mount.querySelector("[data-role='image-viewer-close']")
+  const prev = mount.querySelector("[data-role='image-viewer-prev']")
+  const next = mount.querySelector("[data-role='image-viewer-next']")
+  const image = mount.querySelector("[data-role='image-viewer-image']")
+
+  if (
+    !(
+      open instanceof HTMLButtonElement &&
+      state instanceof HTMLElement &&
+      overlay instanceof HTMLElement &&
+      panel instanceof HTMLElement &&
+      counter instanceof HTMLElement &&
+      close instanceof HTMLButtonElement &&
+      prev instanceof HTMLButtonElement &&
+      next instanceof HTMLButtonElement &&
+      image instanceof HTMLImageElement
+    )
+  ) {
+    return
+  }
+
+  const createSlide = (label, color) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="${color}"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="88">${label}</text></svg>`
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  }
+
+  const images = [
+    { src: createSlide("Release 1", "#2563eb"), alt: "Release screenshot one" },
+    { src: createSlide("Release 2", "#0f766e"), alt: "Release screenshot two" },
+    { src: createSlide("Release 3", "#7c3aed"), alt: "Release screenshot three" },
+  ]
+
+  let index = 0
+  let previousFocus = null
+
+  const normalize = (value) => {
+    if (images.length === 0) return 0
+    return (value + images.length) % images.length
+  }
+
+  const render = () => {
+    const current = images[index]
+    if (!current) return
+    image.src = current.src
+    image.alt = current.alt
+    counter.textContent = `${index + 1} / ${images.length}`
+    const many = images.length > 1
+    prev.disabled = !many
+    next.disabled = !many
+  }
+
+  const setOpen = (nextOpen, reason) => {
+    overlay.hidden = !nextOpen
+    if (nextOpen) {
+      panel.focus()
+      render()
+      return
+    }
+
+    if (reason) state.textContent = reason
+    if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus()
+  }
+
+  const step = (direction) => {
+    if (images.length <= 1) return
+    index = normalize(index + direction)
+    render()
+  }
+
+  open.addEventListener("click", () => {
+    previousFocus = document.activeElement
+    setOpen(true)
+  })
+
+  close.addEventListener("click", () => {
+    setOpen(false, "close-button")
+  })
+
+  prev.addEventListener("click", () => {
+    step(-1)
+  })
+
+  next.addEventListener("click", () => {
+    step(1)
+  })
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      setOpen(false, "backdrop")
+    }
+  })
+
+  panel.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setOpen(false, "escape")
+      return
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault()
+      step(1)
+      return
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault()
+      step(-1)
+      return
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault()
+      index = 0
+      render()
+      return
+    }
+
+    if (event.key === "End") {
+      event.preventDefault()
+      index = Math.max(images.length - 1, 0)
+      render()
+    }
+  })
+
+  render()
 }
 
 function mountGridDemo(mount) {

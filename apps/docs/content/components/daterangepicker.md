@@ -1,6 +1,7 @@
 # DateRangePicker
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -46,11 +47,11 @@ Hydration required for interactive range selection and keyboard grid movement.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
+| Requirement       | Behavior                                                   |
+| ----------------- | ---------------------------------------------------------- |
 | Trigger semantics | input exposes `aria-haspopup="dialog"` and `aria-expanded` |
-| Range highlight | selected boundary days and in-range days use visual states |
-| Keyboard support | arrow key movement and `Escape` close within the calendar |
+| Range highlight   | selected boundary days and in-range days use visual states |
+| Keyboard support  | arrow key movement and `Escape` close within the calendar  |
 
 ## Keymap spec
 

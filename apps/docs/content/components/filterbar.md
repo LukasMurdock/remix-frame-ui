@@ -1,6 +1,7 @@
 # FilterBar
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 

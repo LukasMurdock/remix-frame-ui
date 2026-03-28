@@ -1,6 +1,7 @@
 # Cascader
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 

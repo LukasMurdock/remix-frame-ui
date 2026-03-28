@@ -40,10 +40,13 @@ Use the smallest command set that matches your change:
 - pre-commit runs `lint-staged` with Prettier
 - run `pnpm run format` for manual formatting
 
-## Maturity labels
+## Component metadata labels
 
 - Every component must declare `experimental` or `stable` in `packages/remix/src/component-metadata.json`
-- Docs derive component maturity labels from that metadata
+- Every component can declare a `platform` label in `packages/remix/src/component-metadata.json`:
+  - `universal` (default when omitted)
+  - `mobile` (mobile-optimized interaction model)
+- Docs derive component maturity and platform labels from that metadata
 
 ## Adding or updating a component
 
@@ -82,7 +85,7 @@ Use `apps/docs/content/templates/component-reference-template.md` when authoring
 - API sections can be generated from source types with `pnpm run docs:api:build`
 - `pnpm run docs:api:check` verifies generated API docs are in sync
 - `pnpm run docs:check:sections` verifies required sections are present, non-empty, ordered, and include the generated API notice
-- `pnpm run docs:check:maturity` verifies docs and metadata titles, slugs, and maturity labels stay aligned
+- `pnpm run docs:check:maturity` verifies docs and metadata titles, slugs, maturity labels, and platform labels stay aligned
 - `pnpm run docs:check:imports` verifies component docs import real exports and include the documented component symbol
 - `pnpm run docs:check:guides` verifies guide ordering, titles, Getting Started links, stable-first recommendations, and guide import entrypoints/symbols
 - `pnpm run docs:check:demos` verifies build/dev demo maps match docs runtime registry

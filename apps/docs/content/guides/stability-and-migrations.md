@@ -10,7 +10,7 @@ Remix Frame UI is in `0.x`.
 
 ## Source of truth
 
-- Component maturity: `packages/remix/src/component-metadata.json`
+- Component maturity and platform labels: `packages/remix/src/component-metadata.json`
 - Migration notes: `MIGRATIONS.md`
 
 ## Upgrade workflow

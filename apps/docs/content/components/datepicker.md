@@ -1,6 +1,7 @@
 # DatePicker
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -45,11 +46,11 @@ Hydration required for calendar navigation, keyboard movement, and date selectio
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Trigger semantics | input exposes `aria-haspopup="dialog"` and `aria-expanded` |
-| Calendar semantics | popup uses `role="dialog"` and labeled month heading |
-| Keyboard support | arrow keys, page keys, and enter/space selection |
+| Requirement        | Behavior                                                   |
+| ------------------ | ---------------------------------------------------------- |
+| Trigger semantics  | input exposes `aria-haspopup="dialog"` and `aria-expanded` |
+| Calendar semantics | popup uses `role="dialog"` and labeled month heading       |
+| Keyboard support   | arrow keys, page keys, and enter/space selection           |
 
 ## Keymap spec
 

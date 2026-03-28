@@ -2,6 +2,7 @@ import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { applyGeneratedApiSection } from "./component-api-sections.js"
+import { resolvePlatformLabel } from "./component-doc-maturity.js"
 import { requiredSections } from "./component-doc-sections.js"
 import { guideOrder } from "./guide-config.js"
 import { renderMarkdownToHtml } from "./render-markdown.js"
@@ -16,6 +17,7 @@ const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", 
 
 const demoByComponent = new Map([
   ["alert", { id: "alert-basic", title: "Alert: tone and dismiss patterns" }],
+  ["actionsheet", { id: "action-sheet-basic", title: "ActionSheet: bottom action list" }],
   ["anchor", { id: "anchor-basic", title: "Anchor: in-page section navigation" }],
   ["appheader", { id: "app-header-basic", title: "AppHeader: brand, nav, and actions" }],
   ["appprovider", { id: "app-provider-basic", title: "AppProvider: locale, direction, and navigation" }],
@@ -58,9 +60,13 @@ const demoByComponent = new Map([
   ["grid", { id: "grid-basic", title: "Grid: span-based tile layout" }],
   ["filterbar", { id: "filter-bar-basic", title: "FilterBar: grouped controls and actions" }],
   ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
+  ["floatingpanel", { id: "floating-panel-basic", title: "FloatingPanel: draggable snap heights" }],
   ["input", { id: "field-input", title: "Field + Input: live validation" }],
   ["inlinealert", { id: "inline-alert-basic", title: "InlineAlert: compact in-flow status" }],
+  ["infinitescroll", { id: "infinite-scroll-basic", title: "InfiniteScroll: progressive feed loading" }],
   ["image", { id: "image-basic", title: "Image: media with fit strategies" }],
+  ["imageuploader", { id: "image-uploader-basic", title: "ImageUploader: preview and upload queue" }],
+  ["imageviewer", { id: "image-viewer-basic", title: "ImageViewer: fullscreen gallery overlay" }],
   ["layout", { id: "layout-basic", title: "Layout: header, sider, content, footer shell" }],
   ["link", { id: "link-basic", title: "Link: internal routing and external navigation" }],
   ["checkbox", { id: "checkbox-basic", title: "Checkbox: native checked semantics" }],
@@ -71,6 +77,7 @@ const demoByComponent = new Map([
   ["pageheader", { id: "page-header-basic", title: "PageHeader: title, subtitle, actions" }],
   ["popover", { id: "popover-basic", title: "Popover: anchored disclosure panel" }],
   ["progress", { id: "progress-basic", title: "Progress: completion and status tracking" }],
+  ["pulltorefresh", { id: "pull-to-refresh-basic", title: "PullToRefresh: top-edge feed refresh" }],
   ["select", { id: "select-basic", title: "Select: native option selection" }],
   ["sidenav", { id: "side-nav-basic", title: "SideNav: sectioned app navigation" }],
   ["topnav", { id: "top-nav-basic", title: "TopNav: horizontal route navigation" }],
@@ -82,6 +89,8 @@ const demoByComponent = new Map([
   ["statistic", { id: "statistic-basic", title: "Statistic: labeled value metrics" }],
   ["steps", { id: "steps-basic", title: "Steps: multi-step progress indicator" }],
   ["switch", { id: "switch-basic", title: "Switch: boolean setting toggle" }],
+  ["tabbar", { id: "tab-bar-basic", title: "TabBar: bottom destination navigation" }],
+  ["swipeaction", { id: "swipe-action-basic", title: "SwipeAction: reveal row controls" }],
   ["table", { id: "table-basic", title: "Table: semantic columns and rows" }],
   ["tag", { id: "tag-basic", title: "Tag: categorization labels" }],
   ["tabs", { id: "tabs-basic", title: "Tabs: manual activation" }],
@@ -122,7 +131,13 @@ for (const file of files) {
   }
   const markdown = applyGeneratedApiSection(componentName, sourceMarkdown)
   const html = await renderMarkdownToHtml(markdown)
-  componentPages.push({ id: componentName, title: metadataEntry.name, html, maturity: metadataEntry.maturity })
+  componentPages.push({
+    id: componentName,
+    title: metadataEntry.name,
+    html,
+    maturity: metadataEntry.maturity,
+    platform: resolvePlatformLabel(metadataEntry.platform),
+  })
 }
 
 componentPages.sort(
@@ -162,7 +177,7 @@ const guideNav = guidePages
 const componentNav = componentPages
   .map(
     (page) =>
-      `<li class="rf-side-nav-item" data-doc-kind="component" data-maturity="${page.maturity}" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
+      `<li class="rf-side-nav-item" data-doc-kind="component" data-maturity="${page.maturity}" data-platform="${page.platform}" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
   )
   .join("\n")
 
@@ -171,7 +186,7 @@ const navSections = [
     ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Start Here</h2><ul class="rf-side-nav-list">${guideNav}</ul></section>`
     : "",
   componentPages.length
-    ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Components</h2><label class="docs-site-nav-filter"><input type="checkbox" data-docs-stable-only /> Stable only</label><ul class="rf-side-nav-list">${componentNav}</ul></section>`
+    ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Components</h2><div class="docs-site-nav-filters"><label class="docs-site-nav-filter"><input type="checkbox" data-docs-stable-only /> Stable only</label><label class="docs-site-nav-filter"><input type="checkbox" data-docs-mobile-only /> Mobile only</label></div><ul class="rf-side-nav-list">${componentNav}</ul></section>`
     : "",
 ]
   .filter(Boolean)
@@ -186,7 +201,7 @@ const componentBody = componentPages
       ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
       : ""
 
-    return `<article id="${page.id}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
+    return `<article id="${page.id}"><p><strong>Maturity:</strong> ${page.maturity} · <strong>Platform:</strong> ${page.platform}</p>${demoSection}${page.html}</article>`
   })
   .join("\n")
 
@@ -258,6 +273,7 @@ const html = `<!doctype html>
       .docs-site-nav { display: grid; gap: 0.75rem; }
       .docs-site-nav-title { margin: 0; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
       .docs-site-nav .rf-side-nav-list { display: grid; gap: 0.2rem; margin: 0; padding: 0; list-style: none; }
+      .docs-site-nav-filters { display: grid; gap: 0.35rem; }
       .docs-site-nav-filter { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8125rem; color: #475569; }
       .docs-site-nav-filter input { accent-color: #2563eb; }
       .docs-site-content article {
@@ -1101,6 +1117,7 @@ const html = `<!doctype html>
         if (links.length === 0) return
 
         const stableOnlyToggle = document.querySelector("[data-docs-stable-only]")
+        const mobileOnlyToggle = document.querySelector("[data-docs-mobile-only]")
         const componentItems = Array.from(
           document.querySelectorAll(".docs-site-nav .rf-side-nav-item[data-doc-kind='component']"),
         )
@@ -1114,10 +1131,12 @@ const html = `<!doctype html>
 
         const applyComponentFilter = () => {
           const stableOnly = stableOnlyToggle instanceof HTMLInputElement ? stableOnlyToggle.checked : false
+          const mobileOnly = mobileOnlyToggle instanceof HTMLInputElement ? mobileOnlyToggle.checked : false
           for (const item of componentItems) {
             if (!(item instanceof HTMLElement)) continue
             const maturity = item.dataset.maturity
-            item.hidden = stableOnly && maturity !== "stable"
+            const platform = item.dataset.platform ?? "universal"
+            item.hidden = (stableOnly && maturity !== "stable") || (mobileOnly && platform !== "mobile")
           }
         }
 
@@ -1144,8 +1163,9 @@ const html = `<!doctype html>
           }
         }
 
-        if (stableOnlyToggle instanceof HTMLInputElement) {
-          stableOnlyToggle.addEventListener("change", () => {
+        for (const toggle of [stableOnlyToggle, mobileOnlyToggle]) {
+          if (!(toggle instanceof HTMLInputElement)) continue
+          toggle.addEventListener("change", () => {
             applyComponentFilter()
             update()
           })

@@ -1,6 +1,7 @@
 # DateTimePicker
 
 Maturity: experimental
+Platform: mobile
 
 ## When to use
 
@@ -45,11 +46,11 @@ Hydration optional for native behavior. Use hydration when listening to `onValue
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Native semantics | uses native `date` and `time` inputs |
+| Requirement         | Behavior                                             |
+| ------------------- | ---------------------------------------------------- |
+| Native semantics    | uses native `date` and `time` inputs                 |
 | Combined submission | optional hidden input supports single `name` payload |
-| Error wiring | supports `aria-describedby` and `aria-invalid` |
+| Error wiring        | supports `aria-describedby` and `aria-invalid`       |
 
 ## Keymap spec
 

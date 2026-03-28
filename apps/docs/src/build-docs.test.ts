@@ -63,7 +63,7 @@ describe("docs contracts", () => {
     expect(devSource).toMatch(sidebarBlockPattern)
   })
 
-  it("keeps guide nav and stable-only filter wiring in build and dev docs", async () => {
+  it("keeps guide nav and component filter wiring in build and dev docs", async () => {
     const root = path.resolve(import.meta.dirname, "..")
     const buildSource = await readFile(path.join(root, "src", "build-docs.mjs"), "utf8")
     const devSource = await readFile(path.join(root, "src", "dev-docs.js"), "utf8")
@@ -72,6 +72,8 @@ describe("docs contracts", () => {
     expect(devSource).toContain("Start Here")
     expect(buildSource).toContain("data-docs-stable-only")
     expect(devSource).toContain("data-docs-stable-only")
+    expect(buildSource).toContain("data-docs-mobile-only")
+    expect(devSource).toContain("data-docs-mobile-only")
   })
 
   it("uses shared guide and section config in build and dev docs", async () => {

@@ -1,6 +1,7 @@
 # <ComponentName>
 
 Maturity: <stable|experimental>
+Platform: <universal|mobile>
 
 ## When to use
 
