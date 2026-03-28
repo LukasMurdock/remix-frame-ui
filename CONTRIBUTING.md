@@ -20,3 +20,11 @@
 - Install dependencies with `pnpm install` to enable git hooks via Husky.
 - Pre-commit runs `lint-staged` and formats staged code/config files with Prettier.
 - Run `pnpm run format` to format supported files manually.
+
+## Releases
+
+- Add a changeset for any pull request that changes public package behavior.
+- Create one with `pnpm changeset` and choose the appropriate bump level.
+- Merges to `main` run two release workflows:
+  - stable: opens/updates a version PR and publishes once merged
+  - canary: publishes snapshot builds to npm under the `canary` tag

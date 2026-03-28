@@ -1,11 +1,34 @@
 {
   "name": "@remix-frame-ui/styles",
+  "description": "Layered CSS tokens, primitives, and component styles for Remix Frame UI.",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasmurdock/remix-frame-ui.git"
+  },
+  "homepage": "https://github.com/lukasmurdock/remix-frame-ui#readme",
+  "bugs": {
+    "url": "https://github.com/lukasmurdock/remix-frame-ui/issues"
+  },
+  "keywords": [
+    "css",
+    "design-tokens",
+    "ui",
+    "remix"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "src/index.css",
+  "style": "src/index.css",
   "files": [
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "tokens:build": "node src/scripts/build-tokens.mjs",
     "check:css-order": "node src/scripts/check-css-order.mjs",
