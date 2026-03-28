@@ -1,4 +1,4 @@
-# @remix-frame-ui/styles
+# @lukasmurdock/styles
 
 ## 0.1.0
 

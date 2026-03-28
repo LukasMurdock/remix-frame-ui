@@ -3724,7 +3724,7 @@ function mountTypographyDemo(mount) {
       <h2 class="rf-typography-heading" style="margin:0;">Release readiness</h2>
       <p class="rf-typography-text" style="margin:0;">All checks passed. One deployment is waiting on manual approval.</p>
       <p class="rf-typography-text" data-truncate="true" style="margin:0;max-width:18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Very long release note title that demonstrates truncation in compact card contexts</p>
-      <code class="rf-typography-code">pnpm --filter @remix-frame-ui/remix test</code>
+      <code class="rf-typography-code">pnpm --filter @lukasmurdock/remix test</code>
     </div>
   `
 }
