@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `FormMessage` usage patterns.
+```tsx
+import { FormMessage } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <FormMessage tone="error">Email is required.</FormMessage>
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Tone drives live-region behavior: error is assertive, success and warning are po
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Helper messaging | passive text for hints and guidance |
+| Requirement        | Behavior                                                |
+| ------------------ | ------------------------------------------------------- |
+| Helper messaging   | passive text for hints and guidance                     |
 | Validation urgency | `error` uses `role="alert"` with assertive live updates |
-| Status updates | `success` and `warning` use polite status updates |
+| Status updates     | `success` and `warning` use polite status updates       |
 
 ## Keymap spec
 
 - No dedicated key handling; follows associated control focus order
-

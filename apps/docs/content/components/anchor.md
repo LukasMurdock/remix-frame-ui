@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Anchor } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "overview", label: "Overview", href: "#overview" },
+  { id: "api", label: "API", href: "#api" },
+  { id: "faq", label: "FAQ", href: "#faq", disabled: true },
+]
+
+export function Example() {
+  return <Anchor items={items} defaultActiveHref="#api" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ Supports controlled or uncontrolled `activeHref`; disabled items remain non-inte
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses `nav` container with configurable label |
+| Requirement         | Behavior                                      |
+| ------------------- | --------------------------------------------- |
+| Landmark semantics  | uses `nav` container with configurable label  |
 | Active target state | active item exposes `aria-current="location"` |
-| Disabled behavior | disabled entries render as non-focusable text |
+| Disabled behavior   | disabled entries render as non-focusable text |
 
 ## Keymap spec
 
 - Uses native anchor keyboard behavior (`Tab`, `Enter`, browser link navigation)
-

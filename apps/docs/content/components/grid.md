@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Grid` usage patterns.
+```tsx
+import { Grid } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Grid columns={3} gap="1rem">
+      <div>API</div>
+      <div>Workers</div>
+      <div>Webhooks</div>
+    </Grid>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ Use `columns`, `gap`, and item `span` values to compose responsive dashboard blo
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantics | neutral layout container and item elements |
-| Keyboard | no component-level key handling |
+| Requirement    | Behavior                                                   |
+| -------------- | ---------------------------------------------------------- |
+| Semantics      | neutral layout container and item elements                 |
+| Keyboard       | no component-level key handling                            |
 | Layout control | data attributes express columns, alignment, and item spans |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

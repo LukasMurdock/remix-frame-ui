@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Steps } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "plan", label: "Plan" },
+  { id: "build", label: "Build" },
+  { id: "ship", label: "Ship" },
+]
+
+export function Example() {
+  return <Steps items={items} currentId="build" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ Progress is controlled with `currentId`; unknown values fall back to the first s
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses labeled `nav` with ordered list |
-| Current step | marks active item with `aria-current="step"` |
-| Status clarity | exposes complete/current/upcoming through data attributes |
+| Requirement        | Behavior                                                  |
+| ------------------ | --------------------------------------------------------- |
+| Landmark semantics | uses labeled `nav` with ordered list                      |
+| Current step       | marks active item with `aria-current="step"`              |
+| Status clarity     | exposes complete/current/upcoming through data attributes |
 
 ## Keymap spec
 
 - No custom key handling; informational component only
-

@@ -19,7 +19,24 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `SideNav` usage patterns.
+```tsx
+import { SideNav } from "@lukasmurdock/remix-ui-components"
+
+const sections = [
+  {
+    id: "primary",
+    label: "Primary",
+    items: [
+      { id: "overview", label: "Overview", href: "/overview" },
+      { id: "deployments", label: "Deployments", href: "/deployments" },
+    ],
+  },
+]
+
+export function Example() {
+  return <SideNav sections={sections} activeId="deployments" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +48,12 @@ Supports compact mode and optional nested child items within a section.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses `nav` with explicit side navigation label |
-| Active state | active entry exposes `aria-current="page"` |
-| Hierarchy | supports nested list structure for grouped routes |
+| Requirement        | Behavior                                          |
+| ------------------ | ------------------------------------------------- |
+| Landmark semantics | uses `nav` with explicit side navigation label    |
+| Active state       | active entry exposes `aria-current="page"`        |
+| Hierarchy          | supports nested list structure for grouped routes |
 
 ## Keymap spec
 
 - No custom key handling; uses native link keyboard behavior
-

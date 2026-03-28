@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `FileUpload` usage patterns.
+```tsx
+import { FileUpload } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <FileUpload name="attachments" accept={[".png", ".jpg", ".pdf"]} multiple />
+}
+```
 
 ## HTML parity
 
@@ -31,14 +37,13 @@ Hydration optional for basic file selection. Add runtime behavior for previews a
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Label association | via native `<label for>` and `id` |
-| File constraints | native `accept`, `multiple`, and `capture` attributes |
-| Error wiring | supports `aria-describedby` and `aria-invalid` |
+| Requirement       | Behavior                                              |
+| ----------------- | ----------------------------------------------------- |
+| Label association | via native `<label for>` and `id`                     |
+| File constraints  | native `accept`, `multiple`, and `capture` attributes |
+| Error wiring      | supports `aria-describedby` and `aria-invalid`        |
 
 ## Keymap spec
 
 - `Tab`: next focus target
 - `Enter` / `Space`: opens native file picker
-

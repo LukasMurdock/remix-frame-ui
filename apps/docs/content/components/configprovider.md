@@ -19,7 +19,17 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `ConfigProvider` usage patterns.
+```tsx
+import { ConfigProvider } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <ConfigProvider locale="en-US" direction="ltr" navigateMode="internal">
+      <main>Settings</main>
+    </ConfigProvider>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,14 +41,13 @@ Supports app-level locale, direction, color scheme, reduced motion, and delegate
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Locale propagation | sets `lang` attribute on provider root |
-| Directionality | sets `dir` as `ltr` or `rtl` |
-| Motion preference | exposes reduced motion preference through data attributes |
-| Keyboard | preserves nested component keyboard behavior |
+| Requirement        | Behavior                                                  |
+| ------------------ | --------------------------------------------------------- |
+| Locale propagation | sets `lang` attribute on provider root                    |
+| Directionality     | sets `dir` as `ltr` or `rtl`                              |
+| Motion preference  | exposes reduced motion preference through data attributes |
+| Keyboard           | preserves nested component keyboard behavior              |
 
 ## Keymap spec
 
 - Inherits key handling from nested components
-

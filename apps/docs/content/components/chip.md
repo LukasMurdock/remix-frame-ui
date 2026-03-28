@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { Chip } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Chip tone="brand">Needs review</Chip>
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ No hydration required for static chips.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantic text | plain inline text content |
-| API parity | same tone behavior as `Tag` |
-| Keyboard | not focusable unless composed with interactive parent |
+| Requirement   | Behavior                                              |
+| ------------- | ----------------------------------------------------- |
+| Semantic text | plain inline text content                             |
+| API parity    | same tone behavior as `Tag`                           |
+| Keyboard      | not focusable unless composed with interactive parent |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

@@ -415,9 +415,50 @@ async function bootDocs() {
       scroll-margin-top: 5.25rem;
     }
     pre { white-space: pre-wrap; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; }
-    .demo-block { border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-bottom: 1rem; background: #fff; }
-    .demo-block h3 { margin-top: 0; font-size: 1rem; }
+    .demo-block {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      background: #fff;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .demo-block h3 { margin: 0; font-size: 1rem; }
     .demo-mount { min-height: 2.25rem; }
+    .docs-example-tabs { display: grid; gap: 0.6rem; }
+    .docs-example-tablist {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.65rem;
+      background: #f8fafc;
+    }
+    .docs-example-tab {
+      border: 0;
+      border-radius: 0.5rem;
+      background: transparent;
+      color: #334155;
+      font: inherit;
+      font-size: 0.875rem;
+      line-height: 1.2;
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+    }
+    .docs-example-tab[data-active="true"] {
+      background: #fff;
+      color: #1e3a8a;
+      box-shadow: 0 0 0 1px #cbd5e1;
+      font-weight: 600;
+    }
+    .docs-example-tab:focus-visible {
+      outline: 2px solid #1d4ed8;
+      outline-offset: 1px;
+    }
+    .docs-example-panel[hidden] { display: none; }
+    .docs-example-panel[data-panel="code"] pre { margin: 0; }
     .docs-button { border-radius: 8px; min-height: 2.5rem; padding: 0 0.875rem; border: 1px solid #cbd5e1; background: #2563eb; color: #fff; cursor: pointer; }
     .docs-button[data-variant="outline"] { background: #fff; color: #0f172a; }
     .docs-button[data-tone="danger"] { background: #dc2626; border-color: #dc2626; color: #fff; }
@@ -580,7 +621,7 @@ async function bootDocs() {
     .rf-pagination-page[data-current="true"] { border-color: #2563eb; background: #eef4ff; font-weight: 600; }
     .rf-pagination-ellipsis { color: #64748b; min-width: 1.5rem; text-align: center; }
     .docs-error { color: #dc2626; font-size: 0.875rem; }
-    .docs-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: grid; place-items: center; }
+    .docs-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: grid; place-items: center; z-index: 80; }
     .docs-overlay[hidden] { display: none; }
     .docs-panel { width: min(36rem, 100%); background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1rem; display: grid; gap: 0.75rem; }
     .docs-drawer-backdrop { place-items: stretch; backdrop-filter: blur(1.5px); background: rgba(15, 23, 42, 0.36); }
@@ -1268,8 +1309,7 @@ async function bootDocs() {
       outline-offset: 2px;
     }
     .rf-collapse[open] {
-      border-color: #93c5fd;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+      border-color: #cbd5e1;
     }
     .rf-collapse-content {
       padding: 0.65rem 0.75rem 0.75rem;

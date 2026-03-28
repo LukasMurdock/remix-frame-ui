@@ -19,7 +19,18 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Flex` usage patterns.
+```tsx
+import { Flex } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Flex align="center" justify="between" gap="1rem">
+      <span>Build</span>
+      <span>Passing</span>
+    </Flex>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +42,12 @@ Use `direction`, `align`, `justify`, `wrap`, and `gap` to compose toolbars, head
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantics | neutral container element |
-| Keyboard | no component-level key handling |
+| Requirement    | Behavior                                                      |
+| -------------- | ------------------------------------------------------------- |
+| Semantics      | neutral container element                                     |
+| Keyboard       | no component-level key handling                               |
 | Layout control | data attributes express alignment, direction, and wrap intent |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Calendar` usage patterns.
+```tsx
+import { Calendar } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Calendar view="month" defaultValue="2026-04-18" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Use `view="month"` for day-level selection and `view="year"` for month-level sel
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Input semantics | native date or month input control |
-| Keyboard | browser-native date input keyboard support |
-| Disabled state | native disabled behavior |
+| Requirement     | Behavior                                   |
+| --------------- | ------------------------------------------ |
+| Input semantics | native date or month input control         |
+| Keyboard        | browser-native date input keyboard support |
+| Disabled state  | native disabled behavior                   |
 
 ## Keymap spec
 
 - Browser-native date input key handling
-

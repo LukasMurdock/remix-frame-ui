@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `TopNav` usage patterns.
+```tsx
+import { TopNav } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "overview", label: "Overview", href: "/overview" },
+  { id: "alerts", label: "Alerts", href: "/alerts" },
+  { id: "settings", label: "Settings", href: "/settings" },
+]
+
+export function Example() {
+  return <TopNav items={items} activeId="alerts" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ Supports compact mode, disabled entries, and default active-item fallback to fir
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses `nav` with explicit top navigation label |
-| Active state | active entry exposes `aria-current="page"` |
-| Keyboard behavior | native link keyboard behavior without custom handlers |
+| Requirement        | Behavior                                              |
+| ------------------ | ----------------------------------------------------- |
+| Landmark semantics | uses `nav` with explicit top navigation label         |
+| Active state       | active entry exposes `aria-current="page"`            |
+| Keyboard behavior  | native link keyboard behavior without custom handlers |
 
 ## Keymap spec
 
 - No custom key handling; uses native link keyboard behavior
-

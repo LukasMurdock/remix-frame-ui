@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for interaction and keyboard behavior patterns.
+```tsx
+import { PageHeader } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <PageHeader
+      title="Deployments"
+      subtitle="Track release progress"
+      actions={<button type="button">Create deployment</button>}
+    />
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ See demos for interaction and keyboard behavior patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Heading semantics | renders title as top-level heading |
-| Supporting text | optional subtitle paragraph |
-| Action placement | actions are grouped in dedicated region |
+| Requirement       | Behavior                                |
+| ----------------- | --------------------------------------- |
+| Heading semantics | renders title as top-level heading      |
+| Supporting text   | optional subtitle paragraph             |
+| Action placement  | actions are grouped in dedicated region |
 
 ## Keymap spec
 
 - Keyboard behavior is inherited from child action controls.
-

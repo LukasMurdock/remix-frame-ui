@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Descriptions` usage patterns.
+```tsx
+import { Descriptions } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { key: "repo", label: "Repository", content: "remix-frame-ui" },
+  { key: "owner", label: "Owner", content: "Platform" },
+  { key: "status", label: "Status", content: "Healthy" },
+]
+
+export function Example() {
+  return <Descriptions title="Service details" items={items} columns={3} />
+}
+```
 
 ## HTML parity
 
@@ -31,14 +43,13 @@ Supports grid columns, item spans, horizontal/vertical layouts, compact density,
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantic pairs | uses `dl` with `dt` and `dd` entries |
-| Section title | optional heading for detail context |
+| Requirement         | Behavior                                         |
+| ------------------- | ------------------------------------------------ |
+| Semantic pairs      | uses `dl` with `dt` and `dd` entries             |
+| Section title       | optional heading for detail context              |
 | Responsive grouping | item spans maintain logical label/value grouping |
 
 ## Keymap spec
 
 - Uses native document navigation
 - Does not add custom key handlers
-

@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Space` usage patterns.
+```tsx
+import { Space } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Space size="sm" align="center" wrap>
+      <button type="button">Approve</button>
+      <button type="button">Comment</button>
+      <button type="button">Reject</button>
+    </Space>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +43,12 @@ Use `size`, `direction`, `align`, and optional wrapping to compose compact actio
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantics | neutral grouping container |
-| Keyboard | no component-level key handling |
+| Requirement    | Behavior                                             |
+| -------------- | ---------------------------------------------------- |
+| Semantics      | neutral grouping container                           |
+| Keyboard       | no component-level key handling                      |
 | Layout control | data attributes express spacing size and orientation |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

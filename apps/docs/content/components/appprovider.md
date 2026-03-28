@@ -19,7 +19,17 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `AppProvider` usage patterns.
+```tsx
+import { AppProvider } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <AppProvider locale="en-US" colorScheme="light">
+      <main>Dashboard content</main>
+    </AppProvider>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,14 +41,13 @@ Supports `lang` and `dir` metadata, color scheme and reduced motion hints, and o
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Locale propagation | sets `lang` attribute on provider root |
-| Directionality | sets `dir` as `ltr` or `rtl` |
-| Motion preference | can reduce animations/transitions for nested content |
+| Requirement        | Behavior                                             |
+| ------------------ | ---------------------------------------------------- |
+| Locale propagation | sets `lang` attribute on provider root               |
+| Directionality     | sets `dir` as `ltr` or `rtl`                         |
+| Motion preference  | can reduce animations/transitions for nested content |
 
 ## Keymap spec
 
 - Inherits key handling from nested components
 - Does not override default keyboard navigation
-
