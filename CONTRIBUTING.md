@@ -28,3 +28,4 @@
 - Merges to `main` run two release workflows:
   - stable: opens/updates a version PR and publishes once merged
   - canary: publishes snapshot builds to npm under the `canary` tag
+- `NPM_TOKEN` must be an automation token that does not require interactive OTP.
