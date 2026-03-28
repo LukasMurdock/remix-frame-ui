@@ -2,20 +2,40 @@
 
 Maturity: experimental
 
-## HTML parity
+## When to use
 
-`Dialog` provides modal behavior semantics with `role="dialog"` and `aria-modal="true"`.
+- Confirm or complete a focused task without leaving the current page
+- Interrupt flow only for high-priority or destructive actions
 
-## Runtime notes
-
-Dialog is controlled-only (`open` + `onClose`). `onClose` receives reasons: `escape`, `backdrop`, `close-button`, `programmatic`.
-
-### Controlled example
+## Import
 
 ```ts
+import { Dialog } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+### Controlled open state
+
+```ts
+import { on } from "remix/component"
+
 let open = false
 
-<button on={{ click() { open = true; handle.update() } }}>Open</button>
+<button
+  mix={[
+    on("click", () => {
+      open = true
+      handle.update()
+    }),
+  ]}
+>
+  Open
+</button>
 <Dialog
   open={open}
   title="Delete item"
@@ -28,7 +48,7 @@ let open = false
 </Dialog>
 ```
 
-### Reasoned close handling
+### Reason-aware close handling
 
 ```ts
 <Dialog
@@ -41,6 +61,14 @@ let open = false
   }}
 />
 ```
+
+## HTML parity
+
+`Dialog` provides modal behavior semantics with `role="dialog"` and `aria-modal="true"`.
+
+## Runtime notes
+
+Dialog is controlled-only (`open` + `onClose`). `onClose` receives reasons: `escape`, `backdrop`, `close-button`, `programmatic`.
 
 ## Accessibility matrix
 

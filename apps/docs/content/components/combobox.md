@@ -2,6 +2,36 @@
 
 Maturity: experimental
 
+## When to use
+
+- Let users type and narrow a list of options
+- Support keyboard-first option discovery and commit
+
+## Import
+
+```ts
+import { Combobox } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Combobox } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  { id: "1", value: "us", label: "United States" },
+  { id: "2", value: "ca", label: "Canada" },
+]
+
+export function CountryField() {
+  return <Combobox label="Country" options={options} defaultValue="" />
+}
+```
+
 ## HTML parity
 
 `Combobox` uses input + listbox semantics for searchable option selection.

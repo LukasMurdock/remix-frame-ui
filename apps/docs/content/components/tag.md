@@ -2,6 +2,31 @@
 
 Maturity: experimental
 
+## When to use
+
+- Label categories, metadata, or taxonomies inline
+- Apply lightweight highlighting to text tokens
+
+## Import
+
+```ts
+import { Tag } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Tag } from "@lukasmurdock/remix-ui-components"
+
+export function CategoryTag() {
+  return <Tag tone="brand">Platform</Tag>
+}
+```
+
 ## HTML parity
 
 `Tag` renders a semantic `<span>` for categorization and metadata labels.

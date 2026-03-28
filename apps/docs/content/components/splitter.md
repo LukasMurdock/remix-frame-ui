@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Creates a two-pane resizable layout with a draggable separator handle.
+- Supports horizontal and vertical layouts, controlled or uncontrolled size, keyboard resizing, and min/max constraints.
+
+## Import
+
+```ts
+import { Splitter } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `Splitter` creates a two-pane resizable layout with a draggable separator handle.
@@ -24,3 +43,4 @@ Supports horizontal and vertical layouts, controlled or uncontrolled size, keybo
 - `ArrowUp`/`ArrowDown`: resize vertical splitter by step
 - `Home`: set first pane to minimum size
 - `End`: set first pane to maximum size
+

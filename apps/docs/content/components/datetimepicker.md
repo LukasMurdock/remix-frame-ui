@@ -2,6 +2,39 @@
 
 Maturity: experimental
 
+## When to use
+
+- Capture date and time together while keeping native input behavior
+- Submit either split fields (`dateName`/`timeName`) or a combined hidden value (`name`)
+
+## Import
+
+```ts
+import { DateTimePicker } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { DateTimePicker } from "@lukasmurdock/remix-ui-components"
+
+export function IncidentDateTime() {
+  return (
+    <DateTimePicker
+      id="incident-at"
+      name="occurredAt"
+      dateName="occurredDate"
+      timeName="occurredTime"
+      onValueChange={(value) => console.log(value)}
+    />
+  )
+}
+```
+
 ## HTML parity
 
 `DateTimePicker` composes native date and time inputs and emits a combined local datetime value.

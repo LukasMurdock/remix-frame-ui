@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Is an alias of `Tag` and renders a semantic `<span>`.
+- No hydration required for static chips.
+
+## Import
+
+```ts
+import { Chip } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `Chip` is an alias of `Tag` and renders a semantic `<span>`.
@@ -21,3 +40,4 @@ No hydration required for static chips.
 ## Keymap spec
 
 - No component-level key bindings.
+

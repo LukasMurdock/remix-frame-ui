@@ -2,6 +2,48 @@
 
 Maturity: experimental
 
+## When to use
+
+- Offer fast keyboard-first command execution from anywhere in an app
+- Centralize navigation and action shortcuts in a single searchable surface
+
+## Import
+
+```ts
+import { CommandPalette } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```ts
+import { CommandPalette } from "@lukasmurdock/remix-ui-components"
+
+let open = false
+
+const commands = [
+  { id: "search", label: "Open search", keywords: ["find"] },
+  { id: "settings", label: "Open settings" },
+]
+
+<CommandPalette
+  open={open}
+  commands={commands}
+  onClose={() => {
+    open = false
+    handle.update()
+  }}
+  onSelect={(id) => {
+    console.log(id)
+    open = false
+    handle.update()
+  }}
+/>
+```
+
 ## HTML parity
 
 `CommandPalette` is a modal command surface combining searchable input and option list.

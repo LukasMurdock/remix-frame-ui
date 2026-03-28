@@ -2,6 +2,25 @@
 
 Maturity: stable
 
+## When to use
+
+- Provides semantic shell regions with `LayoutHeader`, `LayoutSider`, `LayoutContent`, and `LayoutFooter`.
+- Use `direction` and `hasSider` to define high-level page scaffolding.
+
+## Import
+
+```ts
+import { Layout } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Layout` usage patterns.
+
 ## HTML parity
 
 `Layout` provides semantic shell regions with `LayoutHeader`, `LayoutSider`, `LayoutContent`, and `LayoutFooter`.
@@ -21,3 +40,4 @@ Use `direction` and `hasSider` to define high-level page scaffolding. `LayoutSid
 ## Keymap spec
 
 - No component-level key bindings.
+

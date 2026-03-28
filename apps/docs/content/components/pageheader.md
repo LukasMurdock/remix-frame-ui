@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Composes native heading and metadata text with optional action region.
+- Is layout-focused and does not require hydration unless actions are interactive.
+
+## Import
+
+```ts
+import { PageHeader } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for interaction and keyboard behavior patterns.
+
 ## HTML parity
 
 `PageHeader` composes native heading and metadata text with optional action region.
@@ -21,3 +40,4 @@ Maturity: experimental
 ## Keymap spec
 
 - Keyboard behavior is inherited from child action controls.
+

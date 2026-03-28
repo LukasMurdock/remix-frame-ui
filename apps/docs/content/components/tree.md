@@ -2,6 +2,42 @@
 
 Maturity: experimental
 
+## When to use
+
+- Display and navigate hierarchical data with nested branches
+- Support independent selection and expansion state control
+
+## Import
+
+```ts
+import { Tree } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Tree } from "@lukasmurdock/remix-ui-components"
+
+const nodes = [
+  {
+    id: "projects",
+    label: "Projects",
+    children: [
+      { id: "roadmap", label: "Roadmap" },
+      { id: "launch", label: "Launch" },
+    ],
+  },
+]
+
+export function ProjectTree() {
+  return <Tree nodes={nodes} defaultExpandedIds={["projects"]} onSelect={(id) => console.log(id)} />
+}
+```
+
 ## HTML parity
 
 `Tree` renders nested hierarchical nodes with optional expand/collapse behavior.

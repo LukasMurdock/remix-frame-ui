@@ -2,6 +2,40 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provide a consistent app-level frame with header, sidebar, and main content areas
+- Manage collapsible side navigation layout at the shell level
+
+## Import
+
+```ts
+import { AppShell } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { AppShell } from "@lukasmurdock/remix-ui-components"
+
+export function DocsShell() {
+  return (
+    <AppShell
+      header={<div>Header</div>}
+      sidebar={<nav>Sidebar nav</nav>}
+      sidebarPosition="left"
+      sidebarWidth="18rem"
+    >
+      <article>Main content</article>
+    </AppShell>
+  )
+}
+```
+
 ## HTML parity
 
 `AppShell` provides application layout structure with header, sidebar, and main content regions.

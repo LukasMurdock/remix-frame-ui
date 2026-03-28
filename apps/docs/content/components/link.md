@@ -2,6 +2,35 @@
 
 Maturity: stable
 
+## When to use
+
+- Render semantic links for internal routes, external URLs, anchors, and downloads
+- Intercept navigations for client routing via `onNavigate`
+
+## Import
+
+```ts
+import { Link } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Link } from "@lukasmurdock/remix-ui-components"
+
+export function NavigationLink() {
+  return (
+    <Link href="/settings" onNavigate={({ href }) => console.log("navigate", href)}>
+      Open settings
+    </Link>
+  )
+}
+```
+
 ## HTML parity
 
 `Link` renders a native `<a>` with support for `href`, `target`, `rel`, `download`, and `aria-current`.

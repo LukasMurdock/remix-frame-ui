@@ -2,6 +2,39 @@
 
 Maturity: experimental
 
+## When to use
+
+- Select a single calendar date with keyboard and pointer support
+- Accept or emit ISO date strings (`YYYY-MM-DD`)
+
+## Import
+
+```ts
+import { DatePicker } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { DatePicker } from "@lukasmurdock/remix-ui-components"
+
+export function ScheduleDate() {
+  return (
+    <DatePicker
+      id="release-date"
+      name="releaseDate"
+      min="2026-01-01"
+      max="2026-12-31"
+      onValueChange={(value) => console.log(value)}
+    />
+  )
+}
+```
+
 ## HTML parity
 
 `DatePicker` composes an input-like trigger with a calendar dialog for date selection.

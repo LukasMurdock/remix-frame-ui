@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides a top application bar with brand, title, nav, and action slots.
+- Supports compact density and optional sticky mode for persistent page chrome.
+
+## Import
+
+```ts
+import { AppHeader } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `AppHeader` usage patterns.
+
 ## HTML parity
 
 `AppHeader` provides a top application bar with brand, title, nav, and action slots.
@@ -21,3 +40,4 @@ Supports compact density and optional sticky mode for persistent page chrome.
 ## Keymap spec
 
 - No custom key handling; keyboard behavior comes from slotted controls
+

@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Is a compact in-flow status surface for forms and sections.
+- Supports optional trailing action for recovery without modal interruption.
+
+## Import
+
+```ts
+import { InlineAlert } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `InlineAlert` usage patterns.
+
 ## HTML parity
 
 `InlineAlert` is a compact in-flow status surface for forms and sections.
@@ -22,3 +41,4 @@ Supports optional trailing action for recovery without modal interruption.
 
 - `Tab`: navigate to inline action when present
 - `Enter`/`Space`: activate focused action
+

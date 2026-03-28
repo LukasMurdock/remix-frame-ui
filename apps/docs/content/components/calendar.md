@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders a native date input, with optional month-only mode for year-style selection.
+- Use `view="month"` for day-level selection and `view="year"` for month-level selection.
+
+## Import
+
+```ts
+import { Calendar } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Calendar` usage patterns.
+
 ## HTML parity
 
 `Calendar` renders a native date input, with optional month-only mode for year-style selection.
@@ -21,3 +40,4 @@ Use `view="month"` for day-level selection and `view="year"` for month-level sel
 ## Keymap spec
 
 - Browser-native date input key handling
+

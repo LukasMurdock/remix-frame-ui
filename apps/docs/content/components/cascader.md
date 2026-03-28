@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Picks hierarchical values through stepwise option columns.
+- Supports controlled or uncontrolled selected path, popup open state, and optional change-on-intermediate-select.
+
+## Import
+
+```ts
+import { Cascader } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `Cascader` picks hierarchical values through stepwise option columns.
@@ -27,3 +46,4 @@ Supports controlled or uncontrolled selected path, popup open state, and optiona
 - `ArrowLeft`: returns focus to the parent column
 - `Enter`/`Space` in panel: commits focused option (leaf closes panel)
 - `Escape`: closes panel and returns focus to trigger
+

@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Wraps application content and sets `lang` and `dir` on the provider root.
+- Supports app-level locale, direction, color scheme, reduced motion, and delegated link navigation via `router.navigate` and `onNavigate`.
+
+## Import
+
+```ts
+import { ConfigProvider } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `ConfigProvider` usage patterns.
+
 ## HTML parity
 
 `ConfigProvider` wraps application content and sets `lang` and `dir` on the provider root.
@@ -22,3 +41,4 @@ Supports app-level locale, direction, color scheme, reduced motion, and delegate
 ## Keymap spec
 
 - Inherits key handling from nested components
+

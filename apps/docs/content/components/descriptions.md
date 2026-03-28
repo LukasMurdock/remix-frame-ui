@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Presents read-only label/value pairs in a dense, scannable detail layout.
+- Supports grid columns, item spans, horizontal/vertical layouts, compact density, optional header metadata, responsive collapse breakpoints, and empty state.
+
+## Import
+
+```ts
+import { Descriptions } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Descriptions` usage patterns.
+
 ## HTML parity
 
 `Descriptions` presents read-only label/value pairs in a dense, scannable detail layout.
@@ -22,3 +41,4 @@ Supports grid columns, item spans, horizontal/vertical layouts, compact density,
 
 - Uses native document navigation
 - Does not add custom key handlers
+

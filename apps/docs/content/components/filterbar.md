@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Groups native filter controls and actions in a semantic section.
+- Is layout-only and relies on child controls for behavior.
+
+## Import
+
+```ts
+import { FilterBar } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `FilterBar` groups native filter controls and actions in a semantic section.
@@ -21,3 +40,4 @@ Maturity: experimental
 ## Keymap spec
 
 - Keyboard behavior is inherited from child controls.
+

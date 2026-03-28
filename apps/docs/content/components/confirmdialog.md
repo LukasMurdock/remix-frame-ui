@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Is a preset built on `Dialog` for confirmation and destructive actions.
+- Controlled-only (`open` + `onClose`) with dedicated `confirm` and `cancel` close reasons.
+
+## Import
+
+```ts
+import { ConfirmDialog } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `ConfirmDialog` is a preset built on `Dialog` for confirmation and destructive actions.
@@ -23,3 +42,4 @@ Controlled-only (`open` + `onClose`) with dedicated `confirm` and `cancel` close
 - `Escape`: close when enabled
 - `Tab` / `Shift+Tab`: move focus through actions
 - `Enter`: activate focused action
+

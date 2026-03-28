@@ -2,6 +2,37 @@
 
 Maturity: experimental
 
+## When to use
+
+- Present a compact list of contextual actions from a single trigger
+- Support keyboard-first action menus with menu semantics
+
+## Import
+
+```ts
+import { Menu } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Menu } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "rename", label: "Rename" },
+  { id: "duplicate", label: "Duplicate" },
+  { id: "archive", label: "Archive", disabled: true },
+]
+
+export function RowActions() {
+  return <Menu triggerLabel="Actions" items={items} onSelect={(id) => console.log(id)} />
+}
+```
+
 ## HTML parity
 
 `Menu` is action-menu scope only and uses menu/menuitem semantics.
@@ -23,3 +54,4 @@ Menu supports controlled and uncontrolled state with an `onSelect` callback for 
 - Arrow keys: move focus between items
 - `Escape`: close menu
 - `Enter`/`Space`: activate focused item
+- `Home`/`End`: jump to first or last enabled item

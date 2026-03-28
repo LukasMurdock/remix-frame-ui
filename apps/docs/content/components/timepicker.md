@@ -2,6 +2,41 @@
 
 Maturity: experimental
 
+## When to use
+
+- Capture a time-of-day value with native browser controls
+- React to immediate input changes and committed value changes
+
+## Import
+
+```ts
+import { TimePicker } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { TimePicker } from "@lukasmurdock/remix-ui-components"
+
+export function ReminderTime() {
+  return (
+    <TimePicker
+      id="reminder-time"
+      name="reminderTime"
+      min="08:00"
+      max="20:00"
+      step={300}
+      onValueChange={(value) => console.log("typing", value)}
+      onValueCommit={(value) => console.log("commit", value)}
+    />
+  )
+}
+```
+
 ## HTML parity
 
 `TimePicker` wraps native `<input type="time">` with min/max/step constraints.

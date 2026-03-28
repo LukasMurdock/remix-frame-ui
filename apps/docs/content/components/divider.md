@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders a separator element for visual and optional semantic grouping.
+- Use horizontal dividers between stacked sections and vertical dividers between inline groups.
+
+## Import
+
+```ts
+import { Divider } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Divider` usage patterns.
+
 ## HTML parity
 
 `Divider` renders a separator element for visual and optional semantic grouping.
@@ -21,3 +40,4 @@ Use horizontal dividers between stacked sections and vertical dividers between i
 ## Keymap spec
 
 - No component-level key bindings.
+

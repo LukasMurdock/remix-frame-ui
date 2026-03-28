@@ -2,6 +2,42 @@
 
 Maturity: experimental
 
+## When to use
+
+- Let users choose one value from a hierarchical option tree
+- Expose expandable grouped options behind a compact trigger
+
+## Import
+
+```ts
+import { TreeSelect } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { TreeSelect } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  {
+    id: "org",
+    label: "Organization",
+    children: [
+      { id: "eng", label: "Engineering" },
+      { id: "design", label: "Design" },
+    ],
+  },
+]
+
+export function TeamTreeSelect() {
+  return <TreeSelect options={options} defaultExpandedIds={["org"]} onChange={(id) => console.log(id)} />
+}
+```
+
 ## HTML parity
 
 `TreeSelect` combines a trigger field with a hierarchical tree options panel.

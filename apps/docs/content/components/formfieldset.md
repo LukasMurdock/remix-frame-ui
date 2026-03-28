@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Wraps related controls in native `<fieldset>` and `<legend>` semantics.
+- Supports one- or two-column grouping for logically related inputs.
+
+## Import
+
+```ts
+import { FormFieldset } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `FormFieldset` usage patterns.
+
 ## HTML parity
 
 `FormFieldset` wraps related controls in native `<fieldset>` and `<legend>` semantics.
@@ -21,3 +40,4 @@ Supports one- or two-column grouping for logically related inputs.
 ## Keymap spec
 
 - `Tab`: move through controls in grouped order
+

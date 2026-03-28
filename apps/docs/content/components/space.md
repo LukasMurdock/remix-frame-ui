@@ -2,6 +2,25 @@
 
 Maturity: stable
 
+## When to use
+
+- Renders a semantic `<div>` wrapper for consistent spacing between adjacent children.
+- Use `size`, `direction`, `align`, and optional wrapping to compose compact action rows or vertical stacks without bespoke spacing utilities.
+
+## Import
+
+```ts
+import { Space } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Space` usage patterns.
+
 ## HTML parity
 
 `Space` renders a semantic `<div>` wrapper for consistent spacing between adjacent children.
@@ -21,3 +40,4 @@ Use `size`, `direction`, `align`, and optional wrapping to compose compact actio
 ## Keymap spec
 
 - No component-level key bindings.
+

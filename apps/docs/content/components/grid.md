@@ -2,6 +2,25 @@
 
 Maturity: stable
 
+## When to use
+
+- Renders a semantic `<div>` grid container, and `GridItem` renders semantic `<div>` cells.
+- Use `columns`, `gap`, and item `span` values to compose responsive dashboard blocks, form sections, and analytics tiles.
+
+## Import
+
+```ts
+import { Grid } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Grid` usage patterns.
+
 ## HTML parity
 
 `Grid` renders a semantic `<div>` grid container, and `GridItem` renders semantic `<div>` cells.
@@ -21,3 +40,4 @@ Use `columns`, `gap`, and item `span` values to compose responsive dashboard blo
 ## Keymap spec
 
 - No component-level key bindings.
+

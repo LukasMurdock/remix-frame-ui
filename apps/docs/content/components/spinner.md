@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides a compact loading indicator with status semantics.
+- Supports size variants and optional custom loading label.
+
+## Import
+
+```ts
+import { Spinner } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Spinner` usage patterns.
+
 ## HTML parity
 
 `Spinner` provides a compact loading indicator with status semantics.
@@ -21,3 +40,4 @@ Supports size variants and optional custom loading label.
 ## Keymap spec
 
 - No key handling; status indicator only
+

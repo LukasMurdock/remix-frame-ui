@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Communicates multi-step progress with current, complete, and upcoming states.
+- Progress is controlled with `currentId`; unknown values fall back to the first step.
+
+## Import
+
+```ts
+import { Steps } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `Steps` communicates multi-step progress with current, complete, and upcoming states.
@@ -21,3 +40,4 @@ Progress is controlled with `currentId`; unknown values fall back to the first s
 ## Keymap spec
 
 - No custom key handling; informational component only
+
