@@ -1,4 +1,4 @@
-import "@remix-frame-ui/styles/src/index.css"
+import "@lukasmurdock/styles/src/index.css"
 
 export * from "./components/Button"
 export * from "./components/Avatar"

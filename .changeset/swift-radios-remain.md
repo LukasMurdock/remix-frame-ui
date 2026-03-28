@@ -1,7 +1,7 @@
 ---
-"@remix-frame-ui/core": patch
-"@remix-frame-ui/remix": patch
-"@remix-frame-ui/styles": patch
+"@lukasmurdock/core": patch
+"@lukasmurdock/remix": patch
+"@lukasmurdock/styles": patch
 ---
 
 Adopt Changesets-based release automation for stable and canary publishing.

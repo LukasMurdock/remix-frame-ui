@@ -1,5 +1,5 @@
 {
-  "name": "@remix-frame-ui/styles",
+  "name": "@lukasmurdock/styles",
   "description": "Layered CSS tokens, primitives, and component styles for Remix Frame UI.",
   "version": "0.1.0",
   "license": "MIT",

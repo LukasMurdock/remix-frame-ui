@@ -5,28 +5,28 @@
 ## Install
 
 ```bash
-pnpm add @remix-frame-ui/remix @remix-frame-ui/styles
+pnpm add @lukasmurdock/remix @lukasmurdock/styles
 ```
 
 ## Quick start
 
 ```tsx
-import "@remix-frame-ui/styles/src/index.css"
-import { Button } from "@remix-frame-ui/remix"
+import "@lukasmurdock/styles/src/index.css"
+import { Button } from "@lukasmurdock/remix"
 
 export function Example() {
   return <Button variant="primary">Save</Button>
 }
 ```
 
-For low-level helpers, install `@remix-frame-ui/core`.
+For low-level helpers, install `@lukasmurdock/core`.
 
 ## Packages
 
-- `@remix-frame-ui/core`
-- `@remix-frame-ui/styles`
-- `@remix-frame-ui/remix`
-- `@remix-frame-ui/docs`
+- `@lukasmurdock/core`
+- `@lukasmurdock/styles`
+- `@lukasmurdock/remix`
+- `@lukasmurdock/docs`
 
 ## Browser baseline
 

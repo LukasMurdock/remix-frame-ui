@@ -1,5 +1,5 @@
 {
-  "name": "@remix-frame-ui/docs",
+  "name": "@lukasmurdock/docs",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@remix-frame-ui/remix": "workspace:*",
+    "@lukasmurdock/remix": "workspace:*",
     "rehype-stringify": "^10.0.1",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",

@@ -1,4 +1,4 @@
-# @remix-frame-ui/core
+# @lukasmurdock/core
 
 ## 0.1.0
 
