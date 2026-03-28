@@ -70,3 +70,11 @@ This repo uses Changesets.
   - canary: publishes snapshot packages under the `canary` dist-tag
   - stable: creates/updates a release PR and publishes after merge
 - Publishing uses npm trusted publishers (OIDC) with GitHub Actions.
+
+## Package Rename
+
+The package scope was renamed. Update imports and installs as follows:
+
+- `@lukasmurdock/core` -> `@lukasmurdock/remix-ui-core`
+- `@lukasmurdock/styles` -> `@lukasmurdock/remix-ui-styles`
+- `@lukasmurdock/remix` -> `@lukasmurdock/remix-ui-components`
