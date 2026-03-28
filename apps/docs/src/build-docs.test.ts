@@ -24,6 +24,34 @@ describe("docs contracts", () => {
     expect(html).toContain("<td>native button role</td>")
   })
 
+  it("renders API tables with Table component classes", async () => {
+    const markdown = `## API
+
+| Prop | Type |
+| --- | --- |
+| id | string |
+`
+
+    const html = await renderMarkdownToHtml(markdown)
+    expect(html).toContain('class="rf-table-wrap"')
+    expect(html).toContain('aria-label="API table"')
+    expect(html).toContain('class="rf-table"')
+  })
+
+  it("keeps non-API tables unwrapped", async () => {
+    const markdown = `## Accessibility matrix
+
+| Requirement | Behavior |
+| --- | --- |
+| Role | native button role |
+`
+
+    const html = await renderMarkdownToHtml(markdown)
+    expect(html).toContain("<table>")
+    expect(html).not.toContain('class="rf-table-wrap"')
+    expect(html).not.toContain('class="rf-table"')
+  })
+
   it("keeps docs sidebar height constrained to viewport", async () => {
     const root = path.resolve(import.meta.dirname, "..")
     const buildSource = await readFile(path.join(root, "src", "build-docs.mjs"), "utf8")

@@ -98,6 +98,195 @@ export function mountAllDemos(root = document) {
     mount.dataset.demoMounted = "true"
     run(mount)
   }
+
+  mountExampleTabs(root)
+}
+
+let exampleTabsId = 0
+
+function mountExampleTabs(root = document) {
+  if (!root || typeof root.querySelectorAll !== "function") return
+
+  for (const article of root.querySelectorAll("article")) {
+    if (!(article instanceof HTMLElement)) continue
+
+    const directChildren = Array.from(article.children)
+    const demoBlock = directChildren.find(
+      (child) => child instanceof HTMLElement && child.classList.contains("demo-block"),
+    )
+    if (!(demoBlock instanceof HTMLElement)) continue
+    if (demoBlock.dataset.exampleTabsMounted === "true") continue
+
+    const exampleHeading = directChildren.find(
+      (child) =>
+        child instanceof HTMLHeadingElement &&
+        child.tagName === "H2" &&
+        (child.textContent ?? "").trim().toLowerCase() === "example",
+    )
+    if (!(exampleHeading instanceof HTMLHeadingElement)) continue
+
+    const headingIndex = directChildren.indexOf(exampleHeading)
+    if (headingIndex < 0) continue
+
+    const exampleNodes = []
+    for (let index = headingIndex + 1; index < directChildren.length; index += 1) {
+      const child = directChildren[index]
+      if (child instanceof HTMLHeadingElement && child.tagName === "H2") break
+      exampleNodes.push(child)
+    }
+
+    const demoMount = demoBlock.querySelector(".demo-mount")
+    if (!(demoMount instanceof HTMLElement)) continue
+
+    exampleTabsId += 1
+    const baseId = `docs-example-tabs-${exampleTabsId}`
+
+    const tabs = document.createElement("section")
+    tabs.className = "docs-example-tabs"
+
+    const tabList = document.createElement("div")
+    tabList.className = "docs-example-tablist"
+    tabList.setAttribute("role", "tablist")
+    tabList.setAttribute("aria-label", "Example view")
+
+    const previewTab = document.createElement("button")
+    previewTab.type = "button"
+    previewTab.className = "docs-example-tab"
+    previewTab.id = `${baseId}-tab-preview`
+    previewTab.setAttribute("role", "tab")
+    previewTab.setAttribute("aria-controls", `${baseId}-panel-preview`)
+    previewTab.textContent = "Preview"
+
+    const codeTab = document.createElement("button")
+    codeTab.type = "button"
+    codeTab.className = "docs-example-tab"
+    codeTab.id = `${baseId}-tab-code`
+    codeTab.setAttribute("role", "tab")
+    codeTab.setAttribute("aria-controls", `${baseId}-panel-code`)
+    codeTab.textContent = "Code"
+
+    const previewPanel = document.createElement("div")
+    previewPanel.className = "docs-example-panel"
+    previewPanel.dataset.panel = "preview"
+    previewPanel.id = `${baseId}-panel-preview`
+    previewPanel.setAttribute("role", "tabpanel")
+    previewPanel.setAttribute("aria-labelledby", previewTab.id)
+    previewPanel.appendChild(demoMount)
+
+    const codePanel = document.createElement("div")
+    codePanel.className = "docs-example-panel"
+    codePanel.dataset.panel = "code"
+    codePanel.id = `${baseId}-panel-code`
+    codePanel.setAttribute("role", "tabpanel")
+    codePanel.setAttribute("aria-labelledby", codeTab.id)
+    const codeBlock = createCodeBlock(formatPreviewMarkup(demoMount.innerHTML))
+    const codeElement = codeBlock.querySelector("code")
+    const syncCodeFromPreview = () => {
+      if (codeElement instanceof HTMLElement) {
+        codeElement.textContent = formatPreviewMarkup(demoMount.innerHTML)
+      }
+    }
+
+    codePanel.appendChild(codeBlock)
+
+    const tabsInOrder = [previewTab, codeTab]
+    const panelByTab = new Map([
+      [previewTab, previewPanel],
+      [codeTab, codePanel],
+    ])
+
+    const activateTab = (nextTab, shouldFocus = false) => {
+      for (const tab of tabsInOrder) {
+        const active = tab === nextTab
+        tab.setAttribute("aria-selected", active ? "true" : "false")
+        tab.dataset.active = active ? "true" : "false"
+        tab.tabIndex = active ? 0 : -1
+
+        const panel = panelByTab.get(tab)
+        if (panel instanceof HTMLElement) {
+          panel.hidden = !active
+        }
+
+        if (active && tab === codeTab) {
+          syncCodeFromPreview()
+        }
+      }
+
+      if (shouldFocus) nextTab.focus()
+    }
+
+    for (const tab of tabsInOrder) {
+      tab.addEventListener("click", () => {
+        activateTab(tab)
+      })
+    }
+
+    tabList.addEventListener("keydown", (event) => {
+      const target = event.target
+      if (!(target instanceof HTMLButtonElement)) return
+
+      const index = tabsInOrder.indexOf(target)
+      if (index < 0) return
+
+      let nextIndex = index
+      if (event.key === "ArrowRight") {
+        nextIndex = (index + 1) % tabsInOrder.length
+      } else if (event.key === "ArrowLeft") {
+        nextIndex = (index - 1 + tabsInOrder.length) % tabsInOrder.length
+      } else if (event.key === "Home") {
+        nextIndex = 0
+      } else if (event.key === "End") {
+        nextIndex = tabsInOrder.length - 1
+      } else {
+        return
+      }
+
+      event.preventDefault()
+      activateTab(tabsInOrder[nextIndex], true)
+    })
+
+    tabList.append(previewTab, codeTab)
+    tabs.append(tabList, previewPanel, codePanel)
+    demoBlock.appendChild(tabs)
+
+    for (const node of exampleNodes) {
+      node.remove()
+    }
+    exampleHeading.remove()
+    activateTab(previewTab)
+
+    demoBlock.dataset.exampleTabsMounted = "true"
+  }
+}
+
+function createCodeBlock(markup) {
+  const pre = document.createElement("pre")
+  const code = document.createElement("code")
+  code.className = "language-html"
+  code.textContent = markup
+  pre.appendChild(code)
+  return pre
+}
+
+function formatPreviewMarkup(markup) {
+  const lines = String(markup).replace(/\r\n/g, "\n").split("\n")
+
+  while (lines.length > 0 && lines[0].trim() === "") lines.shift()
+  while (lines.length > 0 && lines[lines.length - 1].trim() === "") lines.pop()
+
+  if (lines.length === 0) {
+    return "<!-- No preview markup available -->"
+  }
+
+  let minIndent = Number.POSITIVE_INFINITY
+  for (const line of lines) {
+    if (line.trim() === "") continue
+    const indent = /^\s*/.exec(line)?.[0].length ?? 0
+    minIndent = Math.min(minIndent, indent)
+  }
+
+  if (!Number.isFinite(minIndent)) minIndent = 0
+  return lines.map((line) => line.slice(minIndent)).join("\n")
 }
 
 export function parseDatePickerISODate(value) {
@@ -2337,10 +2526,58 @@ function mountDropdownDemo(mount) {
   const menu = mount.querySelector("[role='menu']")
   if (!(trigger instanceof HTMLButtonElement && menu instanceof HTMLElement)) return
 
-  trigger.addEventListener("click", () => {
-    const next = menu.hidden
+  const menuItems = Array.from(menu.querySelectorAll("[role='menuitem']")).filter(
+    (item) => item instanceof HTMLButtonElement,
+  )
+
+  const setOpen = (next, restoreFocus = false) => {
     menu.hidden = !next
     trigger.setAttribute("aria-expanded", String(next))
+
+    if (!next && restoreFocus) {
+      trigger.focus()
+    }
+  }
+
+  trigger.addEventListener("click", () => {
+    setOpen(menu.hidden)
+  })
+
+  trigger.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+
+    event.preventDefault()
+    if (menu.hidden) {
+      setOpen(true)
+    }
+
+    const targetIndex = event.key === "ArrowDown" ? 0 : menuItems.length - 1
+    const target = menuItems[targetIndex]
+    if (target instanceof HTMLButtonElement) {
+      target.focus()
+    }
+  })
+
+  menu.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return
+    event.preventDefault()
+    setOpen(false, true)
+  })
+
+  for (const item of menuItems) {
+    item.addEventListener("click", () => {
+      setOpen(false, true)
+    })
+  }
+
+  document.addEventListener("pointerdown", (event) => {
+    if (menu.hidden) return
+
+    const target = event.target
+    if (!(target instanceof Node)) return
+    if (mount.contains(target)) return
+
+    setOpen(false)
   })
 }
 
@@ -3425,25 +3662,50 @@ function mountMenuDemo(mount) {
   const menu = mount.querySelector("[role='menu']")
   if (!(trigger instanceof HTMLButtonElement && menu instanceof HTMLElement)) return
 
-  const toggle = () => {
-    const next = menu.hidden
+  const menuItems = Array.from(menu.querySelectorAll("[role='menuitem']")).filter(
+    (item) => item instanceof HTMLButtonElement,
+  )
+
+  const setOpen = (next, restoreFocus = false) => {
     menu.hidden = !next
     trigger.setAttribute("aria-expanded", String(next))
-    if (next) {
-      const first = menu.querySelector("[role='menuitem']")
-      if (first instanceof HTMLElement) first.focus()
-    } else {
+    if (!next && restoreFocus) {
       trigger.focus()
+    }
+  }
+
+  const toggle = () => {
+    const next = menu.hidden
+    setOpen(next)
+    if (next) {
+      const first = menuItems[0]
+      if (first instanceof HTMLElement) {
+        first.focus()
+      }
     }
   }
 
   trigger.addEventListener("click", toggle)
   menu.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      menu.hidden = true
-      trigger.setAttribute("aria-expanded", "false")
-      trigger.focus()
+      setOpen(false, true)
     }
+  })
+
+  for (const item of menuItems) {
+    item.addEventListener("click", () => {
+      setOpen(false, true)
+    })
+  }
+
+  document.addEventListener("pointerdown", (event) => {
+    if (menu.hidden) return
+
+    const target = event.target
+    if (!(target instanceof Node)) return
+    if (mount.contains(target)) return
+
+    setOpen(false)
   })
 }
 
