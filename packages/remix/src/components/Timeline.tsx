@@ -14,6 +14,7 @@ export type TimelineItem = {
 export type TimelineProps = {
   items: TimelineItem[]
   pending?: ComponentChildren
+  /** @default "No events" */
   emptyState?: ComponentChildren
 }
 

@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides sectioned application navigation with active-state highlighting.
+- Supports compact mode and optional nested child items within a section.
+
+## Import
+
+```ts
+import { SideNav } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `SideNav` usage patterns.
+
 ## HTML parity
 
 `SideNav` provides sectioned application navigation with active-state highlighting.
@@ -21,3 +40,4 @@ Supports compact mode and optional nested child items within a section.
 ## Keymap spec
 
 - No custom key handling; uses native link keyboard behavior
+

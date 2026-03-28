@@ -10,10 +10,15 @@ export type TabItem = {
 export type TabsProps = {
   items: TabItem[]
   value?: string
+  /** @default first item id */
   defaultValue?: string
+  /** @default "manual" */
   activation?: "manual" | "automatic"
+  /** @default "wrap" */
   overflow?: "wrap" | "menu"
+  /** @default 4 */
   maxVisibleTabs?: number
+  /** @default "More" */
   overflowLabel?: ComponentChildren
 }
 

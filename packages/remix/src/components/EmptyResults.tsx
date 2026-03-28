@@ -2,6 +2,7 @@ import type { Handle } from "remix/component"
 import type { ComponentChildren } from "../types"
 
 export type EmptyResultsProps = {
+  /** @default "No matching results" */
   title?: ComponentChildren
   description?: ComponentChildren
   clearAction?: ComponentChildren

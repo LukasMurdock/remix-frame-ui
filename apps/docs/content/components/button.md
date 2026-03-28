@@ -2,6 +2,35 @@
 
 Maturity: experimental
 
+## When to use
+
+- Trigger an immediate action like save, submit, or confirm
+- Represent the primary action in a local section
+
+## Import
+
+```ts
+import { Button } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Button } from "@lukasmurdock/remix-ui-components"
+
+export function SaveAction() {
+  return (
+    <Button type="submit" variant="solid" size="md">
+      Save changes
+    </Button>
+  )
+}
+```
+
 ## HTML parity
 
 `Button` renders a native `<button>` and preserves `type`, `name`, `value`, and `disabled` semantics.

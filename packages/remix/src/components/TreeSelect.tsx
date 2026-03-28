@@ -12,15 +12,22 @@ export type TreeSelectProps = {
   options: TreeSelectNode[]
   value?: string
   defaultValue?: string
+  /** @default false */
   open?: boolean
+  /** @default false */
   defaultOpen?: boolean
+  /** @default [] */
   expandedIds?: string[]
+  /** @default [] */
   defaultExpandedIds?: string[]
+  /** @default "Select" */
   placeholder?: ComponentChildren
+  /** @default "No options" */
   emptyState?: ComponentChildren
   onChange?: (id: string) => void
   onOpenChange?: (open: boolean) => void
   onExpandedChange?: (ids: string[]) => void
+  /** @default "Tree select" */
   ariaLabel?: string
 }
 

@@ -25,10 +25,15 @@ export type DataGridLiteProps = {
   columns: DataGridColumn[]
   rows: DataGridRow[]
   caption?: ComponentChildren
+  /** @default false */
   loading?: boolean
+  /** @default "No data" */
   emptyState?: ComponentChildren
+  /** @default false */
   selectable?: boolean
+  /** @default [] */
   selectedKeys?: string[]
+  /** @default [] */
   defaultSelectedKeys?: string[]
   onSelectionChange?: (keys: string[]) => void
   sort?: DataGridSort

@@ -5,18 +5,22 @@ export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 export type TextElement = "p" | "span" | "strong" | "em" | "small"
 
 export type HeadingProps = {
+  /** @default 2 */
   level?: HeadingLevel
   id?: string
   children: ComponentChildren
 }
 
 export type TextProps = {
+  /** @default "p" */
   as?: TextElement
+  /** @default false */
   truncate?: boolean
   children: ComponentChildren
 }
 
 export type CodeProps = {
+  /** @default false */
   block?: boolean
   children: ComponentChildren
 }

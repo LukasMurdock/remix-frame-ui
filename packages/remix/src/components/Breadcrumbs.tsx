@@ -11,7 +11,9 @@ export type BreadcrumbItem = {
 
 export type BreadcrumbsProps = {
   items: BreadcrumbItem[]
+  /** @default "Breadcrumb" */
   ariaLabel?: string
+  /** @default "/" */
   separator?: ComponentChildren
 }
 

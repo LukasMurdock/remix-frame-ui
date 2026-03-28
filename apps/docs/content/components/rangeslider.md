@@ -2,6 +2,41 @@
 
 Maturity: experimental
 
+## When to use
+
+- Capture minimum and maximum values together
+- Let users tune bounded ranges such as price, score, or duration windows
+
+## Import
+
+```ts
+import { RangeSlider } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { RangeSlider } from "@lukasmurdock/remix-ui-components"
+
+export function PriceRange() {
+  return (
+    <RangeSlider
+      id="price-range"
+      min={0}
+      max={1000}
+      step={25}
+      defaultValue={[100, 700]}
+      nameStart="minPrice"
+      nameEnd="maxPrice"
+    />
+  )
+}
+```
+
 ## HTML parity
 
 `RangeSlider` provides dual-thumb range selection for minimum and maximum values.

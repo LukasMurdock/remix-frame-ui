@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Collapses middle breadcrumb items into an ellipsis marker.
+- Keeps the first and tail items visible while collapsing long middle paths.
+
+## Import
+
+```ts
+import { BreadcrumbOverflow } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `BreadcrumbOverflow` usage patterns.
+
 ## HTML parity
 
 `BreadcrumbOverflow` collapses middle breadcrumb items into an ellipsis marker.
@@ -21,3 +40,4 @@ Keeps the first and tail items visible while collapsing long middle paths.
 ## Keymap spec
 
 - No custom key handling; visible links keep native keyboard behavior
+

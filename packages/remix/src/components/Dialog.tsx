@@ -15,13 +15,19 @@ export type DialogProps = {
   children: ComponentChildren
   onClose: (reason: DialogCloseReason) => void
   title?: ComponentChildren
+  /** @default "Close" */
   closeLabel?: string
+  /** @default true */
   showCloseButton?: boolean
+  /** @default true */
   dismissOnBackdrop?: boolean
+  /** @default true */
   dismissOnEscape?: boolean
+  /** @default true */
   restoreFocus?: boolean
   container?: HTMLElement
   ariaLabel?: string
+  /** @default generated from title when present */
   ariaLabelledBy?: string
 }
 

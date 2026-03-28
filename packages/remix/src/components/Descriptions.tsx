@@ -16,11 +16,17 @@ export type DescriptionsProps = {
   items: DescriptionsItem[]
   title?: ComponentChildren
   extra?: ComponentChildren
+  /** @default 3 */
   columns?: number
+  /** @default "comfortable" */
   size?: DescriptionsSize
+  /** @default "horizontal" */
   layout?: DescriptionsLayout
+  /** @default "sm" */
   collapseBelow?: DescriptionsCollapseBelow
+  /** @default true */
   bordered?: boolean
+  /** @default "No details" */
   emptyState?: ComponentChildren
 }
 

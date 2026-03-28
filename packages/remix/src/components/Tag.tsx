@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type TagTone = "neutral" | "brand"
 
 export type TagProps = {
+  /** @default "neutral" */
   tone?: TagTone
   children: ComponentChildren
 }

@@ -2,6 +2,41 @@
 
 Maturity: experimental
 
+## When to use
+
+- Show contextual controls or content anchored to a trigger
+- Keep interactions lightweight without opening a full modal dialog
+
+## Import
+
+```ts
+import { Popover } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Popover } from "@lukasmurdock/remix-ui-components"
+
+export function ProfilePopover() {
+  return (
+    <Popover
+      trigger="Account"
+      content={
+        <div>
+          <a href="/profile">Profile</a>
+          <a href="/billing">Billing</a>
+        </div>
+      }
+    />
+  )
+}
+```
+
 ## HTML parity
 
 `Popover` composes a trigger button with an anchored panel using semantic dialog-like content.

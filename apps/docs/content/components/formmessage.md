@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders contextual helper or validation text tied to form controls.
+- Tone drives live-region behavior: error is assertive, success and warning are polite.
+
+## Import
+
+```ts
+import { FormMessage } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `FormMessage` usage patterns.
+
 ## HTML parity
 
 `FormMessage` renders contextual helper or validation text tied to form controls.
@@ -21,3 +40,4 @@ Tone drives live-region behavior: error is assertive, success and warning are po
 ## Keymap spec
 
 - No dedicated key handling; follows associated control focus order
+

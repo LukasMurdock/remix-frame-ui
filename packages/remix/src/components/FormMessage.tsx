@@ -5,6 +5,7 @@ export type FormMessageTone = "help" | "success" | "warning" | "error"
 
 export type FormMessageProps = {
   id?: string
+  /** @default "help" */
   tone?: FormMessageTone
   children: ComponentChildren
 }

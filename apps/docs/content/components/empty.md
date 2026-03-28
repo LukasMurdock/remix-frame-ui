@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders a semantic status section for no-data and no-selection states.
+- Supports optional icon and action regions with compact and comfortable density options.
+
+## Import
+
+```ts
+import { Empty } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Empty` usage patterns.
+
 ## HTML parity
 
 `Empty` renders a semantic status section for no-data and no-selection states.
@@ -21,3 +40,4 @@ Supports optional icon and action regions with compact and comfortable density o
 ## Keymap spec
 
 - No component-level key bindings.
+

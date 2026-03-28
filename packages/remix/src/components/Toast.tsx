@@ -5,9 +5,12 @@ export type ToastTone = "neutral" | "success" | "danger"
 
 export type ToastItem = {
   id: string
+  /** @default "neutral" */
   tone?: ToastTone
   content: ComponentChildren
+  /** @default store default duration */
   durationMs?: number
+  /** @default true */
   dismissible?: boolean
 }
 

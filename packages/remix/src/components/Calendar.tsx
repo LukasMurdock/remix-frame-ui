@@ -9,8 +9,10 @@ export type CalendarProps = {
   defaultValue?: string
   min?: string
   max?: string
+  /** @default false */
   disabled?: boolean
   required?: boolean
+  /** @default "month" */
   view?: CalendarView
   onValueChange?: (value: string | undefined) => void
   "aria-describedby"?: string

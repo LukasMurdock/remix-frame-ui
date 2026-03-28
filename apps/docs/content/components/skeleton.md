@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides non-interactive loading placeholders for content blocks.
+- Supports configurable line count and optional pulse animation.
+
+## Import
+
+```ts
+import { Skeleton } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Skeleton` usage patterns.
+
 ## HTML parity
 
 `Skeleton` provides non-interactive loading placeholders for content blocks.
@@ -21,3 +40,4 @@ Supports configurable line count and optional pulse animation.
 ## Keymap spec
 
 - No key handling; decorative loading placeholder
+

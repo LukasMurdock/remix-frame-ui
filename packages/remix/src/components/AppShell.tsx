@@ -7,8 +7,11 @@ export type AppShellProps = {
   header?: ComponentChildren
   sidebar?: ComponentChildren
   children: ComponentChildren
+  /** @default false */
   sidebarCollapsed?: boolean
+  /** @default "left" */
   sidebarPosition?: AppShellSidebarPosition
+  /** @default "16rem" */
   sidebarWidth?: string
 }
 

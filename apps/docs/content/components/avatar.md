@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders an image or text fallback token for user identity surfaces.
+- When `src` is provided, avatar renders an `<img>`.
+
+## Import
+
+```ts
+import { Avatar } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Avatar` usage patterns.
+
 ## HTML parity
 
 `Avatar` renders an image or text fallback token for user identity surfaces.
@@ -21,3 +40,4 @@ When `src` is provided, avatar renders an `<img>`. Otherwise it falls back to ge
 ## Keymap spec
 
 - No component-level key bindings.
+

@@ -15,9 +15,13 @@ export type BreadcrumbOverflowEntry =
 
 export type BreadcrumbOverflowProps = {
   items: BreadcrumbItem[]
+  /** @default 4 */
   maxVisible?: number
+  /** @default "Breadcrumb" */
   ariaLabel?: string
+  /** @default "/" */
   separator?: ComponentChildren
+  /** @default "{hiddenCount} hidden breadcrumb items" */
   ellipsisLabel?: string
 }
 

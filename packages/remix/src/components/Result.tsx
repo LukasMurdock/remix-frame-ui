@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type ResultTone = "info" | "success" | "warning" | "danger"
 
 export type ResultProps = {
+  /** @default "info" */
   tone?: ResultTone
   title: ComponentChildren
   description?: ComponentChildren

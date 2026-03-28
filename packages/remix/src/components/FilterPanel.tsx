@@ -10,17 +10,25 @@ export type FilterPanelProps = FilterPanelDrawerOptions & {
   open: boolean
   onClose: (reason: FilterPanelCloseReason) => void
   children: ComponentChildren
+  /** @default "Filters" */
   title?: ComponentChildren
   description?: ComponentChildren
   actions?: ComponentChildren
+  /** @default "Apply filters" */
   applyLabel?: ComponentChildren
+  /** @default "Clear" */
   clearLabel?: ComponentChildren
+  /** @default true */
   closeOnApply?: boolean
+  /** @default false */
   closeOnClear?: boolean
+  /** @default true */
   showApplyButton?: boolean
+  /** @default true */
   showClearButton?: boolean
   onApply?: () => void
   onClear?: () => void
+  /** @default "Filter controls" */
   fieldsLabel?: string
 }
 

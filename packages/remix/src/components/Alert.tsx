@@ -4,9 +4,11 @@ import type { ComponentChildren } from "../types"
 export type AlertTone = "info" | "success" | "warning" | "danger"
 
 export type AlertProps = {
+  /** @default "info" */
   tone?: AlertTone
   title?: ComponentChildren
   children: ComponentChildren
+  /** @default false */
   dismissible?: boolean
   onDismiss?: () => void
 }

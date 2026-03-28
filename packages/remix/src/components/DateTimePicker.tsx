@@ -18,6 +18,7 @@ export type DateTimePickerProps = {
   maxDate?: string
   minTime?: string
   maxTime?: string
+  /** @default browser time input default */
   step?: number
   disabled?: boolean
   required?: boolean

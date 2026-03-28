@@ -2,6 +2,36 @@
 
 Maturity: experimental
 
+## When to use
+
+- Offer finite option selection with native browser semantics
+- Keep keyboard and assistive behavior fully delegated to `<select>`
+
+## Import
+
+```ts
+import { Select } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Select } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  { value: "draft", label: "Draft" },
+  { value: "published", label: "Published" },
+]
+
+export function StatusSelect() {
+  return <Select name="status" options={options} defaultValue="draft" />
+}
+```
+
 ## HTML parity
 
 `Select` is native `<select>` only in v1. No custom combobox replacement.

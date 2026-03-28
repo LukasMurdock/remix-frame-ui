@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders in-page section links with a highlighted active target.
+- Supports controlled or uncontrolled `activeHref`; disabled items remain non-interactive.
+
+## Import
+
+```ts
+import { Anchor } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `Anchor` renders in-page section links with a highlighted active target.
@@ -21,3 +40,4 @@ Supports controlled or uncontrolled `activeHref`; disabled items remain non-inte
 ## Keymap spec
 
 - Uses native anchor keyboard behavior (`Tab`, `Enter`, browser link navigation)
+

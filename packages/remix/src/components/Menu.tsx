@@ -11,7 +11,9 @@ export type MenuItem = {
 export type MenuProps = {
   triggerLabel: ComponentChildren
   items: MenuItem[]
+  /** @default false */
   open?: boolean
+  /** @default false */
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   onSelect?: (id: string) => void

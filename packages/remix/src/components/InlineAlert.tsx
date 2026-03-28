@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type InlineAlertTone = "info" | "success" | "warning" | "danger"
 
 export type InlineAlertProps = {
+  /** @default "info" */
   tone?: InlineAlertTone
   children: ComponentChildren
   action?: ComponentChildren

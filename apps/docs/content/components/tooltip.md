@@ -2,6 +2,35 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provide short contextual hints for icons, compact actions, or dense controls
+- Explain intent without taking additional layout space
+
+## Import
+
+```ts
+import { Tooltip } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Tooltip } from "@lukasmurdock/remix-ui-components"
+
+export function Hint() {
+  return (
+    <Tooltip label="Copy link">
+      <span>Copy</span>
+    </Tooltip>
+  )
+}
+```
+
 ## HTML parity
 
 `Tooltip` provides contextual text tied to a focusable trigger and `role="tooltip"` content.

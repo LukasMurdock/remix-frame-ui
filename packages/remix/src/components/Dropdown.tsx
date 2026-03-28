@@ -5,7 +5,9 @@ import type { ComponentChildren } from "../types"
 export type DropdownProps = {
   label: ComponentChildren
   items: MenuItem[]
+  /** @default false */
   open?: boolean
+  /** @default false */
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   onSelect?: (id: string) => void

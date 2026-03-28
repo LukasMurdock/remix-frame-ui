@@ -2,6 +2,25 @@
 
 Maturity: stable
 
+## When to use
+
+- Provides semantic text primitives (`Heading`, `Text`, `Code`) that render native heading, text, and code elements.
+- No hydration is required for static content.
+
+## Import
+
+```ts
+import { Typography } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `Typography` provides semantic text primitives (`Heading`, `Text`, `Code`) that render native heading, text, and code elements.
@@ -22,3 +41,4 @@ No hydration is required for static content. Optional `truncate` metadata can be
 ## Keymap spec
 
 - No component-level key bindings.
+

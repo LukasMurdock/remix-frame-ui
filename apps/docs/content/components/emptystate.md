@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders status-oriented content with optional action slot.
+- Is static by default and only hydrates if action content requires it.
+
+## Import
+
+```ts
+import { EmptyState } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `EmptyState` renders status-oriented content with optional action slot.
@@ -21,3 +40,4 @@ Maturity: experimental
 ## Keymap spec
 
 - Keyboard behavior depends on provided action controls.
+

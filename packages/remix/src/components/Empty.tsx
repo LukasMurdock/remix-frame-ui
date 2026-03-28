@@ -8,6 +8,7 @@ export type EmptyProps = {
   description?: ComponentChildren
   action?: ComponentChildren
   icon?: ComponentChildren
+  /** @default "comfortable" */
   size?: EmptySize
 }
 

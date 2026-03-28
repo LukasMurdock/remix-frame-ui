@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides structured form sections with optional heading, description, and actions.
+- Use `columns` for responsive-like grouping while keeping native `<form>` semantics.
+
+## Import
+
+```ts
+import { FormLayout } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `FormLayout` usage patterns.
+
 ## HTML parity
 
 `FormLayout` provides structured form sections with optional heading, description, and actions.
@@ -22,3 +41,4 @@ Use `columns` for responsive-like grouping while keeping native `<form>` semanti
 
 - `Tab`: move between form controls
 - `Enter`: submit focused form when submit button is present
+

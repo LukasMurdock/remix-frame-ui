@@ -2,6 +2,37 @@
 
 Maturity: experimental
 
+## When to use
+
+- Present concise action lists without exposing full menu implementation details
+- Reuse `Menu` behavior with simpler naming (`label`, `items`)
+
+## Import
+
+```ts
+import { Dropdown } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Dropdown } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "edit", label: "Edit" },
+  { id: "duplicate", label: "Duplicate" },
+  { id: "archive", label: "Archive", disabled: true },
+]
+
+export function RowActions() {
+  return <Dropdown label="Actions" items={items} onSelect={(id) => console.log(id)} />
+}
+```
+
 ## HTML parity
 
 `Dropdown` is a convenience wrapper over menu semantics for action selection.

@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Presents outcome states like success, warning, and failure with optional actions.
+- Tone controls announcement role and visual emphasis for critical outcomes.
+
+## Import
+
+```ts
+import { Result } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Result` usage patterns.
+
 ## HTML parity
 
 `Result` presents outcome states like success, warning, and failure with optional actions.
@@ -22,3 +41,4 @@ Tone controls announcement role and visual emphasis for critical outcomes. For c
 
 - `Tab`: move to action controls when present
 - `Enter`/`Space`: activate focused action control
+

@@ -2,6 +2,31 @@
 
 Maturity: experimental
 
+## When to use
+
+- Show compact status metadata next to content
+- Emphasize severity or state without adding interactive controls
+
+## Import
+
+```ts
+import { Badge } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```tsx
+import { Badge } from "@lukasmurdock/remix-ui-components"
+
+export function StatusBadge() {
+  return <Badge tone="success">Healthy</Badge>
+}
+```
+
 ## HTML parity
 
 `Badge` renders a semantic `<span>` for compact status labels.

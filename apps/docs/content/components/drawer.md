@@ -2,6 +2,42 @@
 
 Maturity: experimental
 
+## When to use
+
+- Present side-panel workflows without navigating away from the current context
+- Handle dense filtering or editing tasks that need more space than popovers
+
+## Import
+
+```ts
+import { Drawer } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+```ts
+import { Drawer } from "@lukasmurdock/remix-ui-components"
+
+let open = false
+
+<Drawer
+  open={open}
+  title="Project settings"
+  position="right"
+  onClose={(reason) => {
+    if (reason === "backdrop") return
+    open = false
+    handle.update()
+  }}
+>
+  Settings content
+</Drawer>
+```
+
 ## HTML parity
 
 `Drawer` is a modal side panel for app-shell tasks and secondary workflows.

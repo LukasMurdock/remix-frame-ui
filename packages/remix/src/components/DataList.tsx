@@ -11,6 +11,7 @@ export type DataListItem = {
 
 export type DataListProps = {
   items: DataListItem[]
+  /** @default "No items found." */
   emptyState?: ComponentChildren
 }
 

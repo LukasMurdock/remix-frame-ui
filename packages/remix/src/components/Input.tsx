@@ -4,6 +4,7 @@ export type InputType = "text" | "email" | "password" | "search" | "url" | "tel"
 
 export type InputProps = {
   id?: string
+  /** @default "text" */
   type?: InputType
   name?: string
   value?: string

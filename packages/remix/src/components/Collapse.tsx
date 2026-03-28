@@ -4,6 +4,7 @@ import type { ComponentChildren } from "../types"
 export type CollapseProps = {
   title: ComponentChildren
   children: ComponentChildren
+  /** @default false */
   open?: boolean
 }
 

@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Uses native table semantics and adds sortable/selectable interaction affordances.
+- Supports controlled and uncontrolled sorting and row selection, plus loading and empty states.
+
+## Import
+
+```ts
+import { DataGridLite } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `DataGridLite` uses native table semantics and adds sortable/selectable interaction affordances.
@@ -22,3 +41,4 @@ Supports controlled and uncontrolled sorting and row selection, plus loading and
 
 - `Tab`: navigate to sorting and selection controls
 - `Enter`/`Space`: toggle sort and checkbox states
+

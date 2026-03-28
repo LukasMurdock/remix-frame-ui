@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Provides semantic section structure with optional header and footer regions.
+- Is presentational and requires no hydration by default.
+
+## Import
+
+```ts
+import { Card } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `Card` provides semantic section structure with optional header and footer regions.
@@ -21,3 +40,4 @@ Maturity: experimental
 ## Keymap spec
 
 - No component-specific keyboard behavior; delegates to child controls.
+

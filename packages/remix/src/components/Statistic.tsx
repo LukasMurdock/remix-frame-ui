@@ -9,6 +9,7 @@ export type StatisticProps = {
   prefix?: ComponentChildren
   suffix?: ComponentChildren
   caption?: ComponentChildren
+  /** @default "neutral" */
   trend?: StatisticTrend
 }
 

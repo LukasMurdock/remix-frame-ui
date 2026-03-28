@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Communicates filtered/no-match states with optional recovery action.
+- Is static by default and supports interactive actions when provided.
+
+## Import
+
+```ts
+import { EmptyResults } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for composition and layout patterns.
+
 ## HTML parity
 
 `EmptyResults` communicates filtered/no-match states with optional recovery action.
@@ -21,3 +40,4 @@ Maturity: experimental
 ## Keymap spec
 
 - Keyboard behavior is inherited from child action controls.
+

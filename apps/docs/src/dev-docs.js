@@ -1,15 +1,25 @@
 import metadata from "../../../packages/remix/src/component-metadata.json"
+import { applyGeneratedApiSection } from "./component-api-sections.js"
+import { requiredSections } from "./component-doc-sections.js"
+import { guideOrder } from "./guide-config.js"
 import { mountAllDemos } from "./docs-runtime.js"
 import { renderMarkdownToHtml } from "./render-markdown.js"
 
-const markdownModules = import.meta.glob("../content/components/*.md", {
+const componentMarkdownModules = import.meta.glob("../content/components/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
 })
 
-const requiredSections = ["## HTML parity", "## Runtime notes", "## Accessibility matrix"]
-const maturityByName = new Map(metadata.map((entry) => [entry.name.toLowerCase(), entry.maturity]))
+const guideMarkdownModules = import.meta.glob("../content/guides/*.md", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+})
+
+const metadataByName = new Map(metadata.map((entry) => [entry.name.toLowerCase(), entry]))
+const maturitySortOrder = { stable: 0, experimental: 1 }
+const guideOrderRank = new Map(guideOrder.map((slug, index) => [slug, index]))
 
 const demoByComponent = new Map([
   ["alert", { id: "alert-basic", title: "Alert: tone and dismiss patterns" }],
@@ -268,14 +278,14 @@ bootDocs().catch((error) => {
 })
 
 async function bootDocs() {
-  const pages = (
+  const componentPages = (
     await Promise.all(
-      Object.entries(markdownModules).map(async ([file, markdown]) => {
+      Object.entries(componentMarkdownModules).map(async ([file, markdown]) => {
         const name = file.split("/").pop()?.replace(".md", "")
         if (!name) throw new Error(`Unable to parse component name from ${file}`)
 
-        const maturity = maturityByName.get(name)
-        if (!maturity) {
+        const metadataEntry = metadataByName.get(name)
+        if (!metadataEntry) {
           throw new Error(`${name}.md does not have a maturity entry in component metadata`)
         }
 
@@ -285,29 +295,75 @@ async function bootDocs() {
           }
         }
 
-        const html = await renderMarkdownToHtml(markdown)
-        return { name, html, maturity }
+        const markdownWithApi = applyGeneratedApiSection(name, markdown)
+        const html = await renderMarkdownToHtml(markdownWithApi)
+        return { id: name, title: metadataEntry.name, html, maturity: metadataEntry.maturity }
       }),
     )
-  ).sort((a, b) => a.name.localeCompare(b.name))
+  ).sort((a, b) => maturitySortOrder[a.maturity] - maturitySortOrder[b.maturity] || a.title.localeCompare(b.title))
 
-  const nav = pages
+  const guidePages = (
+    await Promise.all(
+      Object.entries(guideMarkdownModules).map(async ([file, markdown]) => {
+        const slug = file.split("/").pop()?.replace(".md", "")
+        if (!slug) throw new Error(`Unable to parse guide name from ${file}`)
+
+        const html = await renderMarkdownToHtml(markdown)
+        return {
+          slug,
+          id: `guide-${slug}`,
+          title: extractMarkdownTitle(markdown, titleFromSlug(slug)),
+          html,
+        }
+      }),
+    )
+  ).sort((a, b) => {
+    const rankA = guideOrderRank.get(a.slug) ?? Number.MAX_SAFE_INTEGER
+    const rankB = guideOrderRank.get(b.slug) ?? Number.MAX_SAFE_INTEGER
+    return rankA - rankB || a.title.localeCompare(b.title)
+  })
+
+  const firstPageId = guidePages[0]?.id ?? componentPages[0]?.id ?? ""
+
+  const guideNav = guidePages
     .map(
-      (page, index) =>
-        `<li class="rf-side-nav-item" data-active="${index === 0 ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.name}" ${index === 0 ? 'aria-current="page"' : ""}>${page.name}</a></li>`,
+      (page) =>
+        `<li class="rf-side-nav-item" data-doc-kind="guide" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
     )
     .join("\n")
 
-  const docsBody = pages
+  const componentNav = componentPages
+    .map(
+      (page) =>
+        `<li class="rf-side-nav-item" data-doc-kind="component" data-maturity="${page.maturity}" data-active="${page.id === firstPageId ? "true" : "false"}"><a class="rf-side-nav-link" href="#${page.id}" ${page.id === firstPageId ? 'aria-current="page"' : ""}>${page.title}</a></li>`,
+    )
+    .join("\n")
+
+  const navSections = [
+    guidePages.length
+      ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Start Here</h2><ul class="rf-side-nav-list">${guideNav}</ul></section>`
+      : "",
+    componentPages.length
+      ? `<section class="rf-side-nav-section"><h2 class="docs-site-nav-title">Components</h2><label class="docs-site-nav-filter"><input type="checkbox" data-docs-stable-only /> Stable only</label><ul class="rf-side-nav-list">${componentNav}</ul></section>`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n")
+
+  const guideBody = guidePages.map((page) => `<article id="${page.id}">${page.html}</article>`).join("\n")
+
+  const componentBody = componentPages
     .map((page) => {
-      const demo = demoByComponent.get(page.name)
+      const demo = demoByComponent.get(page.id)
       const demoSection = demo
         ? `<section class="demo-block"><h3>${demo.title}</h3><div class="demo-mount" data-demo="${demo.id}"></div></section>`
         : ""
 
-      return `<article id="${page.name}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
+      return `<article id="${page.id}"><p><strong>Maturity:</strong> ${page.maturity}</p>${demoSection}${page.html}</article>`
     })
     .join("\n")
+
+  const docsBody = [guideBody, componentBody].filter(Boolean).join("\n")
 
   const app = document.querySelector("#app")
   if (!app) {
@@ -352,6 +408,8 @@ async function bootDocs() {
     .docs-site-nav { display: grid; gap: 0.75rem; }
     .docs-site-nav-title { margin: 0; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
     .docs-site-nav .rf-side-nav-list { display: grid; gap: 0.2rem; margin: 0; padding: 0; list-style: none; }
+    .docs-site-nav-filter { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8125rem; color: #475569; }
+    .docs-site-nav-filter input { accent-color: #2563eb; }
     .docs-site-content article {
       margin-bottom: 2rem;
       scroll-margin-top: 5.25rem;
@@ -1231,10 +1289,7 @@ async function bootDocs() {
     </header>
     <div class="rf-app-shell-body">
       <aside class="rf-app-shell-sidebar">
-        <nav class="rf-side-nav docs-site-nav" aria-label="Components">
-          <h2 class="docs-site-nav-title">Components</h2>
-          <ul class="rf-side-nav-list">${nav}</ul>
-        </nav>
+        <nav class="rf-side-nav docs-site-nav" aria-label="Documentation">${navSections}</nav>
       </aside>
       <main class="rf-app-shell-main docs-site-content">${docsBody}</main>
     </div>
@@ -1245,22 +1300,74 @@ async function bootDocs() {
   setupDocsSideNav()
 }
 
+function titleFromSlug(slug) {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ")
+}
+
+function extractMarkdownTitle(markdown, fallback) {
+  const match = /^#\s+(.+)$/m.exec(markdown)
+  return match?.[1]?.trim() || fallback
+}
+
 function setupDocsSideNav() {
   const links = Array.from(document.querySelectorAll(".docs-site-nav .rf-side-nav-link"))
   if (links.length === 0) return
 
+  const stableOnlyToggle = document.querySelector("[data-docs-stable-only]")
+  const componentItems = Array.from(
+    document.querySelectorAll(".docs-site-nav .rf-side-nav-item[data-doc-kind='component']"),
+  )
+
+  const getVisibleLinks = () =>
+    links.filter((link) => {
+      if (!(link instanceof HTMLAnchorElement)) return false
+      const item = link.closest(".rf-side-nav-item")
+      return !(item instanceof HTMLElement && item.hidden)
+    })
+
+  const applyComponentFilter = () => {
+    const stableOnly = stableOnlyToggle instanceof HTMLInputElement ? stableOnlyToggle.checked : false
+    for (const item of componentItems) {
+      if (!(item instanceof HTMLElement)) continue
+      const maturity = item.dataset.maturity
+      item.hidden = stableOnly && maturity !== "stable"
+    }
+  }
+
   const update = () => {
-    const target = (window.location.hash || links[0].getAttribute("href") || "").replace(/^#/, "")
+    const visibleLinks = getVisibleLinks()
+    if (visibleLinks.length === 0) return
+
+    const fallback = visibleLinks[0]?.getAttribute("href") || ""
+    const requested = window.location.hash || fallback
+    const activeHref = visibleLinks.some((link) => link.getAttribute("href") === requested) ? requested : fallback
+
+    if (activeHref && window.location.hash !== activeHref) {
+      history.replaceState(null, "", activeHref)
+    }
+
     for (const link of links) {
       if (!(link instanceof HTMLAnchorElement)) continue
       const item = link.closest(".rf-side-nav-item")
-      const isActive = link.getAttribute("href") === `#${target}`
+      const visible = !(item instanceof HTMLElement && item.hidden)
+      const isActive = visible && link.getAttribute("href") === activeHref
       if (item instanceof HTMLElement) item.dataset.active = isActive ? "true" : "false"
       if (isActive) link.setAttribute("aria-current", "page")
       else link.removeAttribute("aria-current")
     }
   }
 
+  if (stableOnlyToggle instanceof HTMLInputElement) {
+    stableOnlyToggle.addEventListener("change", () => {
+      applyComponentFilter()
+      update()
+    })
+  }
+
   window.addEventListener("hashchange", update)
+  applyComponentFilter()
   update()
 }

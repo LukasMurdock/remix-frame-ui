@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Renders native `<details>` and `<summary>` semantics for disclosure content.
+- Use `open` for initial expansion state.
+
+## Import
+
+```ts
+import { Collapse } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `Collapse` usage patterns.
+
 ## HTML parity
 
 `Collapse` renders native `<details>` and `<summary>` semantics for disclosure content.
@@ -22,3 +41,4 @@ Use `open` for initial expansion state. Native details behavior handles keyboard
 
 - `Enter`: toggles disclosure when summary is focused
 - `Space`: toggles disclosure when summary is focused
+

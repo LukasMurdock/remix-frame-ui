@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Wraps native `<input type="file">` with support for `multiple`, `accept`, and `capture`.
+- Hydration optional for basic file selection.
+
+## Import
+
+```ts
+import { FileUpload } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos on this page for complete `FileUpload` usage patterns.
+
 ## HTML parity
 
 `FileUpload` wraps native `<input type="file">` with support for `multiple`, `accept`, and `capture`.
@@ -22,3 +41,4 @@ Hydration optional for basic file selection. Add runtime behavior for previews a
 
 - `Tab`: next focus target
 - `Enter` / `Space`: opens native file picker
+

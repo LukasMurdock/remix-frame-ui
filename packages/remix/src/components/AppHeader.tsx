@@ -10,7 +10,9 @@ export type AppHeaderProps = {
   nav?: ComponentChildren
   actions?: ComponentChildren
   account?: ComponentChildren
+  /** @default false */
   sticky?: boolean
+  /** @default "comfortable" */
   density?: AppHeaderDensity
 }
 

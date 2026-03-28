@@ -5,7 +5,9 @@ export type LayoutDirection = "row" | "column"
 
 export type LayoutProps = {
   children: ComponentChildren
+  /** @default "column" */
   direction?: LayoutDirection
+  /** @default false */
   hasSider?: boolean
 }
 
@@ -15,7 +17,9 @@ export type LayoutSectionProps = {
 
 export type LayoutSiderProps = {
   children: ComponentChildren
+  /** @default "16rem" */
   width?: string
+  /** @default false */
   collapsed?: boolean
 }
 

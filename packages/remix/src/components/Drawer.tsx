@@ -17,14 +17,21 @@ export type DrawerProps = {
   onClose: (reason: DrawerCloseReason) => void
   title?: ComponentChildren
   children: ComponentChildren
+  /** @default "right" */
   position?: DrawerPosition
+  /** @default "Close" */
   closeLabel?: string
+  /** @default true */
   showCloseButton?: boolean
+  /** @default true */
   dismissOnBackdrop?: boolean
+  /** @default true */
   dismissOnEscape?: boolean
+  /** @default true */
   restoreFocus?: boolean
   container?: HTMLElement
   ariaLabel?: string
+  /** @default generated from title when present */
   ariaLabelledBy?: string
 }
 

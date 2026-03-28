@@ -20,19 +20,27 @@ export type DataTableProps = {
   rows: DataTableRow[]
   rowFilter?: DataTableRowFilter
   caption?: ComponentChildren
+  /** @default false */
   loading?: boolean
   errorState?: ComponentChildren
+  /** @default "No rows" */
   emptyState?: ComponentChildren
+  /** @default false */
   selectable?: boolean
+  /** @default [] */
   selectedKeys?: string[]
+  /** @default [] */
   defaultSelectedKeys?: string[]
   onSelectionChange?: (keys: string[]) => void
   sort?: DataGridSort
   defaultSort?: DataGridSort
   onSortChange?: (sort: DataGridSort | undefined) => void
+  /** @default 1 */
   page?: number
+  /** @default 1 */
   defaultPage?: number
   onPageChange?: (page: number) => void
+  /** @default 10 */
   pageSize?: number
 }
 

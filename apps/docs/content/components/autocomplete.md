@@ -2,6 +2,25 @@
 
 Maturity: experimental
 
+## When to use
+
+- Uses input + listbox semantics and allows free-text entry.
+- Requires a visible `label`, supports controlled and uncontrolled values, and emits commit events for suggestions or free text.
+
+## Import
+
+```ts
+import { Autocomplete } from "@lukasmurdock/remix-ui-components"
+```
+
+## API
+
+Type definitions are generated from component source.
+
+## Example
+
+See demos for controlled and uncontrolled usage patterns.
+
 ## HTML parity
 
 `Autocomplete` uses input + listbox semantics and allows free-text entry.
@@ -25,3 +44,4 @@ Requires a visible `label`, supports controlled and uncontrolled values, and emi
 - `Enter`: commit active suggestion or current free text
 - `Tab`: commit highlighted suggestion
 - `Escape`: close suggestions
+
