@@ -9,18 +9,20 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   stable:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
+      - run: npm i -g npm@latest
       - run: pnpm install --frozen-lockfile=false
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run ci
@@ -33,8 +35,6 @@ jobs:
           createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Verify latest dist-tags
         if: steps.changesets.outputs.published == 'true'
         run: node scripts/verify-dist-tags.mjs latest
