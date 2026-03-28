@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Renamed published packages:
+  - `@lukasmurdock/core` -> `@lukasmurdock/remix-ui-core`
+  - `@lukasmurdock/styles` -> `@lukasmurdock/remix-ui-styles`
+  - `@lukasmurdock/remix` -> `@lukasmurdock/remix-ui-components`
 - Upgraded `@lukasmurdock/remix-ui-components` to `remix@3.0.0-alpha.4`.
 - Migrated component host usage from removed props to mixins:
   - `on={{ ... }}` -> `mix={[on(...)]}`
