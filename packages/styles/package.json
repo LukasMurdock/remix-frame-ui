@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lukasmurdock/remix-frame-ui.git"
+    "url": "https://github.com/LukasMurdock/remix-frame-ui"
   },
   "homepage": "https://github.com/lukasmurdock/remix-frame-ui#readme",
   "bugs": {
