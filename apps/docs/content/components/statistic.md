@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Statistic` usage patterns.
+```tsx
+import { Statistic } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Statistic label="Success rate" value="99.95" suffix="%" trend="up" caption="Last 24h" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Supports prefix and suffix tokens around values and trend metadata for visual di
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Semantic text | native text elements for value communication |
+| Requirement   | Behavior                                      |
+| ------------- | --------------------------------------------- |
+| Semantic text | native text elements for value communication  |
 | Trend hinting | optional data-trend metadata for visual state |
-| Keyboard | static content with no custom key handlers |
+| Keyboard      | static content with no custom key handlers    |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

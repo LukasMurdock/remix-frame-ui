@@ -19,7 +19,20 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `AppHeader` usage patterns.
+```tsx
+import { AppHeader } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <AppHeader
+      brand="Acme"
+      title="Operations"
+      subtitle="Release readiness"
+      actions={<button type="button">New report</button>}
+    />
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +44,12 @@ Supports compact density and optional sticky mode for persistent page chrome.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses native `header` and optional `nav` regions |
+| Requirement           | Behavior                                                     |
+| --------------------- | ------------------------------------------------------------ |
+| Landmark semantics    | uses native `header` and optional `nav` regions              |
 | Information hierarchy | separates brand/title metadata from actions/account controls |
-| Responsive structure | supports dense and compact header treatments |
+| Responsive structure  | supports dense and compact header treatments                 |
 
 ## Keymap spec
 
 - No custom key handling; keyboard behavior comes from slotted controls
-

@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Empty` usage patterns.
+```tsx
+import { Empty } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Empty title="No deployments yet" description="Run your first pipeline to see activity." />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Supports optional icon and action regions with compact and comfortable density o
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Status semantics | uses `role="status"` for passive announcements |
+| Requirement       | Behavior                                                |
+| ----------------- | ------------------------------------------------------- |
+| Status semantics  | uses `role="status"` for passive announcements          |
 | Content structure | title, optional description, and optional action region |
-| Keyboard | no component-level key handling |
+| Keyboard          | no component-level key handling                         |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

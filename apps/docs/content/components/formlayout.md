@@ -19,7 +19,20 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `FormLayout` usage patterns.
+```tsx
+import { FormLayout } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <FormLayout title="Profile" description="Update account details" actions={<button type="submit">Save</button>}>
+      <label>
+        Name
+        <input type="text" defaultValue="Ada" />
+      </label>
+    </FormLayout>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,14 +44,13 @@ Use `columns` for responsive-like grouping while keeping native `<form>` semanti
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Native semantics | renders a native `<form>` container |
-| Context wiring | optional title and description map to `aria-labelledby` and `aria-describedby` |
-| Action grouping | actions render as a dedicated footer row |
+| Requirement      | Behavior                                                                       |
+| ---------------- | ------------------------------------------------------------------------------ |
+| Native semantics | renders a native `<form>` container                                            |
+| Context wiring   | optional title and description map to `aria-labelledby` and `aria-describedby` |
+| Action grouping  | actions render as a dedicated footer row                                       |
 
 ## Keymap spec
 
 - `Tab`: move between form controls
 - `Enter`: submit focused form when submit button is present
-

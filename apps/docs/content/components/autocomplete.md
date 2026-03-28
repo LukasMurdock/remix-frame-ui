@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Autocomplete } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  { id: "us", label: "United States", value: "us" },
+  { id: "ca", label: "Canada", value: "ca" },
+  { id: "jp", label: "Japan", value: "jp" },
+]
+
+export function Example() {
+  return <Autocomplete label="Country" options={options} defaultValue="ca" />
+}
+```
 
 ## HTML parity
 
@@ -31,11 +43,11 @@ Requires a visible `label`, supports controlled and uncontrolled values, and emi
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Input role | `role="combobox"` with listbox relationship |
-| Input labeling | visible label is required and bound to input `id` |
-| Option semantics | rendered as `role="option"` entries |
+| Requirement      | Behavior                                                            |
+| ---------------- | ------------------------------------------------------------------- |
+| Input role       | `role="combobox"` with listbox relationship                         |
+| Input labeling   | visible label is required and bound to input `id`                   |
+| Option semantics | rendered as `role="option"` entries                                 |
 | Keyboard support | arrow navigation, Enter commit, Tab suggestion commit, Escape close |
 
 ## Keymap spec
@@ -44,4 +56,3 @@ Requires a visible `label`, supports controlled and uncontrolled values, and emi
 - `Enter`: commit active suggestion or current free text
 - `Tab`: commit highlighted suggestion
 - `Escape`: close suggestions
-

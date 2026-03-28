@@ -19,7 +19,24 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `FormFieldset` usage patterns.
+```tsx
+import { FormFieldset } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <FormFieldset legend="Notification channels" columns={2}>
+      <label>
+        Email
+        <input type="email" />
+      </label>
+      <label>
+        Slack channel
+        <input type="text" />
+      </label>
+    </FormFieldset>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +48,12 @@ Supports one- or two-column grouping for logically related inputs.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Group semantics | native `fieldset` and `legend` establish control relationships |
-| Description wiring | optional description connects via `aria-describedby` |
-| Layout grouping | grouped controls remain keyboard-linear |
+| Requirement        | Behavior                                                       |
+| ------------------ | -------------------------------------------------------------- |
+| Group semantics    | native `fieldset` and `legend` establish control relationships |
+| Description wiring | optional description connects via `aria-describedby`           |
+| Layout grouping    | grouped controls remain keyboard-linear                        |
 
 ## Keymap spec
 
 - `Tab`: move through controls in grouped order
-

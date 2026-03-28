@@ -19,7 +19,18 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { EmptyResults } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <EmptyResults
+      description="Try removing one or more filters."
+      clearAction={<button type="button">Clear filters</button>}
+    />
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +42,12 @@ See demos for composition and layout patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Status semantics | `role="status"` with polite updates |
-| Message hierarchy | title + supporting description |
-| Recovery path | optional clear/reset action region |
+| Requirement       | Behavior                            |
+| ----------------- | ----------------------------------- |
+| Status semantics  | `role="status"` with polite updates |
+| Message hierarchy | title + supporting description      |
+| Recovery path     | optional clear/reset action region  |
 
 ## Keymap spec
 
 - Keyboard behavior is inherited from child action controls.
-

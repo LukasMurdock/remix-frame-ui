@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Segmented } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  { value: "day", label: "Day" },
+  { value: "week", label: "Week" },
+  { value: "month", label: "Month" },
+]
+
+export function Example() {
+  return <Segmented options={options} defaultValue="week" ariaLabel="Time range" />
+}
+```
 
 ## HTML parity
 
@@ -31,14 +43,13 @@ Supports controlled and uncontrolled selection, compact density, full-width layo
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Group semantics | root uses `role="radiogroup"` |
+| Requirement      | Behavior                                            |
+| ---------------- | --------------------------------------------------- |
+| Group semantics  | root uses `role="radiogroup"`                       |
 | Option semantics | each segment uses `role="radio"` and `aria-checked` |
-| Disabled options | disabled segments are non-interactive |
+| Disabled options | disabled segments are non-interactive               |
 
 ## Keymap spec
 
 - `Tab`: moves focus to each segment button
 - `Enter`/`Space`: selects focused segment
-

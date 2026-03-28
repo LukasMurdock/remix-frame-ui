@@ -19,7 +19,18 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Timeline` usage patterns.
+```tsx
+import { Timeline } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { key: "build", title: "Build started", time: "10:02" },
+  { key: "tests", title: "Tests passed", time: "10:05", tone: "success" },
+]
+
+export function Example() {
+  return <Timeline items={items} pending="Deploying to production" />
+}
+```
 
 ## HTML parity
 
@@ -31,14 +42,13 @@ Supports per-item tone, optional description/time metadata, pending entry, and e
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Ordered sequence | uses semantic `ol` list of events |
-| Status context | visual markers indicate item tone |
-| Readability | title, detail, and time metadata are grouped per row |
+| Requirement      | Behavior                                             |
+| ---------------- | ---------------------------------------------------- |
+| Ordered sequence | uses semantic `ol` list of events                    |
+| Status context   | visual markers indicate item tone                    |
+| Readability      | title, detail, and time metadata are grouped per row |
 
 ## Keymap spec
 
 - Uses native document navigation
 - Does not add custom key handlers
-

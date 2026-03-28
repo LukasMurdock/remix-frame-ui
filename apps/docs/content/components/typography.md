@@ -19,7 +19,17 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { Typography } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Typography as="p" truncate>
+      Very long status message that should truncate in narrow layouts.
+    </Typography>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,14 +41,13 @@ No hydration is required for static content. Optional `truncate` metadata can be
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Heading semantics | `Heading` maps to native `h1` through `h6` |
-| Text semantics | `Text` maps to native text elements (`p`, `span`, `strong`, `em`, `small`) |
-| Code semantics | `Code` maps to native `code` and optional `pre > code` |
-| Keyboard | static typography does not add key handlers |
+| Requirement       | Behavior                                                                   |
+| ----------------- | -------------------------------------------------------------------------- |
+| Heading semantics | `Heading` maps to native `h1` through `h6`                                 |
+| Text semantics    | `Text` maps to native text elements (`p`, `span`, `strong`, `em`, `small`) |
+| Code semantics    | `Code` maps to native `code` and optional `pre > code`                     |
+| Keyboard          | static typography does not add key handlers                                |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

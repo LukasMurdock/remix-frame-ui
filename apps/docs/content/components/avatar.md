@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Avatar` usage patterns.
+```tsx
+import { Avatar } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Avatar name="Ada Lovelace" status="online" size="lg" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ When `src` is provided, avatar renders an `<img>`. Otherwise it falls back to ge
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Image alternative | supports explicit `alt` text and defaults to `name` |
-| Fallback readability | initials generated from provided name |
-| Status hinting | optional status data attribute for visual presence states |
+| Requirement          | Behavior                                                  |
+| -------------------- | --------------------------------------------------------- |
+| Image alternative    | supports explicit `alt` text and defaults to `name`       |
+| Fallback readability | initials generated from provided name                     |
+| Status hinting       | optional status data attribute for visual presence states |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

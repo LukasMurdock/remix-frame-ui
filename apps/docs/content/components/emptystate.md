@@ -19,7 +19,15 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { EmptyState } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <EmptyState title="Create your first project" description="Projects group dashboards, alerts, and ownership." />
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +39,12 @@ See demos for composition and layout patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Status semantics | container uses `role="status"` |
-| Readable hierarchy | title + description grouping |
-| Action support | optional action region for recovery path |
+| Requirement        | Behavior                                 |
+| ------------------ | ---------------------------------------- |
+| Status semantics   | container uses `role="status"`           |
+| Readable hierarchy | title + description grouping             |
+| Action support     | optional action region for recovery path |
 
 ## Keymap spec
 
 - Keyboard behavior depends on provided action controls.
-

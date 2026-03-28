@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Splitter } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Splitter first={<section>Editor</section>} second={<section>Preview</section>} defaultSize={60} />
+}
+```
 
 ## HTML parity
 
@@ -31,11 +37,11 @@ Supports horizontal and vertical layouts, controlled or uncontrolled size, keybo
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Separator semantics | handle uses `role="separator"` with value metadata |
-| Keyboard resize | arrow keys adjust size, `Home` and `End` jump to bounds |
-| Orientation metadata | separator announces horizontal or vertical axis |
+| Requirement          | Behavior                                                |
+| -------------------- | ------------------------------------------------------- |
+| Separator semantics  | handle uses `role="separator"` with value metadata      |
+| Keyboard resize      | arrow keys adjust size, `Home` and `End` jump to bounds |
+| Orientation metadata | separator announces horizontal or vertical axis         |
 
 ## Keymap spec
 
@@ -43,4 +49,3 @@ Supports horizontal and vertical layouts, controlled or uncontrolled size, keybo
 - `ArrowUp`/`ArrowDown`: resize vertical splitter by step
 - `Home`: set first pane to minimum size
 - `End`: set first pane to maximum size
-

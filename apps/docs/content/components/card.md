@@ -19,7 +19,17 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { Card } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Card title="Release status" subtitle="Updated 2 minutes ago" footer="Last deployed by CI">
+      All quality gates passed.
+    </Card>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +41,12 @@ See demos for composition and layout patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Landmark semantics | uses `<section>` wrapper |
-| Heading support | optional title rendered as heading |
-| Content grouping | header/body/footer separation |
+| Requirement        | Behavior                           |
+| ------------------ | ---------------------------------- |
+| Landmark semantics | uses `<section>` wrapper           |
+| Heading support    | optional title rendered as heading |
+| Content grouping   | header/body/footer separation      |
 
 ## Keymap spec
 
 - No component-specific keyboard behavior; delegates to child controls.
-

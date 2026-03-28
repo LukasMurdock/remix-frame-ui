@@ -19,7 +19,17 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { FilterBar } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <FilterBar title="Filters" actions={<button type="button">Clear all</button>}>
+      <input type="search" placeholder="Search services" />
+    </FilterBar>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +41,12 @@ See demos for composition and layout patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
+| Requirement      | Behavior                            |
+| ---------------- | ----------------------------------- |
 | Region semantics | section with `aria-label="Filters"` |
-| Group clarity | title and action grouping |
-| Control behavior | delegated to native form controls |
+| Group clarity    | title and action grouping           |
+| Control behavior | delegated to native form controls   |
 
 ## Keymap spec
 
 - Keyboard behavior is inherited from child controls.
-

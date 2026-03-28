@@ -19,7 +19,32 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for controlled and uncontrolled usage patterns.
+```tsx
+import { Cascader } from "@lukasmurdock/remix-ui-components"
+
+const options = [
+  {
+    value: "americas",
+    label: "Americas",
+    children: [
+      { value: "us", label: "United States" },
+      { value: "ca", label: "Canada" },
+    ],
+  },
+  {
+    value: "europe",
+    label: "Europe",
+    children: [
+      { value: "de", label: "Germany" },
+      { value: "fr", label: "France" },
+    ],
+  },
+]
+
+export function Example() {
+  return <Cascader options={options} placeholder="Select market" />
+}
+```
 
 ## HTML parity
 
@@ -31,11 +56,11 @@ Supports controlled or uncontrolled selected path, popup open state, and optiona
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Trigger semantics | button exposes popup state with `aria-expanded` |
-| Hierarchy navigation | options are grouped into progressive columns |
-| Selected feedback | selected path label appears in trigger |
+| Requirement          | Behavior                                        |
+| -------------------- | ----------------------------------------------- |
+| Trigger semantics    | button exposes popup state with `aria-expanded` |
+| Hierarchy navigation | options are grouped into progressive columns    |
+| Selected feedback    | selected path label appears in trigger          |
 
 ## Keymap spec
 
@@ -46,4 +71,3 @@ Supports controlled or uncontrolled selected path, popup open state, and optiona
 - `ArrowLeft`: returns focus to the parent column
 - `Enter`/`Space` in panel: commits focused option (leaf closes panel)
 - `Escape`: closes panel and returns focus to trigger
-

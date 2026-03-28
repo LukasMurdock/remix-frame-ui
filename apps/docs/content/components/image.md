@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Image` usage patterns.
+```tsx
+import { Image } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Image src="/images/dashboard-preview.png" alt="Dashboard preview" width={640} height={360} fit="cover" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Use `fit` to control object fitting behavior and `loading` to choose lazy or eag
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Alternative text | requires native `alt` text |
+| Requirement      | Behavior                             |
+| ---------------- | ------------------------------------ |
+| Alternative text | requires native `alt` text           |
 | Loading behavior | supports native `loading` strategies |
-| Keyboard | non-interactive media element |
+| Keyboard         | non-interactive media element        |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

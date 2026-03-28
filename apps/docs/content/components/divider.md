@@ -19,7 +19,13 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Divider` usage patterns.
+```tsx
+import { Divider } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return <Divider decorative={false} ariaLabel="Section divider" />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +37,12 @@ Use horizontal dividers between stacked sections and vertical dividers between i
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Separator semantics | uses `role="separator"` when not decorative |
-| Orientation | supports horizontal and vertical orientation |
-| Decorative mode | hidden from assistive tech by default |
+| Requirement         | Behavior                                     |
+| ------------------- | -------------------------------------------- |
+| Separator semantics | uses `role="separator"` when not decorative  |
+| Orientation         | supports horizontal and vertical orientation |
+| Decorative mode     | hidden from assistive tech by default        |
 
 ## Keymap spec
 
 - No component-level key bindings.
-

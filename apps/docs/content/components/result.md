@@ -19,7 +19,19 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Result` usage patterns.
+```tsx
+import { Result } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Result
+      tone="success"
+      title="Deployment succeeded"
+      description="All checks passed and traffic has shifted to the new release."
+    />
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,14 +43,13 @@ Tone controls announcement role and visual emphasis for critical outcomes. For c
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
+| Requirement       | Behavior                                                   |
+| ----------------- | ---------------------------------------------------------- |
 | Outcome semantics | uses `status` for info/success, `alert` for warning/danger |
 | Content structure | supports title, optional description, and optional actions |
-| Action affordance | actions are explicit controls adjacent to outcome content |
+| Action affordance | actions are explicit controls adjacent to outcome content  |
 
 ## Keymap spec
 
 - `Tab`: move to action controls when present
 - `Enter`/`Space`: activate focused action control
-

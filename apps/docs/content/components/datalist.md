@@ -19,7 +19,18 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos for composition and layout patterns.
+```tsx
+import { DataList } from "@lukasmurdock/remix-ui-components"
+
+const items = [
+  { id: "1", title: "Build docs", description: "Regenerate static docs output", meta: "Today" },
+  { id: "2", title: "Run tests", description: "Validate docs and component suites", meta: "In progress" },
+]
+
+export function Example() {
+  return <DataList items={items} />
+}
+```
 
 ## HTML parity
 
@@ -31,13 +42,12 @@ See demos for composition and layout patterns.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| List semantics | native `ul`/`li` structure |
+| Requirement    | Behavior                       |
+| -------------- | ------------------------------ |
+| List semantics | native `ul`/`li` structure     |
 | Empty handling | dedicated empty-state fallback |
 | Action support | optional per-row action region |
 
 ## Keymap spec
 
 - Keyboard behavior is inherited from focusable child controls.
-

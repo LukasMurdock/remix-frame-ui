@@ -19,7 +19,18 @@ Type definitions are generated from component source.
 
 ## Example
 
-See demos on this page for complete `Layout` usage patterns.
+```tsx
+import { Layout } from "@lukasmurdock/remix-ui-components"
+
+export function Example() {
+  return (
+    <Layout hasSider direction="row">
+      <aside>Sidebar</aside>
+      <main>Main content</main>
+    </Layout>
+  )
+}
+```
 
 ## HTML parity
 
@@ -31,13 +42,12 @@ Use `direction` and `hasSider` to define high-level page scaffolding. `LayoutSid
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
+| Requirement        | Behavior                                                     |
+| ------------------ | ------------------------------------------------------------ |
 | Landmark semantics | uses native `header`, `aside`, `main`, and `footer` elements |
-| Sidebar state | collapsed sider maps to `hidden` behavior |
-| Keyboard | no component-level key handling |
+| Sidebar state      | collapsed sider maps to `hidden` behavior                    |
+| Keyboard           | no component-level key handling                              |
 
 ## Keymap spec
 
 - No component-level key bindings.
-
