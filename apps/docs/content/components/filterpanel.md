@@ -18,32 +18,6 @@ import { FilterPanel } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```ts
-import { FilterPanel } from "@lukasmurdock/remix-ui-components"
-
-let open = true
-
-<FilterPanel
-  open={open}
-  title="Filters"
-  description="Refine results"
-  onApply={() => {
-    console.log("apply")
-  }}
-  onClear={() => {
-    console.log("clear")
-  }}
-  onClose={() => {
-    open = false
-    handle.update()
-  }}
->
-  Filter controls
-</FilterPanel>
-```
-
 ## HTML parity
 
 `FilterPanel` wraps drawer behavior with a structured filter form and apply/clear actions.

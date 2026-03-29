@@ -17,16 +17,6 @@ import { FileUpload } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FileUpload } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <FileUpload name="attachments" accept={[".png", ".jpg", ".pdf"]} multiple />
-}
-```
-
 ## HTML parity
 
 `FileUpload` wraps native `<input type="file">` with support for `multiple`, `accept`, and `capture`.

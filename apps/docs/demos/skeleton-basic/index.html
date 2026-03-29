@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Component Demo</title>
+  </head>
+  <body>
+    <div id="demo-root"></div>
+    <script type="module">
+      const mount = document.getElementById("demo-root")
+      const candidates = ["./entry.tsx", "./entry.js"]
+
+      for (const candidate of candidates) {
+        try {
+          const mod = await import(candidate)
+          if (typeof mod.mount === "function" && mount instanceof HTMLElement) {
+            mod.mount(mount)
+            break
+          }
+        } catch (_error) {}
+      }
+    </script>
+  </body>
+</html>

@@ -17,22 +17,6 @@ import { Transfer } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Transfer, TransferItem } from "@lukasmurdock/remix-ui-components"
-
-const items: TransferItem[] = [
-  { key: "eng", label: "Engineering" },
-  { key: "design", label: "Design" },
-  { key: "ops", label: "Operations" },
-]
-
-export function TeamTransfer() {
-  return <Transfer items={items} defaultTargetKeys={["eng"]} onChange={(keys) => console.log(keys)} />
-}
-```
-
 ## HTML parity
 
 `Transfer` moves selected items between available and chosen lists.

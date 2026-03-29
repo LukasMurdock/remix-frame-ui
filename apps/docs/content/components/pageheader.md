@@ -17,22 +17,6 @@ import { PageHeader } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { PageHeader } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <PageHeader
-      title="Deployments"
-      subtitle="Track release progress"
-      actions={<button type="button">Create deployment</button>}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `PageHeader` composes native heading and metadata text with optional action region.

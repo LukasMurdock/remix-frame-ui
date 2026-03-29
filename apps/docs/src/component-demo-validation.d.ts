@@ -1,13 +1,15 @@
 export type ComponentDemoCoverageAnalysis = {
   missingInRegistry: string[]
   extraInRegistry: string[]
-  missingRuntimeIds: string[]
-  missingRuntimeSources: string[]
+  missingDemoDirs: string[]
+  missingEntryFiles: string[]
+  missingIndexFiles: string[]
   duplicateDemoIds: string[]
+  extraDemoDirs: string[]
 }
 
-export function parseRuntimeDemoIds(source: string): Set<string>
 export function analyzeComponentDemoCoverage(
   componentNames: string[],
-  runtimeSource: string,
+  demosById: Map<string, Set<string>>,
+  demosRootDirs: Set<string>,
 ): ComponentDemoCoverageAnalysis

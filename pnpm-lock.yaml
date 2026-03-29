@@ -47,6 +47,9 @@ importers:
       '@lukasmurdock/remix-ui-components':
         specifier: workspace:*
         version: link:../../packages/remix
+      '@remix-run/component':
+        specifier: 0.6.0
+        version: 0.6.0
       rehype-stringify:
         specifier: ^10.0.1
         version: 10.0.1
@@ -59,10 +62,16 @@ importers:
       remark-rehype:
         specifier: ^11.1.2
         version: 11.1.2
+      remix:
+        specifier: 3.0.0-alpha.4
+        version: 3.0.0-alpha.4
       unified:
         specifier: ^11.0.5
         version: 11.0.5
     devDependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
       vite:
         specifier: 7.1.12
         version: 7.1.12(@types/node@22.19.15)(yaml@2.8.3)

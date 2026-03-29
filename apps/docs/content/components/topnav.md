@@ -18,22 +18,6 @@ import { TopNav } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { TopNav, TopNavItem } from "@lukasmurdock/remix-ui-components"
-
-const items: TopNavItem[] = [
-  { id: "overview", label: "Overview", href: "/overview" },
-  { id: "alerts", label: "Alerts", href: "/alerts" },
-  { id: "settings", label: "Settings", href: "/settings" },
-]
-
-export function Example() {
-  return <TopNav items={items} activeId="alerts" />
-}
-```
-
 ## HTML parity
 
 `TopNav` provides horizontal application navigation with active-state highlighting.

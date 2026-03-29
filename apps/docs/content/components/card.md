@@ -17,20 +17,6 @@ import { Card } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Card } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Card title="Release status" subtitle="Updated 2 minutes ago" footer="Last deployed by CI">
-      All quality gates passed.
-    </Card>
-  )
-}
-```
-
 ## HTML parity
 
 `Card` provides semantic section structure with optional header and footer regions.

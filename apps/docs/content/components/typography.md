@@ -17,20 +17,6 @@ import { Typography } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Typography } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Typography as="p" truncate>
-      Very long status message that should truncate in narrow layouts.
-    </Typography>
-  )
-}
-```
-
 ## HTML parity
 
 `Typography` provides semantic text primitives (`Heading`, `Text`, `Code`) that render native heading, text, and code elements.

@@ -17,16 +17,6 @@ import { Avatar } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Avatar } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Avatar name="Ada Lovelace" status="online" size="lg" />
-}
-```
-
 ## HTML parity
 
 `Avatar` renders an image or text fallback token for user identity surfaces.

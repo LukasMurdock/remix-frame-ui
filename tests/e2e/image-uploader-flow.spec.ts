@@ -20,8 +20,11 @@ test("image uploader demo previews, removes, and caps image count", async ({ pag
 
   const state = page.locator("[data-role='image-uploader-state']")
   const listItems = page.locator("[data-role='image-uploader-list'] .rf-image-uploader-item[data-item-id]")
+  const viewerOverlay = page.locator("[data-role='image-uploader-viewer-overlay']")
+  const viewerCounter = page.locator("[data-role='image-uploader-viewer-counter']")
 
   await expect(state).toHaveText("No images selected")
+  await expect(viewerOverlay).toBeHidden()
 
   await page.locator("[data-role='image-uploader-input']").setInputFiles([
     {
@@ -46,6 +49,12 @@ test("image uploader demo previews, removes, and caps image count", async ({ pag
         .evaluate((img) => (img as HTMLImageElement).naturalWidth),
     )
     .toBeGreaterThan(0)
+
+  await page.locator("button[data-preview-id]").first().click()
+  await expect(viewerOverlay).toBeVisible()
+  await expect(viewerCounter).toHaveText("1 / 2")
+  await page.locator("[data-role='image-uploader-viewer-close']").click()
+  await expect(viewerOverlay).toBeHidden()
 
   await page.locator("button[data-remove-id]").first().click()
   await expect(state).toHaveText("1 selected")

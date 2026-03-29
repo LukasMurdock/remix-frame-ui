@@ -17,16 +17,6 @@ import { Input } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Input } from "@lukasmurdock/remix-ui-components"
-
-export function EmailField() {
-  return <Input id="email" name="email" type="email" required placeholder="you@company.com" />
-}
-```
-
 ## HTML parity
 
 `Input` is a native `<input>` wrapper limited to text-like types in v1.

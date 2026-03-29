@@ -17,27 +17,6 @@ import { Tree } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Tree } from "@lukasmurdock/remix-ui-components"
-
-const nodes = [
-  {
-    id: "projects",
-    label: "Projects",
-    children: [
-      { id: "roadmap", label: "Roadmap" },
-      { id: "launch", label: "Launch" },
-    ],
-  },
-]
-
-export function ProjectTree() {
-  return <Tree nodes={nodes} defaultExpandedIds={["projects"]} onSelect={(id) => console.log(id)} />
-}
-```
-
 ## HTML parity
 
 `Tree` renders nested hierarchical nodes with optional expand/collapse behavior.

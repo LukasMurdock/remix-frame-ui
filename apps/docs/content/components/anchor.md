@@ -17,22 +17,6 @@ import { Anchor } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Anchor, AnchorItem } from "@lukasmurdock/remix-ui-components"
-
-const items: AnchorItem[] = [
-  { id: "overview", label: "Overview", href: "#overview" },
-  { id: "api", label: "API", href: "#api" },
-  { id: "faq", label: "FAQ", href: "#faq", disabled: true },
-]
-
-export function Example() {
-  return <Anchor items={items} defaultActiveHref="#api" />
-}
-```
-
 ## HTML parity
 
 `Anchor` renders in-page section links with a highlighted active target.

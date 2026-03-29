@@ -17,21 +17,6 @@ import { Flex } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Flex } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Flex align="center" justify="between" gap="1rem">
-      <span>Build</span>
-      <span>Passing</span>
-    </Flex>
-  )
-}
-```
-
 ## HTML parity
 
 `Flex` renders a semantic `<div>` container for one-dimensional layout composition.

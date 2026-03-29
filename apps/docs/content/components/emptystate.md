@@ -17,18 +17,6 @@ import { EmptyState } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { EmptyState } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <EmptyState title="Create your first project" description="Projects group dashboards, alerts, and ownership." />
-  )
-}
-```
-
 ## HTML parity
 
 `EmptyState` renders status-oriented content with optional action slot.

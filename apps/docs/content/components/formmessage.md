@@ -17,16 +17,6 @@ import { FormMessage } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FormMessage } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <FormMessage tone="error">Email is required.</FormMessage>
-}
-```
-
 ## HTML parity
 
 `FormMessage` renders contextual helper or validation text tied to form controls.

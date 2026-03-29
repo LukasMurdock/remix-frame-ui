@@ -18,31 +18,13 @@ import { ImageViewer } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { ImageViewer, ImageViewerImage } from "@lukasmurdock/remix-ui-components"
-
-const images: ImageViewerImage[] = [
-  { src: "/images/release-1.png", alt: "Release details 1" },
-  { src: "/images/release-2.png", alt: "Release details 2" },
-  { src: "/images/release-3.png", alt: "Release details 3" },
-]
-
-export function Example() {
-  return (
-    <ImageViewer open images={images} defaultIndex={0} onClose={() => {}} onIndexChange={(next) => console.log(next)} />
-  )
-}
-```
-
 ## HTML parity
 
 `ImageViewer` renders a modal dialog overlay with previous and next controls around an image frame.
 
 ## Runtime notes
 
-Supports controlled and uncontrolled image index, backdrop and escape dismissal, loop navigation, and optional counter display.
+Supports `open`/`visible` controlled display, controlled and uncontrolled index, `afterClose`, backdrop and escape dismissal, edge-clamped navigation by default, optional looping, and touch-swipe parity.
 
 ## Accessibility matrix
 

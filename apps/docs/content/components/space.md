@@ -17,22 +17,6 @@ import { Space } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Space } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Space size="sm" align="center" wrap>
-      <button type="button">Approve</button>
-      <button type="button">Comment</button>
-      <button type="button">Reject</button>
-    </Space>
-  )
-}
-```
-
 ## HTML parity
 
 `Space` renders a semantic `<div>` wrapper for consistent spacing between adjacent children.

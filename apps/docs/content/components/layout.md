@@ -17,28 +17,6 @@ import { Layout, LayoutContent, LayoutFooter, LayoutHeader, LayoutSider } from "
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Layout, LayoutContent, LayoutFooter, LayoutHeader, LayoutSider } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Layout hasSider>
-      <LayoutHeader>
-        <strong>Workspace</strong>
-        <button type="button">Toggle sidebar</button>
-      </LayoutHeader>
-      <Layout direction="row" hasSider>
-        <LayoutSider width="16rem">Sidebar</LayoutSider>
-        <LayoutContent>Main content</LayoutContent>
-      </Layout>
-      <LayoutFooter>Footer utilities</LayoutFooter>
-    </Layout>
-  )
-}
-```
-
 ## HTML parity
 
 `Layout` provides semantic shell regions with `LayoutHeader`, `LayoutSider`, `LayoutContent`, and `LayoutFooter`.

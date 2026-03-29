@@ -18,35 +18,13 @@ import { ImageUploader } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { ImageUploader } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <ImageUploader
-      maxCount={6}
-      upload={async (file) => {
-        await new Promise((resolve) => setTimeout(resolve, 300))
-        return {
-          src: URL.createObjectURL(file),
-          alt: file.name,
-          fileName: file.name,
-        }
-      }}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `ImageUploader` renders a native file input workflow with image-preview tiles and remove controls.
 
 ## Runtime notes
 
-Supports controlled/uncontrolled value, max-count limits, async upload transforms, and upload error callbacks.
+Supports controlled/uncontrolled value, async `beforeUpload` transforms, queue events (`onUploadQueueChange`), overflow handling (`onCountExceed`), and built-in `ImageViewer` previews from thumbnail taps.
 
 ## Accessibility matrix
 

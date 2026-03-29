@@ -17,21 +17,6 @@ import { EmptyResults } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { EmptyResults } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <EmptyResults
-      description="Try removing one or more filters."
-      clearAction={<button type="button">Clear filters</button>}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `EmptyResults` communicates filtered/no-match states with optional recovery action.

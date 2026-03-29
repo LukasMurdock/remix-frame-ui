@@ -17,16 +17,6 @@ import { Empty } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Empty } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Empty title="No deployments yet" description="Run your first pipeline to see activity." />
-}
-```
-
 ## HTML parity
 
 `Empty` renders a semantic status section for no-data and no-selection states.

@@ -17,16 +17,6 @@ import { Spinner } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Spinner } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Spinner label="Loading deployment status" size="md" />
-}
-```
-
 ## HTML parity
 
 `Spinner` provides a compact loading indicator with status semantics.

@@ -1,6 +1,7 @@
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, readdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import ts from "typescript"
 import { applyGeneratedApiSection } from "./component-api-sections.js"
 import { demoByComponent } from "./component-demo-registry.js"
 import { resolvePlatformLabel } from "./component-doc-maturity.js"
@@ -12,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, "..")
 const contentDir = path.join(root, "content", "components")
 const guidesDir = path.join(root, "content", "guides")
+const demosDir = path.join(root, "demos")
 const outDir = path.join(root, "dist")
 const runtimeSourcePath = path.join(root, "src", "docs-runtime.js")
 const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", "component-metadata.json")
@@ -71,6 +73,7 @@ guidePages.sort((a, b) => {
 })
 
 await mkdir(outDir, { recursive: true })
+await buildDemos(demosDir, path.join(outDir, "demos"))
 
 const firstPageId = guidePages[0]?.id ?? componentPages[0]?.id ?? ""
 
@@ -135,6 +138,63 @@ async function readMarkdownFiles(directory) {
     }
     throw error
   }
+}
+
+async function buildDemos(sourceRoot, outputRoot) {
+  await mkdir(outputRoot, { recursive: true })
+  const files = await collectDemoFiles(sourceRoot)
+
+  for (const relativeFile of files) {
+    const sourcePath = path.join(sourceRoot, relativeFile)
+    const outputPath = path.join(outputRoot, relativeFile)
+    await mkdir(path.dirname(outputPath), { recursive: true })
+
+    if (relativeFile.endsWith(".d.ts")) {
+      await cp(sourcePath, outputPath)
+      continue
+    }
+
+    if (relativeFile.endsWith(".ts") || relativeFile.endsWith(".tsx")) {
+      const source = await readFile(sourcePath, "utf8")
+      const transpiled = ts.transpileModule(source, {
+        compilerOptions: {
+          module: ts.ModuleKind.ESNext,
+          target: ts.ScriptTarget.ES2022,
+          jsx: ts.JsxEmit.ReactJSX,
+          jsxImportSource: "remix/component",
+        },
+        fileName: sourcePath,
+      })
+
+      const outputJsPath = outputPath.replace(/\.(ts|tsx)$/, ".js")
+      await writeFile(outputJsPath, transpiled.outputText)
+      await cp(sourcePath, outputPath)
+      continue
+    }
+
+    await cp(sourcePath, outputPath)
+  }
+}
+
+async function collectDemoFiles(directory, prefix = "") {
+  const entries = await readdir(directory, { withFileTypes: true })
+  const files = []
+
+  for (const entry of entries) {
+    const relativePath = prefix ? path.join(prefix, entry.name) : entry.name
+    const absolutePath = path.join(directory, entry.name)
+
+    if (entry.isDirectory()) {
+      files.push(...(await collectDemoFiles(absolutePath, relativePath)))
+      continue
+    }
+
+    if (entry.isFile()) {
+      files.push(relativePath)
+    }
+  }
+
+  return files
 }
 
 const html = `<!doctype html>
@@ -957,6 +1017,314 @@ const html = `<!doctype html>
       .rf-combobox-list[hidden] { display: none; }
       .rf-combobox-option { padding: 0.5rem 0.6rem; border-radius: 0.5rem; cursor: pointer; }
       .rf-combobox-option:hover { background: #eef4ff; }
+      .rf-image-uploader { width: 100%; max-width: 42rem; }
+      .rf-image-uploader-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      .rf-image-uploader .rf-image-uploader-list,
+      .rf-image-uploader .rf-image-uploader-list > li {
+        list-style: none !important;
+        margin: 0;
+      }
+      .rf-image-uploader .rf-image-uploader-list > li::marker { content: ""; }
+      .rf-image-uploader-item {
+        border: 1px solid #cbd5e1;
+        border-radius: 14px;
+        background: #fff;
+        color: #0f172a;
+        padding: 0.5rem;
+        display: grid;
+        gap: 0.3rem;
+        align-content: start;
+        min-width: 0;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .rf-image-uploader-thumb {
+        margin: 0;
+        border-radius: 11px;
+        overflow: hidden;
+        border: 1px solid #dbe3ee;
+        background: #f8fafc;
+        aspect-ratio: 4 / 3;
+        display: grid;
+        place-items: center;
+        margin-bottom: 0.08rem;
+      }
+      .rf-image-uploader-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.2s ease;
+      }
+      .rf-image-uploader-preview {
+        border: 0;
+        background: transparent;
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        border-radius: inherit;
+        overflow: hidden;
+      }
+      .rf-image-uploader-preview:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }
+      .rf-image-uploader-preview:hover .rf-image-uploader-image,
+      .rf-image-uploader-preview:focus-visible .rf-image-uploader-image { transform: scale(1.02); }
+      .rf-image-uploader-empty { font-size: 0.78rem; color: #64748b; }
+      .rf-image-uploader-name {
+        margin: 0;
+        margin-top: 0.03rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rf-image-uploader-status {
+        margin: 0;
+        font-size: 0.7rem;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.01em;
+        color: #475569;
+        border: 1px solid #dbe3ee;
+        background: #f8fafc;
+        border-radius: 999px;
+        padding: 0.14rem 0.42rem;
+        display: inline-flex;
+        justify-self: start;
+        margin-top: 0.03rem;
+      }
+      .rf-image-uploader-item[data-uploading="true"] .rf-image-uploader-status {
+        color: #1d4ed8;
+        border-color: #93c5fd;
+        background: #dbeafe;
+      }
+      .rf-image-uploader-item[data-error="true"] .rf-image-uploader-status {
+        color: #b91c1c;
+        border-color: #fca5a5;
+        background: #fee2e2;
+      }
+      .rf-image-uploader-remove {
+        border: 1px solid #cbd5e1;
+        border-radius: 9px;
+        min-height: 1.9rem;
+        padding: 0.24rem 0.52rem;
+        background: #f8fafc;
+        color: #334155;
+        font-size: 0.74rem;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        justify-self: stretch;
+        margin-top: 0.06rem;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+      }
+      .rf-image-uploader-remove[data-variant="danger"] {
+        border-color: #fca5a5;
+        color: #b91c1c;
+      }
+      .rf-image-uploader-remove[data-variant="neutral"] {
+        border-color: #93c5fd;
+        color: #1d4ed8;
+      }
+      .rf-image-uploader-add-wrap {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        gap: 0;
+        align-self: start;
+      }
+      .rf-image-uploader-add-wrap[data-hidden="true"] { display: none; }
+      .rf-image-uploader-add {
+        border: 1px dashed #cbd5e1;
+        border-radius: 14px;
+        min-height: 7rem;
+        background: #f8fafc;
+        display: grid;
+        gap: 0.35rem;
+        align-content: start;
+        justify-items: start;
+        padding: 0.65rem;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+      }
+      .rf-image-uploader-add[data-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.72;
+      }
+      .rf-image-uploader-add:not([data-disabled="true"]):hover,
+      .rf-image-uploader-add:not([data-disabled="true"]):focus-within {
+        border-color: #93c5fd;
+        background: #eff6ff;
+      }
+      .rf-image-uploader-add-icon {
+        inline-size: 1.75rem;
+        block-size: 1.75rem;
+        border-radius: 999px;
+        border: 1px solid #93c5fd;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+      .rf-image-uploader-add-label { font-size: 0.87rem; font-weight: 600; line-height: 1.25; }
+      .rf-image-uploader-count { font-size: 0.75rem; color: #64748b; justify-self: start; }
+      .rf-image-uploader-input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        position: absolute;
+        pointer-events: none;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        appearance: none;
+      }
+      @media (min-width: 32rem) {
+        .rf-image-uploader-list { grid-template-columns: repeat(2, minmax(10rem, 1fr)); }
+      }
+      @media (min-width: 48rem) {
+        .rf-image-uploader-list { grid-template-columns: repeat(3, minmax(11rem, 1fr)); }
+      }
+      .rf-image-viewer-portal {
+        position: relative;
+        z-index: 998;
+      }
+      .rf-image-viewer-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.72);
+        display: grid;
+        place-items: center;
+        padding: 0.75rem;
+        backdrop-filter: blur(1.5px);
+        z-index: 998;
+      }
+      .rf-image-viewer-backdrop[hidden] { display: none; }
+      .rf-image-viewer {
+        width: min(100%, 56rem);
+        max-height: calc(100vh - 1.5rem);
+        border: 1px solid #cbd5e1;
+        border-radius: 14px;
+        background: #f8fafc;
+        color: #0f172a;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        box-shadow: 0 24px 56px rgba(15, 23, 42, 0.36);
+        overflow: hidden;
+      }
+      .rf-image-viewer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        padding: 0.65rem 0.8rem;
+        border-bottom: 1px solid #dbe3ee;
+        background: #ffffff;
+      }
+      .rf-image-viewer-counter {
+        margin: 0;
+        font-size: 0.84rem;
+        line-height: 1.25;
+        color: #475569;
+        font-weight: 600;
+      }
+      .rf-image-viewer-close {
+        border: 1px solid #cbd5e1;
+        border-radius: 9px;
+        min-height: 2.05rem;
+        padding: 0.3rem 0.65rem;
+        background: #fff;
+        color: #0f172a;
+        font-size: 0.82rem;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .rf-image-viewer-stage {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.65rem;
+        min-height: 0;
+        padding: 0.75rem;
+      }
+      .rf-image-viewer-nav {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        min-width: 3.1rem;
+        min-height: 2.5rem;
+        padding: 0.35rem 0.55rem;
+        background: #fff;
+        color: #0f172a;
+        font-size: 0.8rem;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .rf-image-viewer-nav:disabled {
+        cursor: not-allowed;
+        color: #94a3b8;
+        border-color: #dbe3ee;
+        background: #f8fafc;
+      }
+      .rf-image-viewer-frame {
+        margin: 0;
+        min-height: 0;
+        width: 100%;
+        display: grid;
+        place-items: center;
+        border: 1px solid #dbe3ee;
+        border-radius: 12px;
+        background: #0f172a;
+        overflow: hidden;
+      }
+      .rf-image-viewer-image {
+        width: 100%;
+        max-height: calc(100vh - 10rem);
+        object-fit: contain;
+        display: block;
+        background: rgba(248, 250, 252, 0.2);
+        touch-action: pan-y;
+      }
+      .rf-image-viewer-empty {
+        margin: 0;
+        padding: 2rem 1rem;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        text-align: center;
+      }
+      @media (max-width: 40rem) {
+        .rf-image-viewer-stage {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          grid-template-rows: minmax(0, 1fr) auto;
+        }
+        .rf-image-viewer-frame {
+          grid-column: 1 / -1;
+        }
+        .rf-image-viewer-nav[data-direction="prev"] {
+          justify-self: start;
+        }
+        .rf-image-viewer-nav[data-direction="next"] {
+          justify-self: end;
+        }
+      }
       .rf-slider { width: min(100%, 20rem); accent-color: #2563eb; cursor: pointer; }
       .rf-range-slider { position: relative; width: min(100%, 22rem); height: 2rem; display: grid; align-items: center; --rf-range-start: 0%; --rf-range-end: 100%; }
       .rf-range-slider-track { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 0.35rem; border-radius: 999px; background: #cbd5e1; overflow: hidden; }

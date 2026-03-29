@@ -17,24 +17,6 @@ import { ToastViewport, createToastStore } from "@lukasmurdock/remix-ui-componen
 
 Type definitions are generated from component source.
 
-## Example
-
-```ts
-import { ToastViewport, createToastStore } from "@lukasmurdock/remix-ui-components"
-
-const store = createToastStore([], { defaultDurationMs: 5000 })
-store.show({ id: "save-1", tone: "success", content: "Changes saved" })
-
-const items = store.items()
-
-<ToastViewport
-  items={items}
-  onPause={(id) => store.pause(id)}
-  onResume={(id) => store.resume(id)}
-  onDismiss={(id, reason) => store.dismiss(id, reason)}
-/>
-```
-
 ## HTML parity
 
 `ToastViewport` renders semantic list markup with live-region announcements.

@@ -17,16 +17,6 @@ import { Tag } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Tag } from "@lukasmurdock/remix-ui-components"
-
-export function CategoryTag() {
-  return <Tag tone="brand">Platform</Tag>
-}
-```
-
 ## HTML parity
 
 `Tag` renders a semantic `<span>` for categorization and metadata labels.

@@ -17,22 +17,6 @@ import { Steps } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Steps } from "@lukasmurdock/remix-ui-components"
-
-const items = [
-  { id: "plan", label: "Plan" },
-  { id: "build", label: "Build" },
-  { id: "ship", label: "Ship" },
-]
-
-export function Example() {
-  return <Steps items={items} currentId="build" />
-}
-```
-
 ## HTML parity
 
 `Steps` communicates multi-step progress with current, complete, and upcoming states.

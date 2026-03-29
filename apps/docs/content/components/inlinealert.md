@@ -17,16 +17,6 @@ import { InlineAlert } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { InlineAlert } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <InlineAlert tone="success">Deployment completed successfully.</InlineAlert>
-}
-```
-
 ## HTML parity
 
 `InlineAlert` is a compact in-flow status surface for forms and sections.

@@ -17,16 +17,6 @@ import { Divider } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Divider } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Divider decorative={false} ariaLabel="Section divider" />
-}
-```
-
 ## HTML parity
 
 `Divider` renders a separator element for visual and optional semantic grouping.

@@ -19,10 +19,6 @@ import { ExampleComponent } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-See demos on this page for complete \`ExampleComponent\` usage patterns.
-
 ## HTML parity
 
 Renders semantic native elements.
@@ -54,9 +50,9 @@ describe("component doc section analysis", () => {
   })
 
   it("reports missing sections", () => {
-    const analysis = analyzeComponentDoc(validDoc.replace("## Example", "## Demo"))
+    const analysis = analyzeComponentDoc(validDoc.replace("## Runtime notes", "## Runtime"))
 
-    expect(analysis.missingSections).toContain("## Example")
+    expect(analysis.missingSections).toContain("## Runtime notes")
   })
 
   it("reports empty sections", () => {

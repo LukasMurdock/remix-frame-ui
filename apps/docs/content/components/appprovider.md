@@ -17,20 +17,6 @@ import { AppProvider } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { AppProvider } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <AppProvider locale="en-US" colorScheme="light">
-      <main>Dashboard content</main>
-    </AppProvider>
-  )
-}
-```
-
 ## HTML parity
 
 `AppProvider` wraps application content to set locale, direction, and app-level interaction defaults.

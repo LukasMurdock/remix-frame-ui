@@ -18,20 +18,6 @@ import { FilterBar } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FilterBar } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <FilterBar title="Filters" actions={<button type="button">Clear all</button>}>
-      <input type="search" placeholder="Search services" />
-    </FilterBar>
-  )
-}
-```
-
 ## HTML parity
 
 `FilterBar` groups native filter controls and actions in a semantic section.
