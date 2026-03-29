@@ -20,9 +20,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Transfer } from "@lukasmurdock/remix-ui-components"
+import { Transfer, TransferItem } from "@lukasmurdock/remix-ui-components"
 
-const items = [
+const items: TransferItem[] = [
   { key: "eng", label: "Engineering" },
   { key: "design", label: "Design" },
   { key: "ops", label: "Operations" },
@@ -43,11 +43,11 @@ Supports controlled and uncontrolled target/selection state, disabled items, and
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Selection semantics | each row uses a native checkbox |
-| Movement controls | explicit left/right move buttons |
-| Disabled items | disabled rows are non-interactive |
+| Requirement         | Behavior                          |
+| ------------------- | --------------------------------- |
+| Selection semantics | each row uses a native checkbox   |
+| Movement controls   | explicit left/right move buttons  |
+| Disabled items      | disabled rows are non-interactive |
 
 ## Keymap spec
 

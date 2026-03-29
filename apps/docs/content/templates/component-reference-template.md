@@ -20,6 +20,9 @@ Type definitions are generated from component source.
 
 ## Example
 
+Use fenced `ts`/`tsx` blocks. Add `###` subheadings when providing multiple snippets.
+Keep this example aligned with the preview demo scenario in `apps/docs/src/component-demo-registry.js`.
+
 ```tsx
 import { <ComponentName> } from "@lukasmurdock/remix-ui-components"
 

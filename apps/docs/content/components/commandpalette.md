@@ -20,11 +20,11 @@ Type definitions are generated from component source.
 ## Example
 
 ```ts
-import { CommandPalette } from "@lukasmurdock/remix-ui-components"
+import { CommandItem, CommandPalette } from "@lukasmurdock/remix-ui-components"
 
 let open = false
 
-const commands = [
+const commands: CommandItem[] = [
   { id: "search", label: "Open search", keywords: ["find"] },
   { id: "settings", label: "Open settings" },
 ]
@@ -54,11 +54,11 @@ Controlled open state with callback-driven select and close behavior. Search inp
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Modal semantics | `role="dialog"` with overlay dismissal |
+| Requirement      | Behavior                               |
+| ---------------- | -------------------------------------- |
+| Modal semantics  | `role="dialog"` with overlay dismissal |
 | Search semantics | combobox input driving listbox results |
-| Keyboard support | arrows, Enter, Escape |
+| Keyboard support | arrows, Enter, Escape                  |
 
 ## Keymap spec
 

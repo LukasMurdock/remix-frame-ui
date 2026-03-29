@@ -22,6 +22,8 @@ for (const file of files) {
     file,
     issues: analysis.issues,
     codeBlockCount: analysis.codeBlockCount,
+    typeScriptCodeBlockCount: analysis.typeScriptCodeBlockCount,
+    snippetCount: analysis.snippetCount,
     exampleBody: summarizeBody(analysis.exampleBody),
   })
 }

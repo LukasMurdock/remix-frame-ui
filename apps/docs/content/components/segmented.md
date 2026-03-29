@@ -20,9 +20,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Segmented } from "@lukasmurdock/remix-ui-components"
+import { Segmented, SegmentedOption } from "@lukasmurdock/remix-ui-components"
 
-const options = [
+const options: SegmentedOption[] = [
   { value: "day", label: "Day" },
   { value: "week", label: "Week" },
   { value: "month", label: "Month" },

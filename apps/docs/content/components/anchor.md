@@ -20,9 +20,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Anchor } from "@lukasmurdock/remix-ui-components"
+import { Anchor, AnchorItem } from "@lukasmurdock/remix-ui-components"
 
-const items = [
+const items: AnchorItem[] = [
   { id: "overview", label: "Overview", href: "#overview" },
   { id: "api", label: "API", href: "#api" },
   { id: "faq", label: "FAQ", href: "#faq", disabled: true },

@@ -20,9 +20,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Timeline } from "@lukasmurdock/remix-ui-components"
+import { Timeline, TimelineItem } from "@lukasmurdock/remix-ui-components"
 
-const items = [
+const items: TimelineItem[] = [
   { key: "build", title: "Build started", time: "10:02" },
   { key: "tests", title: "Tests passed", time: "10:05", tone: "success" },
 ]

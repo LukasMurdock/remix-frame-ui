@@ -1,20 +1,13 @@
-export function parseComponentToDemoIdMap(source: string): Map<string, string>
-export function parseRuntimeDemoIds(source: string): Set<string>
-
-export type ComponentDemoCoverageResult = {
-  missingInBuild: string[]
-  missingInDev: string[]
-  extraInBuild: string[]
-  extraInDev: string[]
-  mismatchedBuildVsDev: string[]
+export type ComponentDemoCoverageAnalysis = {
+  missingInRegistry: string[]
+  extraInRegistry: string[]
   missingRuntimeIds: string[]
-  duplicateBuildDemoIds: string[]
-  duplicateDevDemoIds: string[]
+  missingRuntimeSources: string[]
+  duplicateDemoIds: string[]
 }
 
+export function parseRuntimeDemoIds(source: string): Set<string>
 export function analyzeComponentDemoCoverage(
   componentNames: string[],
-  buildSource: string,
-  devSource: string,
   runtimeSource: string,
-): ComponentDemoCoverageResult
+): ComponentDemoCoverageAnalysis

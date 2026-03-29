@@ -20,10 +20,12 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Statistic } from "@lukasmurdock/remix-ui-components"
+import { Statistic, StatisticTrend } from "@lukasmurdock/remix-ui-components"
+
+const trend: StatisticTrend = "up"
 
 export function Example() {
-  return <Statistic label="Success rate" value="99.95" suffix="%" trend="up" caption="Last 24h" />
+  return <Statistic label="Success rate" value="99.95" suffix="%" trend={trend} caption="Last 24h" />
 }
 ```
 

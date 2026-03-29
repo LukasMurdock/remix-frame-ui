@@ -21,9 +21,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Cascader } from "@lukasmurdock/remix-ui-components"
+import { Cascader, CascaderOption } from "@lukasmurdock/remix-ui-components"
 
-const options = [
+const options: CascaderOption[] = [
   {
     value: "americas",
     label: "Americas",

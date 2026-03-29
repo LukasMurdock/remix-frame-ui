@@ -20,16 +20,18 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { SideNav } from "@lukasmurdock/remix-ui-components"
+import { SideNav, SideNavItem, SideNavSection } from "@lukasmurdock/remix-ui-components"
 
-const sections = [
+const primaryItems: SideNavItem[] = [
+  { id: "overview", label: "Overview", href: "/overview" },
+  { id: "deployments", label: "Deployments", href: "/deployments" },
+]
+
+const sections: SideNavSection[] = [
   {
     id: "primary",
     label: "Primary",
-    items: [
-      { id: "overview", label: "Overview", href: "/overview" },
-      { id: "deployments", label: "Deployments", href: "/deployments" },
-    ],
+    items: primaryItems,
   },
 ]
 

@@ -115,33 +115,9 @@ let exampleTabsId = 0
 function mountExampleTabs(root = document) {
   if (!root || typeof root.querySelectorAll !== "function") return
 
-  for (const article of root.querySelectorAll("article")) {
-    if (!(article instanceof HTMLElement)) continue
-
-    const directChildren = Array.from(article.children)
-    const demoBlock = directChildren.find(
-      (child) => child instanceof HTMLElement && child.classList.contains("demo-block"),
-    )
+  for (const demoBlock of root.querySelectorAll(".demo-block")) {
     if (!(demoBlock instanceof HTMLElement)) continue
     if (demoBlock.dataset.exampleTabsMounted === "true") continue
-
-    const exampleHeading = directChildren.find(
-      (child) =>
-        child instanceof HTMLHeadingElement &&
-        child.tagName === "H2" &&
-        (child.textContent ?? "").trim().toLowerCase() === "example",
-    )
-    if (!(exampleHeading instanceof HTMLHeadingElement)) continue
-
-    const headingIndex = directChildren.indexOf(exampleHeading)
-    if (headingIndex < 0) continue
-
-    const exampleNodes = []
-    for (let index = headingIndex + 1; index < directChildren.length; index += 1) {
-      const child = directChildren[index]
-      if (child instanceof HTMLHeadingElement && child.tagName === "H2") break
-      exampleNodes.push(child)
-    }
 
     const demoMount = demoBlock.querySelector(".demo-mount")
     if (!(demoMount instanceof HTMLElement)) continue
@@ -187,15 +163,14 @@ function mountExampleTabs(root = document) {
     codePanel.id = `${baseId}-panel-code`
     codePanel.setAttribute("role", "tabpanel")
     codePanel.setAttribute("aria-labelledby", codeTab.id)
-    const codeBlock = createCodeBlock(formatPreviewMarkup(demoMount.innerHTML))
-    const codeElement = codeBlock.querySelector("code")
-    const syncCodeFromPreview = () => {
-      if (codeElement instanceof HTMLElement) {
-        codeElement.textContent = formatPreviewMarkup(demoMount.innerHTML)
-      }
-    }
 
-    codePanel.appendChild(codeBlock)
+    const exampleContent = extractConsumerExampleContent(demoBlock)
+    if (exampleContent) {
+      codePanel.appendChild(exampleContent)
+    } else {
+      const demoId = demoMount.dataset.demo ?? "unknown"
+      codePanel.appendChild(createCodeBlock(`// Consumer example unavailable for demo: ${demoId}`, "text"))
+    }
 
     const tabsInOrder = [previewTab, codeTab]
     const panelByTab = new Map([
@@ -213,10 +188,6 @@ function mountExampleTabs(root = document) {
         const panel = panelByTab.get(tab)
         if (panel instanceof HTMLElement) {
           panel.hidden = !active
-        }
-
-        if (active && tab === codeTab) {
-          syncCodeFromPreview()
         }
       }
 
@@ -257,44 +228,67 @@ function mountExampleTabs(root = document) {
     tabs.append(tabList, previewPanel, codePanel)
     demoBlock.appendChild(tabs)
 
-    for (const node of exampleNodes) {
-      node.remove()
-    }
-    exampleHeading.remove()
     activateTab(previewTab)
 
     demoBlock.dataset.exampleTabsMounted = "true"
   }
 }
 
-function createCodeBlock(markup) {
+function createCodeBlock(markup, language = "html") {
   const pre = document.createElement("pre")
   const code = document.createElement("code")
-  code.className = "language-html"
+  const normalizedLanguage = String(language ?? "")
+    .trim()
+    .toLowerCase()
+  code.className = normalizedLanguage ? `language-${normalizedLanguage}` : "language-text"
   code.textContent = markup
   pre.appendChild(code)
   return pre
 }
 
-function formatPreviewMarkup(markup) {
-  const lines = String(markup).replace(/\r\n/g, "\n").split("\n")
+function extractConsumerExampleContent(demoBlock) {
+  const article = demoBlock.closest("article")
+  if (!(article instanceof HTMLElement)) return null
 
-  while (lines.length > 0 && lines[0].trim() === "") lines.shift()
-  while (lines.length > 0 && lines[lines.length - 1].trim() === "") lines.pop()
+  const directChildren = Array.from(article.children)
+  const exampleHeading = directChildren.find(
+    (child) =>
+      child instanceof HTMLHeadingElement &&
+      child.tagName === "H2" &&
+      normalizeDocsText(child.textContent) === "example",
+  )
+  if (!(exampleHeading instanceof HTMLHeadingElement)) return null
 
-  if (lines.length === 0) {
-    return "<!-- No preview markup available -->"
+  const headingIndex = directChildren.indexOf(exampleHeading)
+  if (headingIndex < 0) return null
+
+  const sectionNodes = []
+  for (let index = headingIndex + 1; index < directChildren.length; index += 1) {
+    const child = directChildren[index]
+    if (child instanceof HTMLHeadingElement && child.tagName === "H2") break
+    sectionNodes.push(child)
   }
 
-  let minIndent = Number.POSITIVE_INFINITY
-  for (const line of lines) {
-    if (line.trim() === "") continue
-    const indent = /^\s*/.exec(line)?.[0].length ?? 0
-    minIndent = Math.min(minIndent, indent)
+  if (sectionNodes.length === 0) return null
+
+  const fragment = document.createDocumentFragment()
+  for (const node of sectionNodes) {
+    fragment.appendChild(node.cloneNode(true))
   }
 
-  if (!Number.isFinite(minIndent)) minIndent = 0
-  return lines.map((line) => line.slice(minIndent)).join("\n")
+  exampleHeading.remove()
+  for (const node of sectionNodes) {
+    node.remove()
+  }
+
+  return fragment
+}
+
+function normalizeDocsText(value) {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
 }
 
 export function parseDatePickerISODate(value) {
@@ -5071,7 +5065,7 @@ function mountLayoutDemo(mount) {
     <section class="rf-layout" data-direction="column" data-has-sider="true" style="display:grid;gap:.6rem;max-width:48rem;">
       <header class="rf-layout-header" style="display:flex;justify-content:space-between;align-items:center;">
         <strong>Workspace</strong>
-        <button class="docs-button" data-variant="outline" type="button" id="layout-toggle-sider">Toggle sider</button>
+        <button class="docs-button" data-variant="outline" type="button" id="layout-toggle-sider">Toggle sidebar</button>
       </header>
       <div style="display:grid;grid-template-columns:16rem 1fr;gap:.6rem;">
         <aside class="rf-layout-sider" id="layout-sider" style="--rf-layout-sider-width:16rem;">

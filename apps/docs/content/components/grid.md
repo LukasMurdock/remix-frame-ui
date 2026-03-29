@@ -10,7 +10,7 @@ Maturity: stable
 ## Import
 
 ```ts
-import { Grid } from "@lukasmurdock/remix-ui-components"
+import { Card, Grid, GridItem } from "@lukasmurdock/remix-ui-components"
 ```
 
 ## API
@@ -20,14 +20,23 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { Grid } from "@lukasmurdock/remix-ui-components"
+import { Card, Grid, GridItem } from "@lukasmurdock/remix-ui-components"
 
 export function Example() {
   return (
-    <Grid columns={3} gap="1rem">
-      <div>API</div>
-      <div>Workers</div>
-      <div>Webhooks</div>
+    <Grid columns={4} gap="0.6rem">
+      <GridItem span={2}>
+        <Card>Span 2</Card>
+      </GridItem>
+      <GridItem span={1}>
+        <Card>Span 1</Card>
+      </GridItem>
+      <GridItem span={1}>
+        <Card>Span 1</Card>
+      </GridItem>
+      <GridItem span={4}>
+        <Card>Full row span 4</Card>
+      </GridItem>
     </Grid>
   )
 }

@@ -1,25 +1,8 @@
 import { describe, expect, it } from "vitest"
-import {
-  analyzeComponentDemoCoverage,
-  parseComponentToDemoIdMap,
-  parseRuntimeDemoIds,
-} from "./component-demo-validation.js"
+import { analyzeComponentDemoCoverage, parseRuntimeDemoIds } from "./component-demo-validation.js"
+import { componentDemoEntries } from "./component-demo-registry.js"
 
 describe("component demo validation", () => {
-  it("parses component to demo maps", () => {
-    const source = `
-const demoByComponent = new Map([
-  ["button", { id: "button-basic", title: "Button" }],
-  ["form", { id: "form-basic", title: "Form" }],
-])
-`
-
-    expect([...parseComponentToDemoIdMap(source).entries()]).toEqual([
-      ["button", "button-basic"],
-      ["form", "form-basic"],
-    ])
-  })
-
   it("parses runtime demo ids", () => {
     const source = `
 const mounts = {
@@ -32,46 +15,50 @@ const mounts = {
   })
 
   it("returns no issues for aligned coverage", () => {
-    const componentNames = ["button", "form"]
-    const buildSource = '["button", { id: "button-basic" }], ["form", { id: "form-basic" }]'
-    const devSource = '["button", { id: "button-basic" }], ["form", { id: "form-basic" }]'
-    const runtimeSource = '"button-basic": mountButton, "form-basic": mountForm'
+    const componentNames = componentDemoEntries.map(([componentName]) => componentName)
+    const registryLines = componentDemoEntries
+      .map(([, entry]) => `  "${entry.id}": mount${toMountName(entry.id)},`)
+      .join("\n")
+    const functionLines = componentDemoEntries
+      .map(([, entry]) => `function mount${toMountName(entry.id)}() {}`)
+      .join("\n")
+    const runtimeSource = `const registry = {\n${registryLines}\n}\n${functionLines}\n`
 
-    const analysis = analyzeComponentDemoCoverage(componentNames, buildSource, devSource, runtimeSource)
+    const analysis = analyzeComponentDemoCoverage(componentNames, runtimeSource)
 
     expect(analysis).toEqual({
-      missingInBuild: [],
-      missingInDev: [],
-      extraInBuild: [],
-      extraInDev: [],
-      mismatchedBuildVsDev: [],
+      missingInRegistry: [],
+      extraInRegistry: [],
       missingRuntimeIds: [],
-      duplicateBuildDemoIds: [],
-      duplicateDevDemoIds: [],
+      missingRuntimeSources: [],
+      duplicateDemoIds: [],
     })
   })
 
-  it("detects mismatches, extras, missing runtime ids, and duplicates", () => {
-    const componentNames = ["button", "form"]
-    const buildSource =
-      '["button", { id: "button-basic" }], ["form", { id: "shared-demo" }], ["extra", { id: "shared-demo" }]'
-    const devSource =
-      '["button", { id: "button-dev" }], ["form", { id: "shared-demo" }], ["extra-dev", { id: "shared-demo" }]'
-    const runtimeSource = '"button-basic": mountButton'
+  it("detects missing mappings and runtime demo ids", () => {
+    const componentNames = [...componentDemoEntries.map(([componentName]) => componentName), "missing-component"]
+    const registryLines = componentDemoEntries
+      .filter(([componentName]) => componentName !== "form")
+      .map(([, entry]) => `  "${entry.id}": mount${toMountName(entry.id)},`)
+      .join("\n")
+    const functionLines = componentDemoEntries
+      .filter(([componentName]) => componentName !== "form")
+      .map(([, entry]) => `function mount${toMountName(entry.id)}() {}`)
+      .join("\n")
+    const runtimeSource = `const registry = {\n${registryLines}\n}\n${functionLines}\n`
 
-    const analysis = analyzeComponentDemoCoverage(componentNames, buildSource, devSource, runtimeSource)
+    const analysis = analyzeComponentDemoCoverage(componentNames, runtimeSource)
 
-    expect(analysis.missingInBuild).toEqual([])
-    expect(analysis.missingInDev).toEqual([])
-    expect(analysis.extraInBuild).toEqual(["extra"])
-    expect(analysis.extraInDev).toEqual(["extra-dev"])
-    expect(analysis.mismatchedBuildVsDev).toEqual(["button: build=button-basic, dev=button-dev"])
-    expect(analysis.missingRuntimeIds).toEqual([
-      "dev-docs: button -> button-dev",
-      "build-docs: form -> shared-demo",
-      "dev-docs: form -> shared-demo",
-    ])
-    expect(analysis.duplicateBuildDemoIds).toEqual(["shared-demo: extra, form"])
-    expect(analysis.duplicateDevDemoIds).toEqual(["shared-demo: extra-dev, form"])
+    expect(analysis.extraInRegistry).toEqual([])
+    expect(analysis.missingInRegistry).toEqual(["missing-component"])
+    expect(analysis.missingRuntimeIds).toEqual(["form -> form-basic"])
+    expect(analysis.missingRuntimeSources).toEqual(["form -> form-basic"])
   })
 })
+
+function toMountName(demoId: string) {
+  return demoId
+    .split("-")
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join("")
+}

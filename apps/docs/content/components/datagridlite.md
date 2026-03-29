@@ -20,7 +20,7 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { DataGridLite } from "@lukasmurdock/remix-ui-components"
+import { DataGridLite, DataGridSort } from "@lukasmurdock/remix-ui-components"
 
 const columns = [
   { key: "service", header: "Service", sortable: true },
@@ -32,8 +32,10 @@ const rows = [
   { key: "worker", cells: { service: "Worker", latency: "410ms" }, sortValues: { latency: 410 } },
 ]
 
+const defaultSort: DataGridSort = { columnKey: "latency", direction: "asc" }
+
 export function Example() {
-  return <DataGridLite columns={columns} rows={rows} defaultSort={{ columnKey: "latency", direction: "asc" }} />
+  return <DataGridLite columns={columns} rows={rows} defaultSort={defaultSort} />
 }
 ```
 

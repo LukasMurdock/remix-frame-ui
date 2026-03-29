@@ -21,9 +21,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { ImageViewer } from "@lukasmurdock/remix-ui-components"
+import { ImageViewer, ImageViewerImage } from "@lukasmurdock/remix-ui-components"
 
-const images = [
+const images: ImageViewerImage[] = [
   { src: "/images/release-1.png", alt: "Release details 1" },
   { src: "/images/release-2.png", alt: "Release details 2" },
   { src: "/images/release-3.png", alt: "Release details 3" },

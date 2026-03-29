@@ -89,6 +89,21 @@ describe("docs contracts", () => {
     expect(devSource).not.toContain("const guideOrder = [")
   })
 
+  it("uses shared demo registry without inline code payload scripts", async () => {
+    const root = path.resolve(import.meta.dirname, "..")
+    const buildSource = await readFile(path.join(root, "src", "build-docs.mjs"), "utf8")
+    const devSource = await readFile(path.join(root, "src", "dev-docs.js"), "utf8")
+
+    expect(buildSource).toContain('from "./component-demo-registry.js"')
+    expect(devSource).toContain('from "./component-demo-registry.js"')
+    expect(buildSource).not.toContain("const demoByComponent = new Map(")
+    expect(devSource).not.toContain("const demoByComponent = new Map(")
+    expect(buildSource).not.toContain("data-docs-preview-source")
+    expect(devSource).not.toContain("data-docs-preview-source")
+    expect(buildSource).not.toContain("data-docs-example-source")
+    expect(devSource).not.toContain("data-docs-example-source")
+  })
+
   it("injects generated API section for docs missing API heading", () => {
     const source = `# Alert
 

@@ -21,9 +21,9 @@ Type definitions are generated from component source.
 ## Example
 
 ```tsx
-import { TabBar } from "@lukasmurdock/remix-ui-components"
+import { TabBar, TabBarItem } from "@lukasmurdock/remix-ui-components"
 
-const items = [
+const items: TabBarItem[] = [
   { id: "home", label: "Home", icon: "🏠" },
   { id: "search", label: "Search", icon: "🔎" },
   { id: "alerts", label: "Alerts", icon: "🔔", badge: "3" },

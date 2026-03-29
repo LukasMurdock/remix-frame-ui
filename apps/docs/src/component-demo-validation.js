@@ -1,22 +1,11 @@
-export function parseComponentToDemoIdMap(source) {
-  const map = new Map()
-  const regex = /\[\s*"([a-z0-9-]+)"\s*,\s*\{\s*id:\s*"([a-z0-9-]+)"/g
-
-  for (const match of source.matchAll(regex)) {
-    const componentSlug = match[1]
-    const demoId = match[2]
-    if (!componentSlug || !demoId) continue
-    map.set(componentSlug, demoId)
-  }
-
-  return map
-}
+import { componentDemoEntries, demoByComponent } from "./component-demo-registry.js"
+import { buildRuntimeDemoSourceMap } from "./component-demo-runtime-source.js"
 
 export function parseRuntimeDemoIds(source) {
   const ids = new Set()
   const regex = /"([a-z0-9-]+)":\s*mount[A-Za-z0-9]+/g
 
-  for (const match of source.matchAll(regex)) {
+  for (const match of String(source).matchAll(regex)) {
     const id = match[1]
     if (id) ids.add(id)
   }
@@ -24,69 +13,56 @@ export function parseRuntimeDemoIds(source) {
   return ids
 }
 
-export function analyzeComponentDemoCoverage(componentNames, buildSource, devSource, runtimeSource) {
-  const buildDemoMap = parseComponentToDemoIdMap(buildSource)
-  const devDemoMap = parseComponentToDemoIdMap(devSource)
+export function analyzeComponentDemoCoverage(componentNames, runtimeSource) {
   const runtimeDemoIds = parseRuntimeDemoIds(runtimeSource)
+  const runtimeDemoSources = buildRuntimeDemoSourceMap(runtimeSource)
   const componentSet = new Set(componentNames)
 
-  const missingInBuild = []
-  const missingInDev = []
-  const extraInBuild = []
-  const extraInDev = []
-  const mismatchedBuildVsDev = []
+  const missingInRegistry = []
+  const extraInRegistry = []
   const missingRuntimeIds = []
+  const missingRuntimeSources = []
 
   for (const componentName of componentNames) {
-    const buildDemoId = buildDemoMap.get(componentName)
-    const devDemoId = devDemoMap.get(componentName)
-
-    if (!buildDemoId) missingInBuild.push(componentName)
-    if (!devDemoId) missingInDev.push(componentName)
-
-    if (buildDemoId && devDemoId && buildDemoId !== devDemoId) {
-      mismatchedBuildVsDev.push(`${componentName}: build=${buildDemoId}, dev=${devDemoId}`)
+    const demoEntry = demoByComponent.get(componentName)
+    if (!demoEntry) {
+      missingInRegistry.push(componentName)
+      continue
     }
 
-    if (buildDemoId && !runtimeDemoIds.has(buildDemoId)) {
-      missingRuntimeIds.push(`build-docs: ${componentName} -> ${buildDemoId}`)
+    if (!runtimeDemoIds.has(demoEntry.id)) {
+      missingRuntimeIds.push(`${componentName} -> ${demoEntry.id}`)
     }
 
-    if (devDemoId && !runtimeDemoIds.has(devDemoId)) {
-      missingRuntimeIds.push(`dev-docs: ${componentName} -> ${devDemoId}`)
+    if (!runtimeDemoSources.has(demoEntry.id)) {
+      missingRuntimeSources.push(`${componentName} -> ${demoEntry.id}`)
     }
   }
 
-  for (const componentName of buildDemoMap.keys()) {
-    if (!componentSet.has(componentName)) extraInBuild.push(componentName)
+  for (const [componentName] of componentDemoEntries) {
+    if (!componentSet.has(componentName)) {
+      extraInRegistry.push(componentName)
+    }
   }
 
-  for (const componentName of devDemoMap.keys()) {
-    if (!componentSet.has(componentName)) extraInDev.push(componentName)
-  }
-
-  const duplicateBuildDemoIds = collectDuplicateDemoIds(buildDemoMap)
-  const duplicateDevDemoIds = collectDuplicateDemoIds(devDemoMap)
+  const duplicateDemoIds = collectDuplicateDemoIds(componentDemoEntries)
 
   return {
-    missingInBuild,
-    missingInDev,
-    extraInBuild,
-    extraInDev,
-    mismatchedBuildVsDev,
+    missingInRegistry,
+    extraInRegistry,
     missingRuntimeIds,
-    duplicateBuildDemoIds,
-    duplicateDevDemoIds,
+    missingRuntimeSources,
+    duplicateDemoIds,
   }
 }
 
-function collectDuplicateDemoIds(componentToDemoMap) {
+function collectDuplicateDemoIds(entries) {
   const componentsByDemoId = new Map()
 
-  for (const [componentName, demoId] of componentToDemoMap.entries()) {
-    const list = componentsByDemoId.get(demoId) ?? []
+  for (const [componentName, demoEntry] of entries) {
+    const list = componentsByDemoId.get(demoEntry.id) ?? []
     list.push(componentName)
-    componentsByDemoId.set(demoId, list)
+    componentsByDemoId.set(demoEntry.id, list)
   }
 
   const duplicates = []

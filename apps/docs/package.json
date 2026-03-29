@@ -6,7 +6,7 @@
   "scripts": {
     "api:build": "node src/generate-component-api-docs.mjs",
     "api:check": "node src/generate-component-api-docs.mjs --check",
-    "check": "pnpm run api:check && pnpm run check:sections && pnpm run check:examples && pnpm run check:maturity && pnpm run check:imports && pnpm run check:guides && pnpm run check:demos",
+    "check": "pnpm run api:check && pnpm run check:sections && pnpm run check:examples && pnpm run check:maturity && pnpm run check:imports && pnpm run check:guides && pnpm run check:demos && pnpm run check:parity",
     "dev": "vite",
     "build": "pnpm run api:build && node src/build-docs.mjs",
     "check:sections": "node src/check-component-doc-sections.mjs",
@@ -17,6 +17,7 @@
     "check:imports": "node src/check-component-doc-imports.mjs",
     "check:guides": "node src/check-guide-docs.mjs",
     "check:demos": "node src/check-component-demos.mjs",
+    "check:parity": "node src/check-component-demo-parity.mjs",
     "cf:dev": "pnpm run build && pnpm dlx wrangler dev --config wrangler.jsonc",
     "cf:deploy": "pnpm run build && pnpm dlx wrangler deploy --config wrangler.jsonc",
     "preview": "vite preview",

@@ -56,9 +56,9 @@ When shipping a new component or public API change, update all relevant contract
 2. Metadata entry in `packages/remix/src/component-metadata.json`
 3. Component docs page in `apps/docs/content/components/<component>.md`
 4. Demo wiring in:
+   - `apps/docs/src/component-demo-registry.js`
    - `apps/docs/src/docs-runtime.js`
-   - `apps/docs/src/dev-docs.js`
-   - `apps/docs/src/build-docs.mjs`
+   - build/dev docs use the shared registry; do not duplicate ad-hoc maps
 5. Unit tests in `packages/remix/test`
 6. E2E coverage in `tests/e2e` when interaction complexity justifies it
 
@@ -73,6 +73,7 @@ Component docs pages must include:
 - `## Accessibility matrix`
 - `## Keymap spec`
 - Keep `## API` body as: `Type definitions are generated from component source.`
+- Keep `## Example` code blocks in fenced `ts`/`tsx`; the docs Code tab renders this authored source verbatim.
 
 Use `apps/docs/content/templates/component-reference-template.md` when authoring new or refreshed component docs.
 
@@ -88,7 +89,8 @@ Use `apps/docs/content/templates/component-reference-template.md` when authoring
 - `pnpm run docs:check:maturity` verifies docs and metadata titles, slugs, maturity labels, and platform labels stay aligned
 - `pnpm run docs:check:imports` verifies component docs import real exports and include the documented component symbol
 - `pnpm run docs:check:guides` verifies guide ordering, titles, Getting Started links, stable-first recommendations, and guide import entrypoints/symbols
-- `pnpm run docs:check:demos` verifies build/dev demo maps match docs runtime registry
+- `pnpm run docs:check:demos` verifies demo registry coverage and docs-runtime IDs
+- `pnpm run docs:check:parity` verifies consumer `## Example` snippets stay aligned with preview demo behavior and that removed payload paths are not reintroduced
 - Add `@default` tags to prop type fields when runtime defaults exist and are user-facing
 - During docs render, generated API content replaces any existing `## API` section in component markdown
 

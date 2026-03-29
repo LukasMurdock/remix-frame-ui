@@ -1,3 +1,5 @@
+import { extractComponentExampleSnippets, isTypeScriptExampleLanguage } from "./component-example-source.js"
+
 export const examplePlaceholderPatterns = [
   /^See demos? on this page for complete .+ usage patterns\.$/i,
   /^See demos? for controlled and uncontrolled usage patterns\.$/i,
@@ -5,7 +7,7 @@ export const examplePlaceholderPatterns = [
   /^See demos? for interaction and keyboard behavior patterns\.$/i,
 ]
 
-const fencedCodeBlockRegex = /```(?:[^\n]*)\n[\s\S]*?```/g
+const fencedCodeBlockRegex = /```([^\n]*)\n[\s\S]*?```/g
 
 export function analyzeComponentExample(source) {
   const sectionBody = readSectionBody(source, "## Example")
@@ -23,9 +25,12 @@ export function analyzeComponentExample(source) {
   }
 
   const normalizedBody = sectionBody.trim()
-  const codeBlockMatches = normalizedBody.match(fencedCodeBlockRegex) ?? []
-  const codeBlockCount = codeBlockMatches.length
+  const snippets = extractComponentExampleSnippets(source)
+  const codeBlocks = [...normalizedBody.matchAll(fencedCodeBlockRegex)].map((match) => normalizeFenceLanguage(match[1]))
+  const codeBlockCount = codeBlocks.length
+  const typeScriptCodeBlockCount = codeBlocks.filter((language) => isTypeScriptExampleLanguage(language)).length
   const hasCodeBlock = codeBlockCount > 0
+  const hasTypeScriptCodeBlock = typeScriptCodeBlockCount > 0
   const hasPlaceholderCopy = looksLikePlaceholderExample(normalizedBody)
 
   if (normalizedBody === "") {
@@ -40,12 +45,23 @@ export function analyzeComponentExample(source) {
     issues.push("placeholder copy in ## Example")
   }
 
+  if (snippets.length === 0) {
+    issues.push("missing extractable example snippet in ## Example")
+  }
+
+  if (hasCodeBlock && !hasTypeScriptCodeBlock) {
+    issues.push("missing ts/tsx fenced code block in ## Example")
+  }
+
   return {
     issues,
     codeBlockCount,
+    typeScriptCodeBlockCount,
+    snippetCount: snippets.length,
     exampleBody: normalizedBody,
     hasPlaceholderCopy,
     hasCodeBlock,
+    hasTypeScriptCodeBlock,
   }
 }
 
@@ -65,4 +81,13 @@ function readSectionBody(source, heading) {
   const bodyEnd = nextHeadingMatch ? bodyStart + nextHeadingMatch.index : source.length
 
   return source.slice(bodyStart, bodyEnd)
+}
+
+function normalizeFenceLanguage(value) {
+  const text = String(value ?? "")
+    .trim()
+    .toLowerCase()
+  if (text === "") return ""
+  const language = text.split(/\s+/)[0]
+  return language ?? ""
 }

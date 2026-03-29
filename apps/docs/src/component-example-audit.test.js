@@ -31,6 +31,14 @@ describe("component example audit", () => {
     expect(analysis.hasCodeBlock).toBe(true)
   })
 
+  it("requires TypeScript example fences", () => {
+    const doc = buildDoc("```js\nrenderComponent()\n```")
+
+    const analysis = analyzeComponentExample(doc)
+
+    expect(analysis.issues).toContain("missing ts/tsx fenced code block in ## Example")
+  })
+
   it("reports missing Example section", () => {
     const doc = buildDoc("```tsx\n<ExampleComponent />\n```").replace("## Example", "## Demo")
 
