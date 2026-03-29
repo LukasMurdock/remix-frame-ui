@@ -1070,6 +1070,92 @@
     color: color-mix(in srgb, var(--rf-text-default) 70%, transparent);
   }
 
+  .rf-typography-heading {
+    margin: 0;
+    color: var(--rf-text-default);
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1.rf-typography-heading {
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    line-height: 1.1;
+  }
+
+  h2.rf-typography-heading {
+    font-size: clamp(1.65rem, 1.25rem + 1.2vw, 2.25rem);
+  }
+
+  h3.rf-typography-heading {
+    font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.7rem);
+  }
+
+  h4.rf-typography-heading {
+    font-size: clamp(1.15rem, 1.02rem + 0.5vw, 1.35rem);
+  }
+
+  h5.rf-typography-heading {
+    font-size: 1rem;
+  }
+
+  h6.rf-typography-heading {
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .rf-typography-text {
+    margin: 0;
+    color: color-mix(in srgb, var(--rf-text-default) 92%, transparent);
+    line-height: 1.6;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+
+  small.rf-typography-text {
+    font-size: 0.875rem;
+  }
+
+  .rf-typography-text[data-truncate="true"] {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .rf-typography-pre {
+    margin: 0;
+    border: 1px solid color-mix(in srgb, var(--rf-border-default) 75%, transparent);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--rf-surface-default) 92%, var(--rf-color-gray-100));
+    color: color-mix(in srgb, var(--rf-text-default) 92%, transparent);
+    padding: 0.8rem 0.95rem;
+    overflow-x: auto;
+  }
+
+  .rf-typography-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875em;
+    line-height: 1.45;
+    border-radius: 0.4rem;
+    background: color-mix(in srgb, var(--rf-color-gray-100) 80%, var(--rf-surface-default));
+    color: color-mix(in srgb, var(--rf-brand-default) 72%, var(--rf-text-default));
+    padding: 0.16em 0.38em;
+  }
+
+  .rf-typography-pre .rf-typography-code {
+    display: block;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: 0.9rem;
+    white-space: pre;
+  }
+
   .rf-app-provider {
     min-width: 0;
   }
