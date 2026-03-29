@@ -5,6 +5,7 @@ import {
   resolveImageViewerDismissOnEscape,
   resolveImageViewerLoop,
   resolveImageViewerNextIndex,
+  resolveImageViewerOpen,
   resolveImageViewerShowCounter,
 } from "../src/components/ImageViewer"
 
@@ -14,10 +15,15 @@ describe("image viewer helpers", () => {
     expect(resolveImageViewerDismissOnBackdrop(false)).toBe(false)
     expect(resolveImageViewerDismissOnEscape()).toBe(true)
     expect(resolveImageViewerDismissOnEscape(false)).toBe(false)
-    expect(resolveImageViewerLoop()).toBe(true)
+    expect(resolveImageViewerLoop()).toBe(false)
     expect(resolveImageViewerLoop(false)).toBe(false)
+    expect(resolveImageViewerLoop(true)).toBe(true)
     expect(resolveImageViewerShowCounter()).toBe(true)
     expect(resolveImageViewerShowCounter(false)).toBe(false)
+    expect(resolveImageViewerOpen(undefined, undefined)).toBe(false)
+    expect(resolveImageViewerOpen(true, undefined)).toBe(true)
+    expect(resolveImageViewerOpen(false, true)).toBe(true)
+    expect(resolveImageViewerOpen(true, false)).toBe(false)
   })
 
   it("normalizes selected index bounds", () => {

@@ -29,7 +29,7 @@ test("image viewer demo supports navigation and close reasons", async ({ page })
   await expect(counter).toHaveText("3 / 3")
 
   await panel.press("ArrowRight")
-  await expect(counter).toHaveText("1 / 3")
+  await expect(counter).toHaveText("3 / 3")
 
   await panel.press("Escape")
   await expect(overlay).toBeHidden()

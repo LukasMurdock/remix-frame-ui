@@ -4753,12 +4753,46 @@ function mountImageUploaderDemo(mount) {
         <ul class="rf-image-uploader-list" data-role="image-uploader-list" role="list"></ul>
       </section>
       <p data-role="image-uploader-state" style="margin:0;font-size:.85rem;color:#475569;">No images selected</p>
+      <div class="rf-image-viewer-backdrop" data-role="image-uploader-viewer-overlay" hidden>
+        <section class="rf-image-viewer" role="dialog" aria-modal="true" aria-label="Image uploader preview" tabindex="-1">
+          <header class="rf-image-viewer-header">
+            <p class="rf-image-viewer-counter" data-role="image-uploader-viewer-counter">1 / 1</p>
+            <button class="rf-image-viewer-close rf-focus-ring" type="button" data-role="image-uploader-viewer-close">Close</button>
+          </header>
+          <div class="rf-image-viewer-stage">
+            <button class="rf-image-viewer-nav rf-focus-ring" data-direction="prev" type="button" data-role="image-uploader-viewer-prev" aria-label="Previous image">Prev</button>
+            <figure class="rf-image-viewer-frame"><img class="rf-image-viewer-image" data-role="image-uploader-viewer-image" alt="" loading="eager" /></figure>
+            <button class="rf-image-viewer-nav rf-focus-ring" data-direction="next" type="button" data-role="image-uploader-viewer-next" aria-label="Next image">Next</button>
+          </div>
+        </section>
+      </div>
     </div>
   `
 
   const list = mount.querySelector("[data-role='image-uploader-list']")
   const state = mount.querySelector("[data-role='image-uploader-state']")
-  if (!(list instanceof HTMLElement && state instanceof HTMLElement)) return
+  const viewerOverlay = mount.querySelector("[data-role='image-uploader-viewer-overlay']")
+  const viewerPanel = mount.querySelector(".rf-image-viewer")
+  const viewerCounter = mount.querySelector("[data-role='image-uploader-viewer-counter']")
+  const viewerClose = mount.querySelector("[data-role='image-uploader-viewer-close']")
+  const viewerPrev = mount.querySelector("[data-role='image-uploader-viewer-prev']")
+  const viewerNext = mount.querySelector("[data-role='image-uploader-viewer-next']")
+  const viewerImage = mount.querySelector("[data-role='image-uploader-viewer-image']")
+  if (
+    !(
+      list instanceof HTMLElement &&
+      state instanceof HTMLElement &&
+      viewerOverlay instanceof HTMLElement &&
+      viewerPanel instanceof HTMLElement &&
+      viewerCounter instanceof HTMLElement &&
+      viewerClose instanceof HTMLButtonElement &&
+      viewerPrev instanceof HTMLButtonElement &&
+      viewerNext instanceof HTMLButtonElement &&
+      viewerImage instanceof HTMLImageElement
+    )
+  ) {
+    return
+  }
 
   const maxCount = 4
   let sequence = 0
@@ -4766,6 +4800,63 @@ function mountImageUploaderDemo(mount) {
   const objectUrls = new Map()
   let disposed = false
   let disconnectObserver = null
+  let viewerOpen = false
+  let viewerIndex = 0
+  let previousFocus = null
+
+  const normalizeViewerIndex = (value) => {
+    if (items.length === 0) return 0
+    return Math.min(items.length - 1, Math.max(0, value))
+  }
+
+  const renderViewer = () => {
+    if (disposed) return
+
+    if (!viewerOpen || items.length === 0) {
+      viewerOverlay.hidden = true
+      return
+    }
+
+    viewerIndex = normalizeViewerIndex(viewerIndex)
+    const current = items[viewerIndex]
+    if (!current) {
+      viewerOverlay.hidden = true
+      return
+    }
+
+    viewerImage.src = current.src
+    viewerImage.alt = current.alt || current.fileName || `Uploaded image ${viewerIndex + 1}`
+    viewerCounter.textContent = `${viewerIndex + 1} / ${items.length}`
+    viewerPrev.disabled = viewerIndex === 0
+    viewerNext.disabled = viewerIndex >= items.length - 1
+    viewerOverlay.hidden = false
+    viewerPanel.focus()
+  }
+
+  const openViewerAt = (nextIndex) => {
+    if (items.length === 0) return
+    previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    viewerIndex = normalizeViewerIndex(nextIndex)
+    viewerOpen = true
+    renderViewer()
+  }
+
+  const closeViewer = (_reason) => {
+    if (!viewerOpen && viewerOverlay.hidden) return
+    viewerOpen = false
+    viewerOverlay.hidden = true
+    if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+      previousFocus.focus()
+    }
+  }
+
+  const stepViewer = (direction) => {
+    if (items.length <= 1) return
+    const nextIndex = normalizeViewerIndex(viewerIndex + direction)
+    if (nextIndex === viewerIndex) return
+    viewerIndex = nextIndex
+    renderViewer()
+  }
 
   const revoke = (itemId) => {
     if (disposed) return
@@ -4795,11 +4886,13 @@ function mountImageUploaderDemo(mount) {
         (item, index) => `
       <li class="rf-image-uploader-item" data-uploading="false" data-error="false" data-item-id="${item.id}">
         <figure class="rf-image-uploader-thumb">
-          <img class="rf-image-uploader-image" src="${item.src}" alt="${item.alt}" />
+          <button class="rf-image-uploader-preview rf-focus-ring" type="button" data-preview-id="${item.id}" aria-label="Preview ${item.fileName || `image ${index + 1}`}">
+            <img class="rf-image-uploader-image" src="${item.src}" alt="${item.alt}" />
+          </button>
         </figure>
         <p class="rf-image-uploader-name">${item.fileName}</p>
         <p class="rf-image-uploader-status">Ready</p>
-        <button class="rf-image-uploader-remove rf-focus-ring" type="button" data-remove-id="${item.id}" aria-label="Remove ${item.fileName || `image ${index + 1}`}">Remove</button>
+        <button class="rf-image-uploader-remove rf-focus-ring" data-variant="danger" type="button" data-remove-id="${item.id}" aria-label="Remove ${item.fileName || `image ${index + 1}`}">Remove</button>
       </li>`,
       )
       .join("")
@@ -4809,6 +4902,7 @@ function mountImageUploaderDemo(mount) {
       <li class="rf-image-uploader-item rf-image-uploader-add-wrap" data-hidden="false">
         <label class="rf-image-uploader-add rf-focus-ring" data-disabled="false">
           <input class="rf-image-uploader-input" data-role="image-uploader-input" type="file" accept="image/*" multiple />
+          <span class="rf-image-uploader-add-icon" aria-hidden="true">+</span>
           <span class="rf-image-uploader-add-label">Add image</span>
           <span class="rf-image-uploader-count" aria-hidden="true">${items.length}/${maxCount}</span>
         </label>
@@ -4850,6 +4944,18 @@ function mountImageUploaderDemo(mount) {
       })
     }
 
+    for (const button of list.querySelectorAll("button[data-preview-id]")) {
+      if (!(button instanceof HTMLButtonElement)) continue
+      button.addEventListener("click", () => {
+        if (disposed) return
+        const previewId = button.dataset.previewId
+        if (!previewId) return
+        const nextIndex = items.findIndex((item) => item.id === previewId)
+        if (nextIndex < 0) return
+        openViewerAt(nextIndex)
+      })
+    }
+
     for (const button of list.querySelectorAll("button[data-remove-id]")) {
       if (!(button instanceof HTMLButtonElement)) continue
       button.addEventListener("click", () => {
@@ -4860,11 +4966,67 @@ function mountImageUploaderDemo(mount) {
         if (index < 0) return
         items.splice(index, 1)
         revoke(removeId)
+        if (items.length === 0) {
+          closeViewer(undefined)
+        } else if (viewerOpen) {
+          viewerIndex = normalizeViewerIndex(viewerIndex)
+          renderViewer()
+        }
         syncState()
         render()
       })
     }
   }
+
+  viewerClose.addEventListener("click", () => {
+    closeViewer("close-button")
+  })
+
+  viewerPrev.addEventListener("click", () => {
+    stepViewer(-1)
+  })
+
+  viewerNext.addEventListener("click", () => {
+    stepViewer(1)
+  })
+
+  viewerOverlay.addEventListener("click", (event) => {
+    if (event.target === viewerOverlay) {
+      closeViewer("backdrop")
+    }
+  })
+
+  viewerPanel.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeViewer("escape")
+      return
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault()
+      stepViewer(1)
+      return
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault()
+      stepViewer(-1)
+      return
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault()
+      viewerIndex = 0
+      renderViewer()
+      return
+    }
+
+    if (event.key === "End") {
+      event.preventDefault()
+      viewerIndex = Math.max(items.length - 1, 0)
+      renderViewer()
+    }
+  })
 
   const cleanup = () => {
     if (disposed) return
@@ -4959,7 +5121,7 @@ function mountImageViewerDemo(mount) {
 
   const normalize = (value) => {
     if (images.length === 0) return 0
-    return (value + images.length) % images.length
+    return Math.min(images.length - 1, Math.max(0, value))
   }
 
   const render = () => {
@@ -4968,9 +5130,8 @@ function mountImageViewerDemo(mount) {
     image.src = current.src
     image.alt = current.alt
     counter.textContent = `${index + 1} / ${images.length}`
-    const many = images.length > 1
-    prev.disabled = !many
-    next.disabled = !many
+    prev.disabled = images.length <= 1 || index === 0
+    next.disabled = images.length <= 1 || index >= images.length - 1
   }
 
   const setOpen = (nextOpen, reason) => {
@@ -4987,7 +5148,9 @@ function mountImageViewerDemo(mount) {
 
   const step = (direction) => {
     if (images.length <= 1) return
-    index = normalize(index + direction)
+    const nextIndex = normalize(index + direction)
+    if (nextIndex === index) return
+    index = nextIndex
     render()
   }
 

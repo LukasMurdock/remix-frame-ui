@@ -42,7 +42,7 @@ export function Example() {
 
 ## Runtime notes
 
-Supports controlled and uncontrolled image index, backdrop and escape dismissal, loop navigation, and optional counter display.
+Supports `open`/`visible` controlled display, controlled and uncontrolled index, `afterClose`, backdrop and escape dismissal, edge-clamped navigation by default, optional looping, and touch-swipe parity.
 
 ## Accessibility matrix
 

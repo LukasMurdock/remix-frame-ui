@@ -15,18 +15,22 @@ export type ImageViewerImage = {
 export type ImageViewerCloseReason = "escape" | "backdrop" | "close-button" | "programmatic"
 
 export type ImageViewerProps = {
-  open: boolean
+  /** @default false */
+  open?: boolean
+  /** @default false */
+  visible?: boolean
   images: readonly ImageViewerImage[]
   index?: number
   /** @default 0 */
   defaultIndex?: number
   onIndexChange?: (index: number) => void
   onClose: (reason: ImageViewerCloseReason) => void
+  afterClose?: () => void
   /** @default true */
   dismissOnBackdrop?: boolean
   /** @default true */
   dismissOnEscape?: boolean
-  /** @default true */
+  /** @default false */
   loop?: boolean
   /** @default true */
   showCounter?: boolean
@@ -46,11 +50,15 @@ export function resolveImageViewerDismissOnEscape(value?: boolean): boolean {
 }
 
 export function resolveImageViewerLoop(value?: boolean): boolean {
-  return value ?? true
+  return value ?? false
 }
 
 export function resolveImageViewerShowCounter(value?: boolean): boolean {
   return value ?? true
+}
+
+export function resolveImageViewerOpen(open: boolean | undefined, visible: boolean | undefined): boolean {
+  return visible ?? open ?? false
 }
 
 export function normalizeImageViewerIndex(index: number | undefined, imageCount: number): number {
@@ -81,6 +89,9 @@ export function ImageViewer(handle: Handle) {
   let restoreIsolation: (() => void) | null = null
   let restoreScroll: (() => void) | null = null
   let programmaticCloseNotified = false
+  let blockedByActiveViewer = false
+  let touchStartX = 0
+  let touchTracking = false
 
   const teardown = (props: ImageViewerProps) => {
     restoreIsolation?.()
@@ -94,6 +105,8 @@ export function ImageViewer(handle: Handle) {
     }
 
     if (activeImageViewerId === handle.id) activeImageViewerId = null
+
+    props.afterClose?.()
   }
 
   handle.signal.addEventListener("abort", () => {
@@ -105,24 +118,23 @@ export function ImageViewer(handle: Handle) {
   })
 
   return (props: ImageViewerProps) => {
+    const isOpen = resolveImageViewerOpen(props.open, props.visible)
     const imageCount = props.images.length
 
-    if (props.open && !previousOpen && typeof document !== "undefined") {
-      previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    }
-
-    if (!props.open && previousOpen) {
-      teardown(props)
-    }
-
-    previousOpen = props.open
-
-    if (!props.open) {
+    if (!isOpen) {
+      if (previousOpen) {
+        teardown(props)
+      }
+      previousOpen = false
       programmaticCloseNotified = false
+      blockedByActiveViewer = false
       return null
     }
 
-    if (activeImageViewerId !== null && activeImageViewerId !== handle.id) {
+    if (blockedByActiveViewer || (activeImageViewerId !== null && activeImageViewerId !== handle.id)) {
+      blockedByActiveViewer = true
+      previousOpen = false
+
       if (!programmaticCloseNotified) {
         programmaticCloseNotified = true
         handle.queueTask(() => {
@@ -132,11 +144,17 @@ export function ImageViewer(handle: Handle) {
       return null
     }
 
+    blockedByActiveViewer = false
     programmaticCloseNotified = false
 
-    if (props.index === undefined && localIndex === undefined) {
-      localIndex = normalizeImageViewerIndex(props.defaultIndex ?? 0, imageCount)
+    if (!previousOpen && typeof document !== "undefined") {
+      previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+
+      if (props.index === undefined) {
+        localIndex = normalizeImageViewerIndex(props.defaultIndex ?? 0, imageCount)
+      }
     }
+    previousOpen = true
 
     const currentIndex = normalizeImageViewerIndex(props.index ?? localIndex ?? props.defaultIndex ?? 0, imageCount)
     if (props.index === undefined) {
@@ -298,6 +316,31 @@ export function ImageViewer(handle: Handle) {
                     alt={currentImage.alt ?? `Image ${currentIndex + 1}`}
                     className="rf-image-viewer-image"
                     loading="eager"
+                    mix={[
+                      on("touchstart", (event) => {
+                        if (imageCount <= 1) return
+                        const touch = event.touches[0]
+                        if (!touch) return
+                        touchStartX = touch.clientX
+                        touchTracking = true
+                      }),
+                      on("touchend", (event) => {
+                        if (imageCount <= 1 || !touchTracking) return
+                        touchTracking = false
+                        const touch = event.changedTouches[0]
+                        if (!touch) return
+                        const delta = touch.clientX - touchStartX
+                        if (Math.abs(delta) < 36) return
+                        if (delta < 0) {
+                          step(1)
+                        } else {
+                          step(-1)
+                        }
+                      }),
+                      on("touchcancel", () => {
+                        touchTracking = false
+                      }),
+                    ]}
                   />
                 ) : (
                   <figcaption className="rf-image-viewer-empty">No images available.</figcaption>

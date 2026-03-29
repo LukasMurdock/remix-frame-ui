@@ -46,7 +46,7 @@ export function Example() {
 
 ## Runtime notes
 
-Supports controlled/uncontrolled value, max-count limits, async upload transforms, and upload error callbacks.
+Supports controlled/uncontrolled value, async `beforeUpload` transforms, queue events (`onUploadQueueChange`), overflow handling (`onCountExceed`), and built-in `ImageViewer` previews from thumbnail taps.
 
 ## Accessibility matrix
 
