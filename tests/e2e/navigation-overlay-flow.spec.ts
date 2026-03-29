@@ -1,15 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("command palette demo opens with focused search and closes on escape", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="command-palette-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="command-palette-basic"></div>')
 
   const open = page.getByRole("button", { name: "Open command palette" })
   const overlay = page.locator(".rf-command-overlay")
@@ -29,8 +22,7 @@ test("command palette demo opens with focused search and closes on escape", asyn
 })
 
 test("menu demo restores trigger focus after escape", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="menu-actions"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="menu-actions"></div>')
 
   const trigger = page.getByRole("button", { name: "Actions" })
   const menu = page.getByRole("menu")
@@ -46,8 +38,7 @@ test("menu demo restores trigger focus after escape", async ({ page }) => {
 })
 
 test("tabs demo activates overflow tabs and collapses more menu", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="tabs-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="tabs-basic"></div>')
 
   const overflow = page.locator("#tabs-overflow")
   const settingsTab = page.locator("#tab-settings")
@@ -63,8 +54,7 @@ test("tabs demo activates overflow tabs and collapses more menu", async ({ page 
 })
 
 test("collapse demo toggles disclosure content", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="collapse-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="collapse-basic"></div>')
 
   const disclosures = page.locator("details.rf-collapse")
   const second = disclosures.nth(1)
@@ -77,8 +67,7 @@ test("collapse demo toggles disclosure content", async ({ page }) => {
 })
 
 test("calendar demo updates selected date state", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="calendar-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="calendar-basic"></div>')
 
   const input = page.locator("#calendar-date")
   const state = page.locator("#calendar-state")
@@ -88,8 +77,7 @@ test("calendar demo updates selected date state", async ({ page }) => {
 })
 
 test("divider demo renders semantic and decorative separators", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="divider-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="divider-basic"></div>')
 
   const semanticSeparators = page.locator(".rf-divider[role='separator']")
   const horizontalDecorative = page.locator(".rf-divider[data-orientation='horizontal']")
@@ -99,8 +87,7 @@ test("divider demo renders semantic and decorative separators", async ({ page })
 })
 
 test("dropdown demo toggles expanded state and menu visibility", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="dropdown-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="dropdown-basic"></div>')
 
   const trigger = page.getByRole("button", { name: "Bulk actions" })
   const menu = page.getByRole("menu")
@@ -115,8 +102,7 @@ test("dropdown demo toggles expanded state and menu visibility", async ({ page }
 })
 
 test("popover demo toggles panel visibility", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="popover-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="popover-basic"></div>')
 
   const trigger = page.getByRole("button", { name: "Open details" })
   const panel = page.locator(".rf-popover-panel")
@@ -131,8 +117,7 @@ test("popover demo toggles panel visibility", async ({ page }) => {
 })
 
 test("radio demo updates selected state text", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="radio-group"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="radio-group"></div>')
 
   const overnight = page.locator("input[type='radio'][value='overnight']")
   const state = page.locator("#radio-state")
@@ -142,8 +127,7 @@ test("radio demo updates selected state text", async ({ page }) => {
 })
 
 test("textarea demo updates character count", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="textarea-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="textarea-basic"></div>')
 
   const textarea = page.locator("#textarea-demo")
   const counter = page.locator("#textarea-count")
@@ -153,8 +137,7 @@ test("textarea demo updates character count", async ({ page }) => {
 })
 
 test("time picker demo updates selected time", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="time-picker-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="time-picker-basic"></div>')
 
   const input = page.locator("#time-picker-demo")
   const state = page.locator("#time-picker-state")

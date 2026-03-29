@@ -94,8 +94,8 @@ const registry = {
 }
 
 const demoSourceCache = new Map()
-const demoModuleCache = new Map()
 const shouldLoadTypeScriptDemoEntries = import.meta.url.includes("/src/")
+const demoEntryPathPrefix = shouldLoadTypeScriptDemoEntries ? "../demos" : "./demos"
 
 export function mountRuntimeDemoById(demoId, mount) {
   const run = registry[demoId]
@@ -284,8 +284,8 @@ function loadDemoEntrySource(demoId) {
   if (cached) return cached
 
   const request = shouldLoadTypeScriptDemoEntries
-    ? import(`../demos/${demoId}/entry.tsx?raw`).then((module) => module.default)
-    : fetch(`../demos/${demoId}/entry.tsx`).then(async (response) => {
+    ? import(`${demoEntryPathPrefix}/${demoId}/entry.tsx?raw`).then((module) => module.default)
+    : fetch(`${demoEntryPathPrefix}/${demoId}/entry.tsx`).then(async (response) => {
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`)
         }
@@ -298,26 +298,16 @@ function loadDemoEntrySource(demoId) {
 
 async function mountDemoFromEntry(demoId, mount) {
   try {
-    const module = await loadDemoEntryModule(demoId)
-    if (!module || typeof module.mount !== "function") {
-      throw new Error(`demos/${demoId}/entry does not export a mount function`)
+    const run = registry[demoId]
+    if (typeof run !== "function") {
+      throw new Error(`Unknown demo id: ${demoId}`)
     }
 
     mount.replaceChildren()
-    await module.mount(mount)
+    await run(mount)
   } catch (error) {
     mount.replaceChildren(createCodeBlock(`// Failed to mount demo: ${demoId}\n// ${formatDemoError(error)}`, "text"))
   }
-}
-
-function loadDemoEntryModule(demoId) {
-  const cached = demoModuleCache.get(demoId)
-  if (cached) return cached
-
-  const extension = shouldLoadTypeScriptDemoEntries ? "tsx" : "js"
-  const loader = import(`../demos/${demoId}/entry.${extension}`)
-  demoModuleCache.set(demoId, loader)
-  return loader
 }
 
 function formatDemoError(error) {

@@ -1,13 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("cascader demo opens, drills down, and commits leaf selection", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="cascader-basic"></div>')
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="cascader-basic"></div>')
 
   const trigger = page.locator("#cascader-trigger")
   const panel = page.locator("#cascader-panel")
@@ -35,11 +30,7 @@ test("cascader demo opens, drills down, and commits leaf selection", async ({ pa
 })
 
 test("cascader demo supports keyboard navigation and escape close", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="cascader-basic"></div>')
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="cascader-basic"></div>')
 
   const trigger = page.locator("#cascader-trigger")
   const panel = page.locator("#cascader-panel")
@@ -77,13 +68,10 @@ test("cascader demo supports keyboard navigation and escape close", async ({ pag
 })
 
 test("cascader demo closes on outside click and focus leave", async ({ page }) => {
-  await page.setContent(
+  await mountWithDocsRuntime(
+    page,
     '<button id="outside">Outside</button><div class="demo-mount" data-demo="cascader-basic"></div>',
   )
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
 
   const trigger = page.locator("#cascader-trigger")
   const panel = page.locator("#cascader-panel")

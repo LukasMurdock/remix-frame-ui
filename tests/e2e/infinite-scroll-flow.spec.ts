@@ -1,11 +1,5 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 function extractBatchCount(text: string): number {
   const match = text.match(/Loaded batches:\s*(\d+)\s*\/\s*4/)
@@ -14,8 +8,7 @@ function extractBatchCount(text: string): number {
 }
 
 test("infinite scroll demo progressively loads feed batches", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="infinite-scroll-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="infinite-scroll-basic"></div>')
 
   const viewport = page.locator("[data-role='infinite-viewport']")
   const status = page.locator("[data-role='infinite-status']")
@@ -52,8 +45,7 @@ test("infinite scroll demo does not error when unmounted during async load", asy
     pageErrors.push(error.message)
   })
 
-  await page.setContent('<div id="mount" class="demo-mount" data-demo="infinite-scroll-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div id="mount" class="demo-mount" data-demo="infinite-scroll-basic"></div>')
 
   const viewport = page.locator("[data-role='infinite-viewport']")
   await expect(viewport).toBeVisible()

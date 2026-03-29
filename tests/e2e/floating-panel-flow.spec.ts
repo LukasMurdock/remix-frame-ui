@@ -1,15 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("floating panel demo snaps to anchor buttons and keyboard keys", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="floating-panel-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="floating-panel-basic"></div>')
 
   const panel = page.locator("#floating-panel-demo")
   const handle = page.locator("#floating-panel-handle")
@@ -33,8 +26,7 @@ test("floating panel demo snaps to anchor buttons and keyboard keys", async ({ p
 })
 
 test("floating panel demo drag gestures snap to nearest anchors", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="floating-panel-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="floating-panel-basic"></div>')
 
   const handle = page.locator("#floating-panel-handle")
   const heightValue = page.locator("#floating-panel-height")

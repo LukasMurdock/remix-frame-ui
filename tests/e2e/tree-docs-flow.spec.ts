@@ -1,18 +1,16 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("docs tree demo toggle expands and collapses", async ({ page }) => {
-  await page.setContent(`
+  await mountWithDocsRuntime(
+    page,
+    `
     <style>
       .rf-tree-group { display: grid; }
     </style>
     <div class="demo-mount" data-demo="tree-basic"></div>
-  `)
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+  `,
+  )
 
   const toggle = page.locator("[data-toggle='projects']")
   const group = page.locator("[data-group='projects']")

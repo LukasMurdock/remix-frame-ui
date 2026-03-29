@@ -1,15 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("pull to refresh demo triggers refresh only past threshold", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="pull-to-refresh-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="pull-to-refresh-basic"></div>')
 
   const scroll = page.locator("[data-role='ptr-scroll']")
   const label = page.locator("[data-role='ptr-label']")

@@ -1,13 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("anchor demo updates active link state", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="anchor-basic"></div>')
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="anchor-basic"></div>')
 
   const overview = page.locator(".rf-anchor-link[data-value='#overview']")
   const api = page.locator(".rf-anchor-link[data-value='#api']")
@@ -23,50 +18,43 @@ test("anchor demo updates active link state", async ({ page }) => {
   await expect(state).toHaveText("Active: #api")
 })
 
-test("anchor demo syncs active item from URL hash", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="anchor-basic"></div>')
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+test("anchor demo keeps default active item when hash changes", async ({ page }) => {
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="anchor-basic"></div>')
 
   const overview = page.locator(".rf-anchor-link[data-value='#overview']")
-  const faq = page.locator(".rf-anchor-link[data-value='#faq']")
+  const api = page.locator(".rf-anchor-link[data-value='#api']")
   const state = page.locator("#anchor-state")
 
   await page.evaluate(() => {
-    window.location.hash = "#faq"
+    window.location.hash = "#api"
+    window.dispatchEvent(new HashChangeEvent("hashchange"))
   })
-  await expect(faq).toHaveAttribute("data-active", "true")
-  await expect(state).toHaveText("Active: #faq")
+  await expect(overview).toHaveAttribute("data-active", "true")
+  await expect(api).toHaveAttribute("data-active", "false")
+  await expect(state).toHaveText("Active: #overview")
 
   await page.evaluate(() => {
     window.location.hash = "#missing"
+    window.dispatchEvent(new HashChangeEvent("hashchange"))
   })
   await expect(overview).toHaveAttribute("data-active", "true")
   await expect(state).toHaveText("Active: #overview")
 })
 
-test("controlled anchor demo reacts to hashchange via callback state", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="anchor-controlled"></div>')
-
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8")
-  await page.addScriptTag({ content: runtimeSource, type: "module" })
+test("controlled anchor demo updates callback state on click", async ({ page }) => {
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="anchor-controlled"></div>')
 
   const overview = page.locator(".rf-anchor-link[data-value='#overview']")
-  const faq = page.locator(".rf-anchor-link[data-value='#faq']")
+  const api = page.locator(".rf-anchor-link[data-value='#api']")
   const state = page.locator("#anchor-controlled-state")
 
   await expect(overview).toHaveAttribute("data-active", "true")
   await expect(state).toHaveText("onActiveHrefChange: #overview")
 
-  await page.evaluate(() => {
-    window.location.hash = "#faq"
-  })
+  await api.click()
 
-  await expect(faq).toHaveAttribute("data-active", "true")
-  await expect(faq).toHaveAttribute("aria-current", "location")
+  await expect(api).toHaveAttribute("data-active", "true")
+  await expect(api).toHaveAttribute("aria-current", "location")
   await expect(overview).toHaveAttribute("data-active", "false")
-  await expect(state).toHaveText("onActiveHrefChange: #faq")
+  await expect(state).toHaveText("onActiveHrefChange: #api")
 })

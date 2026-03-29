@@ -1,11 +1,5 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 function tinyPngBuffer(): Buffer {
   return Buffer.from(
@@ -15,8 +9,7 @@ function tinyPngBuffer(): Buffer {
 }
 
 test("image uploader demo previews, removes, and caps image count", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="image-uploader-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="image-uploader-basic"></div>')
 
   const state = page.locator("[data-role='image-uploader-state']")
   const listItems = page.locator("[data-role='image-uploader-list'] .rf-image-uploader-item[data-item-id]")
@@ -84,8 +77,10 @@ test("image uploader demo previews, removes, and caps image count", async ({ pag
 })
 
 test("image uploader demo revokes object urls on unmount", async ({ page }) => {
-  await page.setContent('<div id="image-uploader-mount" class="demo-mount" data-demo="image-uploader-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(
+    page,
+    '<div id="image-uploader-mount" class="demo-mount" data-demo="image-uploader-basic"></div>',
+  )
 
   await page.evaluate(() => {
     const current = URL.revokeObjectURL.bind(URL)

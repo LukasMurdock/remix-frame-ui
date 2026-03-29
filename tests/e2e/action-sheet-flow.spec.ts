@@ -1,15 +1,8 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
-
-function runtimeSource(): string {
-  const runtimePath = path.resolve(process.cwd(), "apps/docs/src/docs-runtime.js")
-  return fs.readFileSync(runtimePath, "utf8")
-}
+import { mountWithDocsRuntime } from "./docs-runtime-fixture"
 
 test("action sheet demo supports action, cancel, escape, and backdrop close reasons", async ({ page }) => {
-  await page.setContent('<div class="demo-mount" data-demo="action-sheet-basic"></div>')
-  await page.addScriptTag({ content: runtimeSource(), type: "module" })
+  await mountWithDocsRuntime(page, '<div class="demo-mount" data-demo="action-sheet-basic"></div>')
 
   const open = page.getByRole("button", { name: "Open actions" })
   const overlay = page.locator("#action-sheet-overlay")
