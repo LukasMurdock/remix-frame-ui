@@ -97,21 +97,12 @@ export function isolateModalTree(doc: Document, modalRoot: HTMLElement): Restore
 }
 
 export function mountInContainer(node: HTMLElement, container: HTMLElement): () => void {
-  const originalParent = node.parentElement
-  const originalNextSibling = node.nextSibling
-
   if (node.parentElement !== container) {
     container.appendChild(node)
   }
 
   return () => {
-    if (!originalParent) {
-      node.remove()
-      return
-    }
-
-    if (originalNextSibling) originalParent.insertBefore(node, originalNextSibling)
-    else originalParent.appendChild(node)
+    node.remove()
   }
 }
 

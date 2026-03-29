@@ -18,31 +18,6 @@ import { ActionSheet } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { ActionSheet } from "@lukasmurdock/remix-ui-components"
-
-const actions = [
-  { id: "share", label: "Share" },
-  { id: "duplicate", label: "Duplicate" },
-  { id: "delete", label: "Delete", destructive: true },
-]
-
-export function Example() {
-  return (
-    <ActionSheet
-      open
-      title="Project actions"
-      description="Choose what to do with this project"
-      actions={actions}
-      onAction={(id) => console.log(id)}
-      onClose={() => {}}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `ActionSheet` renders a modal dialog with an actions list and optional cancel button.

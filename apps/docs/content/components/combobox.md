@@ -17,21 +17,6 @@ import { Combobox } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Combobox, ComboboxOption } from "@lukasmurdock/remix-ui-components"
-
-const options: ComboboxOption[] = [
-  { id: "1", value: "us", label: "United States" },
-  { id: "2", value: "ca", label: "Canada" },
-]
-
-export function CountryField() {
-  return <Combobox label="Country" options={options} defaultValue="" />
-}
-```
-
 ## HTML parity
 
 `Combobox` uses input + listbox semantics for searchable option selection.

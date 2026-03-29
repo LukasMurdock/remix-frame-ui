@@ -1,27 +1,13 @@
 import { componentDemoEntries, demoByComponent } from "./component-demo-registry.js"
-import { buildRuntimeDemoSourceMap } from "./component-demo-runtime-source.js"
 
-export function parseRuntimeDemoIds(source) {
-  const ids = new Set()
-  const regex = /"([a-z0-9-]+)":\s*mount[A-Za-z0-9]+/g
-
-  for (const match of String(source).matchAll(regex)) {
-    const id = match[1]
-    if (id) ids.add(id)
-  }
-
-  return ids
-}
-
-export function analyzeComponentDemoCoverage(componentNames, runtimeSource) {
-  const runtimeDemoIds = parseRuntimeDemoIds(runtimeSource)
-  const runtimeDemoSources = buildRuntimeDemoSourceMap(runtimeSource)
+export function analyzeComponentDemoCoverage(componentNames, demosById, demosRootDirs) {
   const componentSet = new Set(componentNames)
 
   const missingInRegistry = []
   const extraInRegistry = []
-  const missingRuntimeIds = []
-  const missingRuntimeSources = []
+  const missingDemoDirs = []
+  const missingEntryFiles = []
+  const missingIndexFiles = []
 
   for (const componentName of componentNames) {
     const demoEntry = demoByComponent.get(componentName)
@@ -30,12 +16,18 @@ export function analyzeComponentDemoCoverage(componentNames, runtimeSource) {
       continue
     }
 
-    if (!runtimeDemoIds.has(demoEntry.id)) {
-      missingRuntimeIds.push(`${componentName} -> ${demoEntry.id}`)
+    const demoFiles = demosById.get(demoEntry.id)
+    if (!demoFiles) {
+      missingDemoDirs.push(`${componentName} -> ${demoEntry.id}`)
+      continue
     }
 
-    if (!runtimeDemoSources.has(demoEntry.id)) {
-      missingRuntimeSources.push(`${componentName} -> ${demoEntry.id}`)
+    if (!demoFiles.has("entry.tsx")) {
+      missingEntryFiles.push(`${componentName} -> ${demoEntry.id}`)
+    }
+
+    if (!demoFiles.has("index.html")) {
+      missingIndexFiles.push(`${componentName} -> ${demoEntry.id}`)
     }
   }
 
@@ -46,13 +38,17 @@ export function analyzeComponentDemoCoverage(componentNames, runtimeSource) {
   }
 
   const duplicateDemoIds = collectDuplicateDemoIds(componentDemoEntries)
+  const mappedDemoIds = new Set(componentDemoEntries.map(([, entry]) => entry.id))
+  const extraDemoDirs = [...demosRootDirs].filter((demoId) => !mappedDemoIds.has(demoId)).sort()
 
   return {
     missingInRegistry,
     extraInRegistry,
-    missingRuntimeIds,
-    missingRuntimeSources,
+    missingDemoDirs,
+    missingEntryFiles,
+    missingIndexFiles,
     duplicateDemoIds,
+    extraDemoDirs,
   }
 }
 

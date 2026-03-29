@@ -22,54 +22,6 @@ import {
 
 Type definitions are generated from component source.
 
-## Example
-
-### Basic usage
-
-```tsx
-import { DataTable } from "@lukasmurdock/remix-ui-components"
-
-const columns = [
-  { key: "name", header: "Name", sortable: true },
-  { key: "status", header: "Status", sortable: true },
-]
-
-const rows = [
-  { key: "1", cells: { name: "Release 1.2", status: "Running" } },
-  { key: "2", cells: { name: "Release 1.3", status: "Success" } },
-]
-
-export function ReleasesTable() {
-  return <DataTable columns={columns} rows={rows} pageSize={10} selectable />
-}
-```
-
-### FilterPanel integration
-
-```ts
-import {
-  composeDataTableRowFilter,
-  createDataTableContainsFilter,
-  createDataTableEqualsFilter,
-  type DataTableRow,
-} from "@lukasmurdock/remix-ui-components"
-
-type Filters = {
-  query: string
-  status: "all" | "success" | "running" | "failed"
-}
-
-function toRowFilter(filters: Filters) {
-  return composeDataTableRowFilter(
-    createDataTableContainsFilter(["name"], filters.query),
-    createDataTableEqualsFilter("status", filters.status, "all"),
-  )
-}
-
-const rowFilter = toRowFilter({ query: "1.2", status: "running" })
-const visibleRows: DataTableRow[] = rowFilter ? allRows.filter(rowFilter) : allRows
-```
-
 ## HTML parity
 
 `DataTable` provides a full data surface with sorting, selection, and pagination controls.

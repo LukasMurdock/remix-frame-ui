@@ -17,24 +17,6 @@ import { ConfirmDialog } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { ConfirmDialog } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <ConfirmDialog
-      open
-      title="Delete record?"
-      description="This action cannot be undone."
-      onClose={() => {}}
-      onConfirm={() => {}}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `ConfirmDialog` is a preset built on `Dialog` for confirmation and destructive actions.

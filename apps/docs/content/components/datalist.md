@@ -17,21 +17,6 @@ import { DataList } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { DataList, DataListItem } from "@lukasmurdock/remix-ui-components"
-
-const items: DataListItem[] = [
-  { id: "1", title: "Build docs", description: "Regenerate static docs output", meta: "Today" },
-  { id: "2", title: "Run tests", description: "Validate docs and component suites", meta: "In progress" },
-]
-
-export function Example() {
-  return <DataList items={items} />
-}
-```
-
 ## HTML parity
 
 `DataList` renders a semantic list with title, description, metadata, and actions.

@@ -17,27 +17,6 @@ import { FormFieldset } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FormFieldset } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <FormFieldset legend="Notification channels" columns={2}>
-      <label>
-        Email
-        <input type="email" />
-      </label>
-      <label>
-        Slack channel
-        <input type="text" />
-      </label>
-    </FormFieldset>
-  )
-}
-```
-
 ## HTML parity
 
 `FormFieldset` wraps related controls in native `<fieldset>` and `<legend>` semantics.

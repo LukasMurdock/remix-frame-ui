@@ -17,29 +17,6 @@ import { SideNav } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { SideNav, SideNavItem, SideNavSection } from "@lukasmurdock/remix-ui-components"
-
-const primaryItems: SideNavItem[] = [
-  { id: "overview", label: "Overview", href: "/overview" },
-  { id: "deployments", label: "Deployments", href: "/deployments" },
-]
-
-const sections: SideNavSection[] = [
-  {
-    id: "primary",
-    label: "Primary",
-    items: primaryItems,
-  },
-]
-
-export function Example() {
-  return <SideNav sections={sections} activeId="deployments" />
-}
-```
-
 ## HTML parity
 
 `SideNav` provides sectioned application navigation with active-state highlighting.

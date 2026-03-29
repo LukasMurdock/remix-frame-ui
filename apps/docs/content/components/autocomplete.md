@@ -17,22 +17,6 @@ import { Autocomplete } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Autocomplete } from "@lukasmurdock/remix-ui-components"
-
-const options = [
-  { id: "us", label: "United States", value: "us" },
-  { id: "ca", label: "Canada", value: "ca" },
-  { id: "jp", label: "Japan", value: "jp" },
-]
-
-export function Example() {
-  return <Autocomplete label="Country" options={options} defaultValue="ca" />
-}
-```
-
 ## HTML parity
 
 `Autocomplete` uses input + listbox semantics and allows free-text entry.

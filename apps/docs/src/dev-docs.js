@@ -1405,7 +1405,7 @@ async function bootDocs() {
   </section>
 `
 
-  mountAllDemos(document)
+  await mountAllDemos(document)
   setupDocsSideNav()
 }
 

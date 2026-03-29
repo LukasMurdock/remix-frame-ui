@@ -17,16 +17,6 @@ import { Chip } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Chip } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Chip tone="brand">Needs review</Chip>
-}
-```
-
 ## HTML parity
 
 `Chip` is an alias of `Tag` and renders a semantic `<span>`.

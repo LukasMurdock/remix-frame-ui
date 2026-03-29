@@ -17,18 +17,6 @@ import { Statistic } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Statistic, StatisticTrend } from "@lukasmurdock/remix-ui-components"
-
-const trend: StatisticTrend = "up"
-
-export function Example() {
-  return <Statistic label="Success rate" value="99.95" suffix="%" trend={trend} caption="Last 24h" />
-}
-```
-
 ## HTML parity
 
 `Statistic` renders semantic text blocks for label, value, and optional supporting caption.

@@ -17,16 +17,6 @@ import { Textarea } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Textarea } from "@lukasmurdock/remix-ui-components"
-
-export function NotesField() {
-  return <Textarea id="notes" name="notes" rows={6} onValueChange={(value) => console.log(value)} />
-}
-```
-
 ## HTML parity
 
 `Textarea` wraps native `<textarea>` and applies shared input styling tokens.

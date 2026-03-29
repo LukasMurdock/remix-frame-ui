@@ -17,20 +17,6 @@ import { Collapse } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Collapse } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <Collapse title="Deployment checklist" open>
-      Run tests, build docs, and confirm accessibility before merge.
-    </Collapse>
-  )
-}
-```
-
 ## HTML parity
 
 `Collapse` renders native `<details>` and `<summary>` semantics for disclosure content.

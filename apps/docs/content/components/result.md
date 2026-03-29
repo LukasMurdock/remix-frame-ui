@@ -17,24 +17,6 @@ import { Result } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Result, ResultActions, ResultDescription, ResultTitle } from "@lukasmurdock/remix-ui-components"
-
-const title = <ResultTitle>Deployment succeeded</ResultTitle>
-const description = <ResultDescription>All checks passed and traffic has shifted to the new release.</ResultDescription>
-const actions = (
-  <ResultActions>
-    <button type="button">View rollout</button>
-  </ResultActions>
-)
-
-export function Example() {
-  return <Result tone="success" title={title} description={description} actions={actions} />
-}
-```
-
 ## HTML parity
 
 `Result` presents outcome states like success, warning, and failure with optional actions.

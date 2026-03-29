@@ -17,16 +17,6 @@ import { Badge } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Badge } from "@lukasmurdock/remix-ui-components"
-
-export function StatusBadge() {
-  return <Badge tone="success">Healthy</Badge>
-}
-```
-
 ## HTML parity
 
 `Badge` renders a semantic `<span>` for compact status labels.

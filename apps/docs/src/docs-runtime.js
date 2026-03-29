@@ -93,18 +93,34 @@ const registry = {
   "tree-select-basic": mountTreeSelectDemo,
 }
 
-export function mountAllDemos(root = document) {
+const demoSourceCache = new Map()
+const demoModuleCache = new Map()
+const shouldLoadTypeScriptDemoEntries = import.meta.url.includes("/src/")
+
+export function mountRuntimeDemoById(demoId, mount) {
+  const run = registry[demoId]
+  if (!run) {
+    throw new Error(`Unknown demo id: ${demoId}`)
+  }
+  run(mount)
+}
+
+if (typeof window !== "undefined") {
+  window.__docsMountRuntimeDemoById = mountRuntimeDemoById
+}
+
+export async function mountAllDemos(root = document) {
+  if (!root || typeof root.querySelectorAll !== "function") return
+
   for (const mount of root.querySelectorAll("[data-demo]")) {
     if (!(mount instanceof HTMLElement)) continue
     if (mount.dataset.demoMounted === "true") continue
 
-    const id = mount.dataset.demo
-    if (!id) continue
-    const run = registry[id]
-    if (!run) continue
+    const demoId = mount.dataset.demo
+    if (!demoId) continue
 
     mount.dataset.demoMounted = "true"
-    run(mount)
+    await mountDemoFromEntry(demoId, mount)
   }
 
   mountExampleTabs(root)
@@ -164,13 +180,10 @@ function mountExampleTabs(root = document) {
     codePanel.setAttribute("role", "tabpanel")
     codePanel.setAttribute("aria-labelledby", codeTab.id)
 
-    const exampleContent = extractConsumerExampleContent(demoBlock)
-    if (exampleContent) {
-      codePanel.appendChild(exampleContent)
-    } else {
-      const demoId = demoMount.dataset.demo ?? "unknown"
-      codePanel.appendChild(createCodeBlock(`// Consumer example unavailable for demo: ${demoId}`, "text"))
-    }
+    const demoId = demoMount.dataset.demo ?? ""
+    const codeBlock = createCodeBlock(`// Loading demo source for ${demoId || "unknown"}...`, "tsx")
+    codePanel.appendChild(codeBlock)
+    void populateDemoCodeBlock(codeBlock, demoId)
 
     const tabsInOrder = [previewTab, codeTab]
     const panelByTab = new Map([
@@ -246,49 +259,70 @@ function createCodeBlock(markup, language = "html") {
   return pre
 }
 
-function extractConsumerExampleContent(demoBlock) {
-  const article = demoBlock.closest("article")
-  if (!(article instanceof HTMLElement)) return null
+async function populateDemoCodeBlock(codeBlock, demoId) {
+  const code = codeBlock.querySelector("code")
+  if (!(code instanceof HTMLElement)) return
 
-  const directChildren = Array.from(article.children)
-  const exampleHeading = directChildren.find(
-    (child) =>
-      child instanceof HTMLHeadingElement &&
-      child.tagName === "H2" &&
-      normalizeDocsText(child.textContent) === "example",
-  )
-  if (!(exampleHeading instanceof HTMLHeadingElement)) return null
-
-  const headingIndex = directChildren.indexOf(exampleHeading)
-  if (headingIndex < 0) return null
-
-  const sectionNodes = []
-  for (let index = headingIndex + 1; index < directChildren.length; index += 1) {
-    const child = directChildren[index]
-    if (child instanceof HTMLHeadingElement && child.tagName === "H2") break
-    sectionNodes.push(child)
+  if (!demoId) {
+    code.className = "language-text"
+    code.textContent = "// Demo is missing a data-demo id."
+    return
   }
 
-  if (sectionNodes.length === 0) return null
-
-  const fragment = document.createDocumentFragment()
-  for (const node of sectionNodes) {
-    fragment.appendChild(node.cloneNode(true))
+  try {
+    const source = await loadDemoEntrySource(demoId)
+    code.className = "language-tsx"
+    code.textContent = source
+  } catch (error) {
+    code.className = "language-text"
+    code.textContent = `// Failed to load demos/${demoId}/entry.tsx\n// ${formatDemoError(error)}`
   }
-
-  exampleHeading.remove()
-  for (const node of sectionNodes) {
-    node.remove()
-  }
-
-  return fragment
 }
 
-function normalizeDocsText(value) {
-  return String(value ?? "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase()
+function loadDemoEntrySource(demoId) {
+  const cached = demoSourceCache.get(demoId)
+  if (cached) return cached
+
+  const request = shouldLoadTypeScriptDemoEntries
+    ? import(`../demos/${demoId}/entry.tsx?raw`).then((module) => module.default)
+    : fetch(`../demos/${demoId}/entry.tsx`).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
+        }
+        return response.text()
+      })
+
+  demoSourceCache.set(demoId, request)
+  return request
+}
+
+async function mountDemoFromEntry(demoId, mount) {
+  try {
+    const module = await loadDemoEntryModule(demoId)
+    if (!module || typeof module.mount !== "function") {
+      throw new Error(`demos/${demoId}/entry does not export a mount function`)
+    }
+
+    mount.replaceChildren()
+    await module.mount(mount)
+  } catch (error) {
+    mount.replaceChildren(createCodeBlock(`// Failed to mount demo: ${demoId}\n// ${formatDemoError(error)}`, "text"))
+  }
+}
+
+function loadDemoEntryModule(demoId) {
+  const cached = demoModuleCache.get(demoId)
+  if (cached) return cached
+
+  const extension = shouldLoadTypeScriptDemoEntries ? "tsx" : "js"
+  const loader = import(`../demos/${demoId}/entry.${extension}`)
+  demoModuleCache.set(demoId, loader)
+  return loader
+}
+
+function formatDemoError(error) {
+  if (error instanceof Error && error.message) return error.message
+  return String(error ?? "Unknown error")
 }
 
 export function parseDatePickerISODate(value) {
@@ -346,9 +380,15 @@ export function buildDatePickerMonthCells(viewMonth) {
 
 if (typeof window !== "undefined" && typeof document !== "undefined") {
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => mountAllDemos(document), { once: true })
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        void mountAllDemos(document)
+      },
+      { once: true },
+    )
   } else {
-    mountAllDemos(document)
+    void mountAllDemos(document)
   }
 }
 

@@ -17,16 +17,6 @@ import { NumberInput } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { NumberInput } from "@lukasmurdock/remix-ui-components"
-
-export function SeatsField() {
-  return <NumberInput id="seats" name="seats" min={1} max={200} step={1} defaultValue={25} />
-}
-```
-
 ## HTML parity
 
 `NumberInput` wraps native `<input type="number">` with min/max/step support.

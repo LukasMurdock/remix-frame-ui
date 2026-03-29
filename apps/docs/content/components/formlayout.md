@@ -17,23 +17,6 @@ import { FormLayout } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FormLayout } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <FormLayout title="Profile" description="Update account details" actions={<button type="submit">Save</button>}>
-      <label>
-        Name
-        <input type="text" defaultValue="Ada" />
-      </label>
-    </FormLayout>
-  )
-}
-```
-
 ## HTML parity
 
 `FormLayout` provides structured form sections with optional heading, description, and actions.

@@ -17,22 +17,6 @@ import { Segmented } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Segmented, SegmentedOption } from "@lukasmurdock/remix-ui-components"
-
-const options: SegmentedOption[] = [
-  { value: "day", label: "Day" },
-  { value: "week", label: "Week" },
-  { value: "month", label: "Month" },
-]
-
-export function Example() {
-  return <Segmented options={options} defaultValue="week" ariaLabel="Time range" />
-}
-```
-
 ## HTML parity
 
 `Segmented` renders mutually exclusive options in a compact segmented control.

@@ -17,16 +17,6 @@ import { Calendar } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Calendar } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Calendar view="month" defaultValue="2026-04-18" />
-}
-```
-
 ## HTML parity
 
 `Calendar` renders a native date input, with optional month-only mode for year-style selection.

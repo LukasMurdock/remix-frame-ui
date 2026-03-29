@@ -1,6 +1,7 @@
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, readdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import ts from "typescript"
 import { applyGeneratedApiSection } from "./component-api-sections.js"
 import { demoByComponent } from "./component-demo-registry.js"
 import { resolvePlatformLabel } from "./component-doc-maturity.js"
@@ -12,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, "..")
 const contentDir = path.join(root, "content", "components")
 const guidesDir = path.join(root, "content", "guides")
+const demosDir = path.join(root, "demos")
 const outDir = path.join(root, "dist")
 const runtimeSourcePath = path.join(root, "src", "docs-runtime.js")
 const metadataPath = path.resolve(root, "..", "..", "packages", "remix", "src", "component-metadata.json")
@@ -71,6 +73,7 @@ guidePages.sort((a, b) => {
 })
 
 await mkdir(outDir, { recursive: true })
+await buildDemos(demosDir, path.join(outDir, "demos"))
 
 const firstPageId = guidePages[0]?.id ?? componentPages[0]?.id ?? ""
 
@@ -135,6 +138,63 @@ async function readMarkdownFiles(directory) {
     }
     throw error
   }
+}
+
+async function buildDemos(sourceRoot, outputRoot) {
+  await mkdir(outputRoot, { recursive: true })
+  const files = await collectDemoFiles(sourceRoot)
+
+  for (const relativeFile of files) {
+    const sourcePath = path.join(sourceRoot, relativeFile)
+    const outputPath = path.join(outputRoot, relativeFile)
+    await mkdir(path.dirname(outputPath), { recursive: true })
+
+    if (relativeFile.endsWith(".d.ts")) {
+      await cp(sourcePath, outputPath)
+      continue
+    }
+
+    if (relativeFile.endsWith(".ts") || relativeFile.endsWith(".tsx")) {
+      const source = await readFile(sourcePath, "utf8")
+      const transpiled = ts.transpileModule(source, {
+        compilerOptions: {
+          module: ts.ModuleKind.ESNext,
+          target: ts.ScriptTarget.ES2022,
+          jsx: ts.JsxEmit.ReactJSX,
+          jsxImportSource: "remix/component",
+        },
+        fileName: sourcePath,
+      })
+
+      const outputJsPath = outputPath.replace(/\.(ts|tsx)$/, ".js")
+      await writeFile(outputJsPath, transpiled.outputText)
+      await cp(sourcePath, outputPath)
+      continue
+    }
+
+    await cp(sourcePath, outputPath)
+  }
+}
+
+async function collectDemoFiles(directory, prefix = "") {
+  const entries = await readdir(directory, { withFileTypes: true })
+  const files = []
+
+  for (const entry of entries) {
+    const relativePath = prefix ? path.join(prefix, entry.name) : entry.name
+    const absolutePath = path.join(directory, entry.name)
+
+    if (entry.isDirectory()) {
+      files.push(...(await collectDemoFiles(absolutePath, relativePath)))
+      continue
+    }
+
+    if (entry.isFile()) {
+      files.push(relativePath)
+    }
+  }
+
+  return files
 }
 
 const html = `<!doctype html>

@@ -17,16 +17,6 @@ import { Skeleton } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Skeleton } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Skeleton lines={4} animated />
-}
-```
-
 ## HTML parity
 
 `Skeleton` provides non-interactive loading placeholders for content blocks.

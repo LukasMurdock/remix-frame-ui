@@ -18,25 +18,6 @@ import { FloatingPanel } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { FloatingPanel } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <FloatingPanel anchors={[120, 260, 420]} defaultHeight={260}>
-      <h2 style="margin:0;">Nearby points</h2>
-      <ul style="margin:0;padding-left:1.1rem;display:grid;gap:.4rem;">
-        <li>Warehouse A - 3 min</li>
-        <li>Warehouse B - 8 min</li>
-        <li>Warehouse C - 12 min</li>
-      </ul>
-    </FloatingPanel>
-  )
-}
-```
-
 ## HTML parity
 
 `FloatingPanel` renders a semantic `<section>` with a keyboard-focusable resize separator and scrollable body content.

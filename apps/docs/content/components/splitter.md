@@ -17,16 +17,6 @@ import { Splitter } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Splitter } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return <Splitter first={<section>Editor</section>} second={<section>Preview</section>} defaultSize={60} />
-}
-```
-
 ## HTML parity
 
 `Splitter` creates a two-pane resizable layout with a draggable separator handle.

@@ -2,7 +2,6 @@ export const requiredSections = [
   "## When to use",
   "## Import",
   "## API",
-  "## Example",
   "## HTML parity",
   "## Runtime notes",
   "## Accessibility matrix",

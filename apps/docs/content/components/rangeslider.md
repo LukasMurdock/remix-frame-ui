@@ -17,26 +17,6 @@ import { RangeSlider } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { RangeSlider } from "@lukasmurdock/remix-ui-components"
-
-export function PriceRange() {
-  return (
-    <RangeSlider
-      id="price-range"
-      min={0}
-      max={1000}
-      step={25}
-      defaultValue={[100, 700]}
-      nameStart="minPrice"
-      nameEnd="maxPrice"
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `RangeSlider` provides dual-thumb range selection for minimum and maximum values.

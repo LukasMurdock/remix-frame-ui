@@ -17,22 +17,6 @@ import { Descriptions } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Descriptions, DescriptionsItem } from "@lukasmurdock/remix-ui-components"
-
-const items: DescriptionsItem[] = [
-  { key: "repo", label: "Repository", content: "remix-frame-ui" },
-  { key: "owner", label: "Owner", content: "Platform" },
-  { key: "status", label: "Status", content: "Healthy" },
-]
-
-export function Example() {
-  return <Descriptions title="Service details" items={items} columns={3} />
-}
-```
-
 ## HTML parity
 
 `Descriptions` presents read-only label/value pairs in a dense, scannable detail layout.

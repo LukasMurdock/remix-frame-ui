@@ -17,20 +17,6 @@ import { Tooltip } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Tooltip } from "@lukasmurdock/remix-ui-components"
-
-export function Hint() {
-  return (
-    <Tooltip label="Copy link">
-      <span>Copy</span>
-    </Tooltip>
-  )
-}
-```
-
 ## HTML parity
 
 `Tooltip` provides contextual text tied to a focusable trigger and `role="tooltip"` content.

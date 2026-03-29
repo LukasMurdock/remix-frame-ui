@@ -17,21 +17,6 @@ import { Radio, RadioGroup } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { RadioGroup } from "@lukasmurdock/remix-ui-components"
-
-const options = [
-  { value: "monthly", label: "Monthly" },
-  { value: "yearly", label: "Yearly" },
-]
-
-export function BillingCycle() {
-  return <RadioGroup legend="Billing cycle" name="billingCycle" options={options} />
-}
-```
-
 ## HTML parity
 
 `Radio` uses native `<input type="radio">`; `RadioGroup` composes a native `<fieldset>` and `<legend>`.

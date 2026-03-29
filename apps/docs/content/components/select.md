@@ -17,21 +17,6 @@ import { Select } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Select } from "@lukasmurdock/remix-ui-components"
-
-const options = [
-  { value: "draft", label: "Draft" },
-  { value: "published", label: "Published" },
-]
-
-export function StatusSelect() {
-  return <Select name="status" options={options} defaultValue="draft" />
-}
-```
-
 ## HTML parity
 
 `Select` is native `<select>` only in v1. No custom combobox replacement.

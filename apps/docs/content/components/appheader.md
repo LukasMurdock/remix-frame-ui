@@ -17,23 +17,6 @@ import { AppHeader } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { AppHeader } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <AppHeader
-      brand="Acme"
-      title="Operations"
-      subtitle="Release readiness"
-      actions={<button type="button">New report</button>}
-    />
-  )
-}
-```
-
 ## HTML parity
 
 `AppHeader` provides a top application bar with brand, title, nav, and action slots.

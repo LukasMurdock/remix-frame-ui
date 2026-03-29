@@ -17,25 +17,6 @@ import { Alert } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Alert } from "@lukasmurdock/remix-ui-components"
-
-export function StorageAlert() {
-  return (
-    <Alert
-      tone="warning"
-      title="Storage almost full"
-      dismissible
-      onDismiss={() => console.log("dismiss")}
-    >
-      Free up space to continue uploads.
-    </Alert>
-  )
-}
-```
-
 ## HTML parity
 
 `Alert` renders semantic status regions and supports tone-based announcement roles.

@@ -17,22 +17,6 @@ import { Breadcrumbs } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Breadcrumbs } from "@lukasmurdock/remix-ui-components"
-
-const items = [
-  { id: "home", label: "Home", href: "/" },
-  { id: "projects", label: "Projects", href: "/projects" },
-  { id: "acme", label: "Acme", current: true },
-]
-
-export function Example() {
-  return <Breadcrumbs items={items} />
-}
-```
-
 ## HTML parity
 
 `Breadcrumbs` provides hierarchical navigation with a current-page marker.

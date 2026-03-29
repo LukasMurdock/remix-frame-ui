@@ -17,22 +17,6 @@ import { Menu } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Menu } from "@lukasmurdock/remix-ui-components"
-
-const items = [
-  { id: "rename", label: "Rename" },
-  { id: "duplicate", label: "Duplicate" },
-  { id: "archive", label: "Archive", disabled: true },
-]
-
-export function RowActions() {
-  return <Menu triggerLabel="Actions" items={items} onSelect={(id) => console.log(id)} />
-}
-```
-
 ## HTML parity
 
 `Menu` is action-menu scope only and uses menu/menuitem semantics.

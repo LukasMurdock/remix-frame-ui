@@ -18,27 +18,6 @@ import { Drawer } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```ts
-import { Drawer } from "@lukasmurdock/remix-ui-components"
-
-let open = false
-
-<Drawer
-  open={open}
-  title="Project settings"
-  position="right"
-  onClose={(reason) => {
-    if (reason === "backdrop") return
-    open = false
-    handle.update()
-  }}
->
-  Settings content
-</Drawer>
-```
-
 ## HTML parity
 
 `Drawer` is a modal side panel for app-shell tasks and secondary workflows.

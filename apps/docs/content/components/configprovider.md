@@ -17,20 +17,6 @@ import { ConfigProvider } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { ConfigProvider } from "@lukasmurdock/remix-ui-components"
-
-export function Example() {
-  return (
-    <ConfigProvider locale="en-US" direction="ltr" navigateMode="internal">
-      <main>Settings</main>
-    </ConfigProvider>
-  )
-}
-```
-
 ## HTML parity
 
 `ConfigProvider` wraps application content and sets `lang` and `dir` on the provider root.

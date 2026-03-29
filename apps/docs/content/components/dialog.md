@@ -17,51 +17,6 @@ import { Dialog } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-### Controlled open state
-
-```ts
-import { on } from "remix/component"
-
-let open = false
-
-<button
-  mix={[
-    on("click", () => {
-      open = true
-      handle.update()
-    }),
-  ]}
->
-  Open
-</button>
-<Dialog
-  open={open}
-  title="Delete item"
-  onClose={() => {
-    open = false
-    handle.update()
-  }}
->
-  Are you sure?
-</Dialog>
-```
-
-### Reason-aware close handling
-
-```ts
-<Dialog
-  open={open}
-  title="Settings"
-  onClose={(reason) => {
-    if (reason === "backdrop") return
-    open = false
-    handle.update()
-  }}
-/>
-```
-
 ## HTML parity
 
 `Dialog` provides modal behavior semantics with `role="dialog"` and `aria-modal="true"`.

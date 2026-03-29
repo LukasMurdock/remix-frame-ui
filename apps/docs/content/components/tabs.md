@@ -17,24 +17,6 @@ import { Tabs } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Tabs } from "@lukasmurdock/remix-ui-components"
-
-const items = [
-  { id: "overview", label: "Overview", panel: "Overview content" },
-  { id: "deployments", label: "Deployments", panel: "Deployments content" },
-  { id: "incidents", label: "Incidents", panel: "Incidents content" },
-  { id: "settings", label: "Settings", panel: "Settings content" },
-  { id: "audit", label: "Audit", panel: "Audit content" },
-]
-
-export function ProjectTabs() {
-  return <Tabs items={items} overflow="menu" maxVisibleTabs={4} activation="manual" />
-}
-```
-
 ## HTML parity
 
 `Tabs` uses WAI-ARIA tab roles with button triggers and tabpanel containers.

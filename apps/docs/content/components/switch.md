@@ -17,20 +17,6 @@ import { Switch } from "@lukasmurdock/remix-ui-components"
 
 Type definitions are generated from component source.
 
-## Example
-
-```tsx
-import { Switch } from "@lukasmurdock/remix-ui-components"
-
-export function NotificationsSwitch() {
-  return (
-    <Switch id="notifications" name="notifications" defaultChecked>
-      Enable notifications
-    </Switch>
-  )
-}
-```
-
 ## HTML parity
 
 `Switch` renders native `<input type="checkbox">` with `role="switch"` for a toggle UI.
