@@ -44,3 +44,5 @@ export function assertNativeInputType(
     throw new Error(`Unsupported input type: ${type}`)
   }
 }
+
+export * from "./table"
