@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   formatDateRangeValue,
+  isDateRangeComplete,
   isDateWithinRange,
   nextDateRangeSelection,
   type DateRangeValue,
@@ -29,5 +30,12 @@ describe("date range picker helpers", () => {
     expect(formatDateRangeValue({})).toBe("")
     expect(formatDateRangeValue({ start: "2026-03-01" })).toBe("2026-03-01 -")
     expect(formatDateRangeValue({ start: "2026-03-01", end: "2026-03-05" })).toBe("2026-03-01 - 2026-03-05")
+  })
+
+  it("requires both start and end for complete ranges", () => {
+    expect(isDateRangeComplete({})).toBe(false)
+    expect(isDateRangeComplete({ start: "2026-03-01" })).toBe(false)
+    expect(isDateRangeComplete({ end: "2026-03-05" })).toBe(false)
+    expect(isDateRangeComplete({ start: "2026-03-01", end: "2026-03-05" })).toBe(true)
   })
 })

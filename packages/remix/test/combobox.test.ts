@@ -3,6 +3,7 @@ import {
   filterComboboxOptions,
   findFirstEnabledIndex,
   findNextEnabledIndex,
+  resolveComboboxEnterAction,
   type ComboboxOption,
 } from "../src/components/Combobox"
 
@@ -28,5 +29,12 @@ describe("combobox helpers", () => {
     expect(findNextEnabledIndex(options, 0, 1)).toBe(2)
     expect(findNextEnabledIndex(options, 2, 1)).toBe(0)
     expect(findNextEnabledIndex(options, 2, -1)).toBe(0)
+  })
+
+  it("prevents native submit when Enter is pressed while list is open", () => {
+    expect(resolveComboboxEnterAction(options, 0, true)).toEqual({ preventSubmit: true, committedValue: "ada" })
+    expect(resolveComboboxEnterAction(options, -1, true)).toEqual({ preventSubmit: true })
+    expect(resolveComboboxEnterAction(options, 1, true)).toEqual({ preventSubmit: true })
+    expect(resolveComboboxEnterAction(options, 0, false)).toEqual({ preventSubmit: false })
   })
 })

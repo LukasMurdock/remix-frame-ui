@@ -11,13 +11,29 @@ export type ComboboxOption = {
 
 export type ComboboxProps = {
   id?: string
+  name?: string
   label: ComponentChildren
   options: ComboboxOption[]
   /** @default "" */
   value?: string
   /** @default "" */
   defaultValue?: string
+  disabled?: boolean
+  required?: boolean
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
   onValueChange?: (value: string) => void
+}
+
+export function resolveComboboxEnterAction(
+  options: ComboboxOption[],
+  highlighted: number,
+  open: boolean,
+): { preventSubmit: boolean; committedValue?: string } {
+  if (!open) return { preventSubmit: false }
+  const option = highlighted >= 0 ? options[highlighted] : undefined
+  if (!option || option.disabled) return { preventSubmit: true }
+  return { preventSubmit: true, committedValue: option.value }
 }
 
 export function filterComboboxOptions(options: ComboboxOption[], query: string): ComboboxOption[] {
@@ -109,16 +125,22 @@ export function Combobox(handle: Handle) {
         <div className="rf-combobox">
           <input
             id={inputId}
+            name={props.name}
             type="text"
+            disabled={props.disabled}
+            required={props.required}
             className="rf-input-base rf-focus-ring"
             role="combobox"
             aria-autocomplete="list"
             aria-expanded={open}
             aria-controls={open ? listId : undefined}
             aria-activedescendant={activeOption ? `${handle.id}-opt-${activeOption.id}` : undefined}
+            aria-describedby={props["aria-describedby"]}
+            aria-invalid={props["aria-invalid"]}
             value={value}
             mix={[
               on("input", (event) => {
+                if (props.disabled) return
                 const target = event.currentTarget as HTMLInputElement
                 open = true
                 setValue(props, target.value)
@@ -129,6 +151,7 @@ export function Combobox(handle: Handle) {
                 highlighted = -1
               }),
               on("click", () => {
+                if (props.disabled) return
                 open = true
                 highlighted = findSelectedEnabledIndex(visible, value)
                 handle.update()
@@ -143,6 +166,7 @@ export function Combobox(handle: Handle) {
                 })
               }),
               on("keydown", (event) => {
+                if (props.disabled) return
                 if (event.key === "Escape") {
                   close()
                   handle.update()
@@ -170,9 +194,12 @@ export function Combobox(handle: Handle) {
                     handle.update()
                   }
                 } else if (event.key === "Enter") {
-                  const option = highlighted >= 0 ? visible[highlighted] : undefined
-                  if (!option || option.disabled) return
-                  setValue(props, option.value)
+                  const action = resolveComboboxEnterAction(visible, highlighted, open)
+                  if (action.preventSubmit) {
+                    event.preventDefault()
+                  }
+                  if (!action.committedValue) return
+                  setValue(props, action.committedValue)
                   close()
                   handle.update()
                 }

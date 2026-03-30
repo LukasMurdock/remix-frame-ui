@@ -14,6 +14,8 @@ export type SelectProps = {
   defaultValue?: string
   disabled?: boolean
   required?: boolean
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
   options: SelectOption[]
 }
 
@@ -26,6 +28,8 @@ export function Select(_handle: Handle) {
       defaultValue={props.defaultValue}
       disabled={props.disabled}
       required={props.required}
+      aria-describedby={props["aria-describedby"]}
+      aria-invalid={props["aria-invalid"]}
       className="rf-input-base rf-focus-ring"
     >
       {props.options.map((option) => (

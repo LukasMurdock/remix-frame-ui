@@ -10,6 +10,8 @@ export type CheckboxProps = {
   defaultChecked?: boolean
   disabled?: boolean
   required?: boolean
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
   children?: ComponentChildren
 }
 
@@ -29,6 +31,8 @@ export function Checkbox(_handle: Handle) {
         defaultChecked={props.defaultChecked}
         disabled={props.disabled}
         required={props.required}
+        aria-describedby={props["aria-describedby"]}
+        aria-invalid={props["aria-invalid"]}
       />
       {props.children}
     </label>

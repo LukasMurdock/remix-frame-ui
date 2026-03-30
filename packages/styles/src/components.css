@@ -234,6 +234,39 @@
   .rf-error {
     color: var(--rf-danger-default);
     font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .rf-form-error-summary {
+    border: 1px solid var(--rf-danger-default);
+    border-left-width: 0.35rem;
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, var(--rf-danger-default) 8%, var(--rf-surface-default));
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rf-form-error-summary-title {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .rf-form-error-summary-list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .rf-form-error-summary-item {
+    margin: 0;
+  }
+
+  .rf-form-error-summary-link {
+    color: inherit;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
   }
 
   .rf-form-layout {
@@ -268,8 +301,12 @@
   .rf-form-layout-actions {
     display: flex;
     gap: 0.5rem;
-    justify-content: flex-end;
+    justify-content: flex-start;
     flex-wrap: wrap;
+  }
+
+  .rf-form-layout-actions[data-align="end"] {
+    justify-content: flex-end;
   }
 
   .rf-form-fieldset {
@@ -299,6 +336,13 @@
 
   .rf-form-fieldset[data-columns="2"] .rf-form-fieldset-fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 768px) {
+    .rf-form-layout .rf-form-layout-fields,
+    .rf-form-fieldset .rf-form-fieldset-fields {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .rf-form-message {

@@ -20,7 +20,12 @@ export type FormErrorSummaryProps = {
   id: string
   /** @default "Please fix the following errors" */
   title?: ComponentChildren
-  errors: string[]
+  errors: Array<string | { message: ComponentChildren; fieldId?: string }>
+}
+
+export type FormErrorSummaryItem = {
+  message: ComponentChildren
+  href?: string
 }
 
 export function resolveFormMethod(method?: FormMethod): FormMethod {
@@ -33,6 +38,16 @@ export function resolveFormBusy(busy?: boolean): boolean {
 
 export function resolveFormNoValidate(noValidate?: boolean): boolean {
   return noValidate ?? false
+}
+
+export function normalizeFormErrorSummaryItems(
+  errors: Array<string | { message: ComponentChildren; fieldId?: string }>,
+): FormErrorSummaryItem[] {
+  return errors.map((error) => {
+    if (typeof error === "string") return { message: error }
+    const cleanFieldId = error.fieldId?.startsWith("#") ? error.fieldId.slice(1) : error.fieldId
+    return cleanFieldId ? { message: error.message, href: `#${cleanFieldId}` } : { message: error.message }
+  })
 }
 
 export function Form(_handle: Handle) {
@@ -58,14 +73,21 @@ export function Form(_handle: Handle) {
 export function FormErrorSummary(_handle: Handle) {
   return (props: FormErrorSummaryProps) => {
     if (props.errors.length === 0) return null
+    const items = normalizeFormErrorSummaryItems(props.errors)
 
     return (
       <section id={props.id} className="rf-form-error-summary" role="alert" aria-live="assertive">
         <h2 className="rf-form-error-summary-title">{props.title ?? "Please fix the following errors"}</h2>
         <ul className="rf-form-error-summary-list">
-          {props.errors.map((error, index) => (
+          {items.map((item, index) => (
             <li key={`${props.id}-${index}`} className="rf-form-error-summary-item">
-              {error}
+              {item.href ? (
+                <a href={item.href} className="rf-form-error-summary-link">
+                  {item.message}
+                </a>
+              ) : (
+                item.message
+              )}
             </li>
           ))}
         </ul>

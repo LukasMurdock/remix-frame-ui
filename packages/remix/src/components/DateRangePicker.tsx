@@ -15,9 +15,12 @@ export type DateRangePickerProps = {
   /** @default {} */
   defaultValue?: DateRangeValue
   disabled?: boolean
+  required?: boolean
   min?: string
   max?: string
   onValueChange?: (value: DateRangeValue) => void
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
 }
 
 export function nextDateRangeSelection(current: DateRangeValue, pickedISO: string): DateRangeValue {
@@ -44,6 +47,10 @@ export function formatDateRangeValue(range: DateRangeValue): string {
   return `${range.start} - ${range.end}`
 }
 
+export function isDateRangeComplete(range: DateRangeValue): boolean {
+  return Boolean(range.start && range.end)
+}
+
 function isDisabled(date: Date, min?: string, max?: string): boolean {
   const minDate = parseISODate(min)
   const maxDate = parseISODate(max)
@@ -67,6 +74,28 @@ export function DateRangePicker(handle: Handle) {
   let viewMonth = monthStart(new Date())
   let activeISO: string | undefined
   let rootElement: HTMLElement | null = null
+  let inputElement: HTMLInputElement | null = null
+  let latestRequired = false
+  let latestRange: DateRangeValue = {}
+
+  function syncRangeValidity(props: DateRangePickerProps, range: DateRangeValue): void {
+    if (!inputElement) return
+    if (!props.required || isDateRangeComplete(range)) {
+      inputElement.setCustomValidity("")
+      return
+    }
+    inputElement.setCustomValidity("Choose a start and end date")
+  }
+
+  function setOpen(next: boolean, restoreFocus = false): void {
+    open = next
+    handle.update()
+    if (!next && restoreFocus) {
+      handle.queueTask(() => {
+        inputElement?.focus()
+      })
+    }
+  }
 
   function setRange(props: DateRangePickerProps, next: DateRangeValue): void {
     if (props.value === undefined) {
@@ -81,17 +110,19 @@ export function DateRangePicker(handle: Handle) {
     }
 
     const range = props.value ?? uncontrolledRange ?? {}
+    latestRequired = props.required ?? false
+    latestRange = range
     const selectedStart = range.start
     const selectedEnd = range.end
     const displayValue = formatDateRangeValue(range)
     const cells = buildCalendarCells(viewMonth, props.min, props.max)
+    syncRangeValidity(props, range)
 
     const openPicker = () => {
       const focusDate = parseISODate(selectedStart) ?? parseISODate(selectedEnd) ?? new Date()
       viewMonth = monthStart(focusDate)
       activeISO = formatISODate(focusDate)
-      open = true
-      handle.update()
+      setOpen(true)
       handle.queueTask(() => {
         if (!rootElement || !activeISO) return
         const target = rootElement.querySelector(`[data-date="${activeISO}"]`)
@@ -111,10 +142,22 @@ export function DateRangePicker(handle: Handle) {
               if (!(target instanceof Node)) return
               if (node.contains(target)) return
               if (!open) return
-              open = false
-              handle.update()
+              setOpen(false, true)
             }
             document.addEventListener("pointerdown", onPointerDown, { signal })
+
+            const form = node.closest("form")
+            if (!form) return
+            const onSubmit = (event: Event) => {
+              if (!latestRequired || isDateRangeComplete(latestRange)) {
+                syncRangeValidity(props, latestRange)
+                return
+              }
+              syncRangeValidity(props, latestRange)
+              event.preventDefault()
+              inputElement?.reportValidity()
+            }
+            form.addEventListener("submit", onSubmit, { signal })
           }),
         ]}
       >
@@ -127,10 +170,17 @@ export function DateRangePicker(handle: Handle) {
             placeholder="YYYY-MM-DD - YYYY-MM-DD"
             readOnly
             disabled={props.disabled}
+            required={props.required}
             aria-haspopup="dialog"
             aria-expanded={open}
             aria-controls={open ? `${handle.id}-range` : undefined}
+            aria-describedby={props["aria-describedby"]}
+            aria-invalid={props["aria-invalid"]}
             mix={[
+              ref((node) => {
+                inputElement = node
+                syncRangeValidity(props, range)
+              }),
               on("click", () => {
                 if (props.disabled) return
                 if (!open) openPicker()
@@ -142,8 +192,7 @@ export function DateRangePicker(handle: Handle) {
                   openPicker()
                 }
                 if (event.key === "Escape") {
-                  open = false
-                  handle.update()
+                  setOpen(false, true)
                 }
               }),
             ]}
@@ -156,8 +205,7 @@ export function DateRangePicker(handle: Handle) {
             mix={[
               on("click", () => {
                 if (open) {
-                  open = false
-                  handle.update()
+                  setOpen(false, true)
                 } else {
                   openPicker()
                 }
@@ -241,7 +289,8 @@ export function DateRangePicker(handle: Handle) {
                                 const next = nextDateRangeSelection(range, cell.iso)
                                 setRange(props, next)
                                 if (next.start && next.end) {
-                                  open = false
+                                  setOpen(false, true)
+                                  return
                                 }
                                 handle.update()
                               }),
@@ -279,8 +328,7 @@ export function DateRangePicker(handle: Handle) {
                                   move(-7)
                                 } else if (event.key === "Escape") {
                                   event.preventDefault()
-                                  open = false
-                                  handle.update()
+                                  setOpen(false, true)
                                 }
                               }),
                             ]}
@@ -303,8 +351,7 @@ export function DateRangePicker(handle: Handle) {
                 mix={[
                   on("click", () => {
                     setRange(props, {})
-                    open = false
-                    handle.update()
+                    setOpen(false, true)
                   }),
                 ]}
               >

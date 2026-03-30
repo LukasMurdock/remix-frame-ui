@@ -10,6 +10,8 @@ export type SwitchProps = {
   defaultChecked?: boolean
   disabled?: boolean
   required?: boolean
+  "aria-describedby"?: string
+  "aria-invalid"?: "true"
   children?: ComponentChildren
 }
 
@@ -31,6 +33,8 @@ export function Switch(_handle: Handle) {
         defaultChecked={props.defaultChecked}
         disabled={props.disabled}
         required={props.required}
+        aria-describedby={props["aria-describedby"]}
+        aria-invalid={props["aria-invalid"]}
       />
       <span className="rf-switch-control" aria-hidden="true">
         <span className="rf-switch-thumb" />

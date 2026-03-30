@@ -17,6 +17,11 @@ function createAriaFieldState(params: { descriptionId?: string; errorId?: string
   }
 }
 
+export function resolveFieldInvalid(invalid?: boolean, error?: ComponentChildren): boolean {
+  if (invalid !== undefined) return invalid
+  return Boolean(error)
+}
+
 export type FieldProps = {
   id: string
   label: ComponentChildren
@@ -37,10 +42,11 @@ export type FieldProps = {
 export function Field(_handle: Handle) {
   return (props: FieldProps) => {
     const ids = createFieldIds(props.id)
+    const invalid = resolveFieldInvalid(props.invalid, props.error)
     const aria = createAriaFieldState({
       ...(props.description ? { descriptionId: ids.descriptionId } : {}),
       ...(props.error ? { errorId: ids.errorId } : {}),
-      ...(props.invalid ? { invalid: true } : {}),
+      ...(invalid ? { invalid: true } : {}),
     })
 
     return (

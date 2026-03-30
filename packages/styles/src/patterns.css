@@ -12,4 +12,11 @@
     color: var(--rf-text-default);
     background: var(--rf-surface-default);
   }
+
+  .rf-input-base[aria-invalid="true"],
+  .rf-field :is(select, input, textarea)[aria-invalid="true"] {
+    border-color: var(--rf-danger-default);
+    border-width: 2px;
+    padding-inline: calc(0.75rem - 1px);
+  }
 }
