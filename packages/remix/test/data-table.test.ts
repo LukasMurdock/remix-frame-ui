@@ -7,7 +7,10 @@ import {
   filterDataTableRows,
   paginateDataTableRows,
   resolveDataTableCellText,
+  resolveDataTableDataMode,
+  resolveDataTableFilter,
   resolveDataTablePageSize,
+  resolveDataTableRowCount,
   resolveDataTableTotalPages,
   type DataTableRow,
 } from "../src/components/DataTable"
@@ -49,6 +52,46 @@ describe("data table helpers", () => {
       "b",
       "d",
     ])
+  })
+
+  it("resolves table data mode", () => {
+    expect(resolveDataTableDataMode()).toBe("client")
+    expect(resolveDataTableDataMode("client")).toBe("client")
+    expect(resolveDataTableDataMode("server")).toBe("server")
+  })
+
+  it("resolves row count for client and server modes", () => {
+    expect(resolveDataTableRowCount("client", rows, 100)).toBe(4)
+    expect(resolveDataTableRowCount("server", rows)).toBe(4)
+    expect(resolveDataTableRowCount("server", rows, 25)).toBe(25)
+    expect(resolveDataTableRowCount("server", rows, -10)).toBe(0)
+    expect(resolveDataTableRowCount("server", rows, 25.9)).toBe(25)
+  })
+
+  it("resolves composed table filter from query and predicate", () => {
+    const releaseFilter = resolveDataTableFilter({
+      columns: [
+        { key: "name", header: "Name" },
+        { key: "status", header: "Status" },
+      ],
+      filterText: "1.3",
+      rowFilter: (row) => resolveDataTableCellText(row, "status").toLowerCase() === "success",
+    })
+
+    expect(releaseFilter).toBeTypeOf("function")
+    expect(filterDataTableRows(rows, releaseFilter).map((row) => row.key)).toEqual(["d"])
+
+    const statusOnlyFilter = resolveDataTableFilter({
+      columns: [
+        { key: "name", header: "Name" },
+        { key: "status", header: "Status" },
+      ],
+      filterText: "success",
+      filterColumnKeys: ["status"],
+    })
+
+    expect(statusOnlyFilter).toBeTypeOf("function")
+    expect(filterDataTableRows(rows, statusOnlyFilter).map((row) => row.key)).toEqual(["a", "d"])
   })
 
   it("resolves text values from row cells and sortValues", () => {

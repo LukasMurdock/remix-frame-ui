@@ -15,10 +15,20 @@ export type DataTableRow = {
   sortValues?: Record<string, string | number>
 }
 
+export type DataTableDataMode = "client" | "server"
+
 export type DataTableProps = {
   columns: DataTableColumn[]
   rows: DataTableRow[]
+  /** @default "client" */
+  dataMode?: DataTableDataMode
+  /** Total row count for server-backed tables */
+  totalRows?: number
   rowFilter?: DataTableRowFilter
+  /** Client-side contains filter query */
+  filterText?: string
+  /** @default all column keys */
+  filterColumnKeys?: string[]
   caption?: ComponentChildren
   /** @default false */
   loading?: boolean
@@ -71,6 +81,31 @@ export function paginateDataTableRows(rows: DataTableRow[], page: number, pageSi
 export function filterDataTableRows(rows: DataTableRow[], rowFilter?: DataTableRowFilter): DataTableRow[] {
   if (!rowFilter) return rows
   return rows.filter((row) => rowFilter(row))
+}
+
+export function resolveDataTableDataMode(dataMode?: DataTableDataMode): DataTableDataMode {
+  return dataMode ?? "client"
+}
+
+export function resolveDataTableRowCount(
+  dataMode: DataTableDataMode,
+  rows: DataTableRow[],
+  totalRows?: number,
+): number {
+  if (dataMode === "server") {
+    if (totalRows === undefined) return rows.length
+    return Math.max(0, Math.floor(totalRows))
+  }
+
+  return rows.length
+}
+
+export function resolveDataTableFilter(
+  props: Pick<DataTableProps, "columns" | "rowFilter" | "filterText" | "filterColumnKeys">,
+): DataTableRowFilter | undefined {
+  const filterColumnKeys = props.filterColumnKeys ?? props.columns.map((column) => column.key)
+  const textFilter = createDataTableContainsFilter(filterColumnKeys, props.filterText)
+  return composeDataTableRowFilter(props.rowFilter, textFilter)
 }
 
 export function composeDataTableRowFilter(
@@ -150,14 +185,18 @@ export function DataTable(handle: Handle) {
   }
 
   return (props: DataTableProps) => {
+    const dataMode = resolveDataTableDataMode(props.dataMode)
+    const isServer = dataMode === "server"
     const sort = props.sort ?? localSort ?? props.defaultSort
-    const filteredRows = filterDataTableRows(props.rows, props.rowFilter)
-    const sortedRows = sortRows(filteredRows, sort)
+    const tableFilter = resolveDataTableFilter(props)
+    const filteredRows = isServer ? props.rows : filterDataTableRows(props.rows, tableFilter)
+    const sortedRows = isServer ? filteredRows : sortRows(filteredRows, sort)
 
     const pageSize = resolveDataTablePageSize(props.pageSize)
-    const totalPages = resolveDataTableTotalPages(sortedRows.length, pageSize)
+    const totalRows = resolveDataTableRowCount(dataMode, sortedRows, props.totalRows)
+    const totalPages = resolveDataTableTotalPages(totalRows, pageSize)
     const page = clampDataTablePage(props.page ?? localPage ?? props.defaultPage, totalPages)
-    const pageRows = paginateDataTableRows(sortedRows, page, pageSize)
+    const pageRows = isServer ? sortedRows : paginateDataTableRows(sortedRows, page, pageSize)
 
     const selected = getSelected(props)
     const allPageRowsSelected = pageRows.length > 0 && pageRows.every((row) => selected.has(row.key))
