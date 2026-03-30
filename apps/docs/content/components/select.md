@@ -23,15 +23,16 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Server-rendered by default; browser handles interaction semantics.
+Server-rendered by default; browser handles interaction semantics. Use `required` for required fields and omit it for optional fields.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Role | native select/listbox behavior |
-| Option disabling | native `disabled` |
-| Required | native constraint validation |
+| Requirement       | Behavior                                       |
+| ----------------- | ---------------------------------------------- |
+| Role              | native select/listbox behavior                 |
+| Option disabling  | native `disabled`                              |
+| Required          | native constraint validation                   |
+| Validation wiring | supports `aria-describedby` and `aria-invalid` |
 
 ## Keymap spec
 

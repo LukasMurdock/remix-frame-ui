@@ -23,15 +23,16 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Hydration optional. Static checked state works server-only.
+Hydration optional. Static checked state works server-only. Use `required` when the switch must be on before submit.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Role | native checkbox with `role="switch"` |
-| Checked state | native `checked` / `defaultChecked` |
-| Submission | native name/value semantics (`on` default) |
+| Requirement       | Behavior                                       |
+| ----------------- | ---------------------------------------------- |
+| Role              | native checkbox with `role="switch"`           |
+| Checked state     | native `checked` / `defaultChecked`            |
+| Submission        | native name/value semantics (`on` default)     |
+| Validation wiring | supports `aria-describedby` and `aria-invalid` |
 
 ## Keymap spec
 

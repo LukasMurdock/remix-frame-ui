@@ -23,7 +23,7 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Supports one- or two-column grouping for logically related inputs.
+Supports one- or two-column grouping for logically related inputs and collapses to one column on narrow viewports.
 
 ## Accessibility matrix
 

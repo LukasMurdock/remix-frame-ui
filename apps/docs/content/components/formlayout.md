@@ -23,7 +23,7 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Use `columns` for responsive-like grouping while keeping native `<form>` semantics.
+Use `columns` for grouped desktop layouts while keeping native `<form>` semantics. Action rows align with start by default for top-to-bottom completion flow.
 
 ## Accessibility matrix
 
@@ -32,6 +32,7 @@ Use `columns` for responsive-like grouping while keeping native `<form>` semanti
 | Native semantics | renders a native `<form>` container                                            |
 | Context wiring   | optional title and description map to `aria-labelledby` and `aria-describedby` |
 | Action grouping  | actions render as a dedicated footer row                                       |
+| Mobile behavior  | multi-column layouts collapse to one column on narrow viewports                |
 
 ## Keymap spec
 

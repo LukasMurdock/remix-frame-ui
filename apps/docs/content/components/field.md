@@ -23,15 +23,15 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Field ARIA wiring is computed in setup and passed into children render function.
+Field ARIA wiring is computed in setup and passed into children render function. If `error` is present and `invalid` is not set, the field is treated as invalid by default.
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Label | wired via `htmlFor` to input id |
-| Description | appended to `aria-describedby` |
-| Error | appended to `aria-describedby` and sets `aria-invalid` |
+| Requirement | Behavior                                                                          |
+| ----------- | --------------------------------------------------------------------------------- |
+| Label       | wired via `htmlFor` to input id                                                   |
+| Description | appended to `aria-describedby`                                                    |
+| Error       | appended to `aria-describedby` and sets inferred `aria-invalid` unless overridden |
 
 ## Keymap spec
 

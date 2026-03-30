@@ -20,4 +20,8 @@ export function NewsletterForm() {
 }
 ```
 
+Recommended validation timing is blur for field-level errors and submit for summary-level errors. Keep labels above controls by default for clear scan order and mobile consistency.
+
+Use `FormErrorSummary` at the top of the form when users need a quick list of issues after submit.
+
 For richer field composition, see `Field`, `Input`, `FormLayout`, and `FormMessage` component pages.

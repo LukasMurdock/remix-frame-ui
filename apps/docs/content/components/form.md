@@ -23,16 +23,16 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Use `busy` to express pending submissions via `aria-busy` and a `data-busy` attribute. `FormErrorSummary` renders an alert region for submission validation errors.
+Use `busy` to express pending submissions via `aria-busy` and a `data-busy` attribute. `FormErrorSummary` renders an alert region for submission validation errors. Keep summary errors focused on submit-time issues and show field errors on blur for first-pass feedback. When linking summary items, target the control id (for `Field`, this is usually `${id}-input`).
 
 ## Accessibility matrix
 
-| Requirement | Behavior |
-| --- | --- |
-| Form semantics | native form submission and field grouping |
-| Busy state | `aria-busy="true"` when pending |
-| Error summary | assertive `role="alert"` region for validation issues |
-| Keyboard Enter | submits according to native form rules |
+| Requirement    | Behavior                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| Form semantics | native form submission and field grouping                                                          |
+| Busy state     | `aria-busy="true"` when pending                                                                    |
+| Error summary  | assertive `role="alert"` region for validation issues; supports plain text and linked field errors |
+| Keyboard Enter | submits according to native form rules                                                             |
 
 ## Keymap spec
 

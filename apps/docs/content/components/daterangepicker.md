@@ -24,15 +24,16 @@ Type definitions are generated from component source.
 
 ## Runtime notes
 
-Hydration required for interactive range selection and keyboard grid movement.
+Hydration required for interactive range selection and keyboard grid movement. Use `required` for mandatory ranges and wire `aria-describedby`/`aria-invalid` from surrounding field state.
 
 ## Accessibility matrix
 
-| Requirement       | Behavior                                                   |
-| ----------------- | ---------------------------------------------------------- |
-| Trigger semantics | input exposes `aria-haspopup="dialog"` and `aria-expanded` |
-| Range highlight   | selected boundary days and in-range days use visual states |
-| Keyboard support  | arrow key movement and `Escape` close within the calendar  |
+| Requirement       | Behavior                                                                  |
+| ----------------- | ------------------------------------------------------------------------- |
+| Trigger semantics | input exposes `aria-haspopup="dialog"` and `aria-expanded`                |
+| Range highlight   | selected boundary days and in-range days use visual states                |
+| Keyboard support  | arrow key movement and `Escape` close within the calendar                 |
+| Validation wiring | trigger input supports `required`, `aria-describedby`, and `aria-invalid` |
 
 ## Keymap spec
 
