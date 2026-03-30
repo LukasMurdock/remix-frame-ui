@@ -1,7 +1,7 @@
 {
   "name": "@lukasmurdock/remix-ui-core",
   "description": "Core accessibility and form primitives for Remix Frame UI.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "repository": {
     "type": "git",
