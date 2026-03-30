@@ -19,3 +19,20 @@ const aria = createAriaFieldState({
   invalid: false,
 })
 ```
+
+## Headless table primitives
+
+```ts
+import { createTableDataController, nextTableSort, toggleTableSelectionKey } from "@lukasmurdock/remix-ui-core"
+
+const sort = nextTableSort(undefined, "name")
+const selected = toggleTableSelectionKey(new Set<string>(), "row-1", "single")
+
+const controller = createTableDataController({
+  initialQuery: { page: 1, pageSize: 10 },
+  load: async ({ query, signal }) => {
+    const response = await fetch(`/api/rows?page=${query.page}&size=${query.pageSize}`, { signal })
+    return response.json()
+  },
+})
+```

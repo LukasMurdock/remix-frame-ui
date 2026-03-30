@@ -1,17 +1,28 @@
 import { describe, expect, it } from "vitest"
 import {
   clampDataTablePage,
+  coerceDataTableFilterSignature,
   composeDataTableRowFilter,
   createDataTableContainsFilter,
   createDataTableEqualsFilter,
   filterDataTableRows,
+  isDataTableActivationKey,
+  isSameDataTableFilterSignature,
+  isSameDataTableOrderedTextList,
+  isSameDataTableDataSourceQuery,
   paginateDataTableRows,
   resolveDataTableCellText,
   resolveDataTableDataMode,
+  resolveDataTableDensity,
   resolveDataTableFilter,
+  resolveDataTableLength,
   resolveDataTablePageSize,
   resolveDataTableRowCount,
+  resolveDataTableSelectionMode,
+  resolveDataTableSurface,
   resolveDataTableTotalPages,
+  resolveDataTableColumnStyle,
+  sortDataTableRows,
   type DataTableRow,
 } from "../src/components/DataTable"
 
@@ -27,6 +38,28 @@ describe("data table helpers", () => {
     expect(resolveDataTablePageSize()).toBe(10)
     expect(resolveDataTablePageSize(0)).toBe(1)
     expect(resolveDataTablePageSize(7.9)).toBe(7)
+  })
+
+  it("resolves surface, density, and selection mode defaults", () => {
+    expect(resolveDataTableSurface()).toBe("card")
+    expect(resolveDataTableSurface("flat")).toBe("flat")
+    expect(resolveDataTableDensity()).toBe("default")
+    expect(resolveDataTableDensity("comfortable")).toBe("comfortable")
+
+    expect(resolveDataTableSelectionMode()).toBe("none")
+    expect(resolveDataTableSelectionMode(undefined, true)).toBe("multiple")
+    expect(resolveDataTableSelectionMode("single", true)).toBe("single")
+  })
+
+  it("normalizes column lengths and inline style declarations", () => {
+    expect(resolveDataTableLength(120)).toBe("120px")
+    expect(resolveDataTableLength("22rem")).toBe("22rem")
+    expect(resolveDataTableLength(undefined)).toBeUndefined()
+
+    expect(resolveDataTableColumnStyle({ width: 120 })).toBe("width: 120px;")
+    expect(resolveDataTableColumnStyle({ minWidth: "12rem" })).toBe("min-width: 12rem;")
+    expect(resolveDataTableColumnStyle({ width: "30%", minWidth: 100 })).toBe("width: 30%; min-width: 100px;")
+    expect(resolveDataTableColumnStyle({})).toBeUndefined()
   })
 
   it("resolves total pages", () => {
@@ -124,5 +157,81 @@ describe("data table helpers", () => {
     expect(filterDataTableRows(rows, combined).map((row) => row.key)).toEqual(["a", "d"])
     expect(composeDataTableRowFilter(queryFilter)).toBe(queryFilter)
     expect(composeDataTableRowFilter(undefined, undefined)).toBeUndefined()
+  })
+
+  it("detects row activation keys", () => {
+    expect(isDataTableActivationKey("Enter")).toBe(true)
+    expect(isDataTableActivationKey(" ")).toBe(true)
+    expect(isDataTableActivationKey("Space")).toBe(false)
+    expect(isDataTableActivationKey("Escape")).toBe(false)
+  })
+
+  it("compares data source query objects", () => {
+    const baseQuery = {
+      page: 2,
+      pageSize: 25,
+      sort: { columnKey: "name", direction: "asc" as const },
+      filterText: "release",
+      filterColumnKeys: ["name", "status"],
+    }
+
+    expect(isSameDataTableDataSourceQuery(baseQuery, { ...baseQuery })).toBe(true)
+    expect(isSameDataTableDataSourceQuery(baseQuery, { ...baseQuery, page: 3 })).toBe(false)
+    expect(isSameDataTableDataSourceQuery(baseQuery, { ...baseQuery, pageSize: 10 })).toBe(false)
+    const { sort: _omittedSort, ...withoutSort } = baseQuery
+    expect(isSameDataTableDataSourceQuery(baseQuery, withoutSort)).toBe(false)
+    expect(isSameDataTableDataSourceQuery(baseQuery, { ...baseQuery, filterText: "deploy" })).toBe(false)
+    expect(isSameDataTableDataSourceQuery(baseQuery, { ...baseQuery, filterColumnKeys: ["status", "name"] })).toBe(
+      false,
+    )
+  })
+
+  it("sorts table rows from sort values and primitive cells", () => {
+    const unsorted: DataTableRow[] = [
+      { key: "c", cells: { name: "Charlie", attempts: 2 }, sortValues: { name: "Charlie" } },
+      { key: "a", cells: { name: "Alpha", attempts: 3 }, sortValues: { name: "Alpha" } },
+      { key: "b", cells: { name: "Beta", attempts: 1 }, sortValues: { name: "Beta" } },
+    ]
+
+    expect(sortDataTableRows(unsorted, { columnKey: "name", direction: "asc" }).map((row) => row.key)).toEqual([
+      "a",
+      "b",
+      "c",
+    ])
+    expect(sortDataTableRows(unsorted, { columnKey: "attempts", direction: "desc" }).map((row) => row.key)).toEqual([
+      "a",
+      "c",
+      "b",
+    ])
+  })
+
+  it("compares ordered lists and filter signatures", () => {
+    expect(isSameDataTableOrderedTextList(["name", "status"], ["name", "status"])).toBe(true)
+    expect(isSameDataTableOrderedTextList(["name", "status"], ["status", "name"])).toBe(false)
+
+    expect(
+      isSameDataTableFilterSignature(
+        { filterText: "release", filterColumnKeys: ["name"] },
+        { filterText: "release", filterColumnKeys: ["name"] },
+      ),
+    ).toBe(true)
+    expect(
+      isSameDataTableFilterSignature(
+        { filterText: "release", filterColumnKeys: ["name"] },
+        { filterText: "deploy", filterColumnKeys: ["name"] },
+      ),
+    ).toBe(false)
+  })
+
+  it("coerces filter signatures from unknown values", () => {
+    expect(coerceDataTableFilterSignature(undefined)).toBeUndefined()
+    expect(coerceDataTableFilterSignature({ filterText: "release", filterColumnKeys: ["name", "status"] })).toEqual({
+      filterText: "release",
+      filterColumnKeys: ["name", "status"],
+    })
+    expect(coerceDataTableFilterSignature({ filterColumnKeys: ["name", 1] })).toBeUndefined()
+    expect(coerceDataTableFilterSignature({ filterText: 4, filterColumnKeys: ["name"] })).toEqual({
+      filterColumnKeys: ["name"],
+    })
   })
 })

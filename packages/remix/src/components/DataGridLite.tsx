@@ -1,7 +1,8 @@
 import { on, type Handle } from "remix/component"
+import { nextTableSort, sortTableRows, type TableSortDirection } from "@lukasmurdock/remix-ui-core"
 import type { ComponentChildren } from "../types"
 
-export type DataGridDirection = "asc" | "desc"
+export type DataGridDirection = TableSortDirection
 
 export type DataGridSort = {
   columnKey: string
@@ -42,29 +43,26 @@ export type DataGridLiteProps = {
 }
 
 export function nextSort(current: DataGridSort | undefined, columnKey: string): DataGridSort | undefined {
-  if (!current || current.columnKey !== columnKey) {
-    return { columnKey, direction: "asc" }
-  }
-
-  if (current.direction === "asc") {
-    return { columnKey, direction: "desc" }
-  }
-
-  return undefined
+  return nextTableSort(current, columnKey)
 }
 
 export function sortRows(rows: DataGridRow[], sort: DataGridSort | undefined): DataGridRow[] {
-  if (!sort) return rows
+  return sortTableRows(rows, sort, (row, columnKey) => {
+    const sortValue = row.sortValues?.[columnKey]
+    if (typeof sortValue === "string" || typeof sortValue === "number") {
+      return sortValue
+    }
 
-  const direction = sort.direction === "asc" ? 1 : -1
+    const cell = row.cells[columnKey]
+    if (typeof cell === "string" || typeof cell === "number") {
+      return cell
+    }
 
-  return [...rows].sort((a, b) => {
-    const aRaw = a.sortValues?.[sort.columnKey] ?? String(a.cells[sort.columnKey] ?? "")
-    const bRaw = b.sortValues?.[sort.columnKey] ?? String(b.cells[sort.columnKey] ?? "")
+    if (typeof cell === "boolean") {
+      return String(cell)
+    }
 
-    if (aRaw === bRaw) return 0
-    if (aRaw > bRaw) return direction
-    return -direction
+    return ""
   })
 }
 
