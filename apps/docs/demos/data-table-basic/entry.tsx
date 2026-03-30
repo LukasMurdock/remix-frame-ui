@@ -1,13 +1,12 @@
 // @ts-nocheck
 import { createRoot, on } from "remix/component"
-// Consumer example from component docs migration
 import { DataTable } from "@lukasmurdock/remix-ui-components"
 
 const pageSize = 6
 const columns = [
-  { key: "name", header: "Name", sortable: true },
+  { key: "name", header: "Name", sortable: true, minWidth: 200 },
   { key: "status", header: "Status", sortable: true },
-  { key: "duration", header: "Duration", align: "right", sortable: true },
+  { key: "duration", header: "Duration", align: "right", sortable: true, width: 120 },
 ]
 
 const sourceRows = [
@@ -49,47 +48,66 @@ function toDataTableRows(items) {
   }))
 }
 
-function loadServerRows({ page, sort, query, status, requestId }) {
-  return new Promise((resolve) => {
+function buildFilterText(query, status) {
+  const queryText = query.trim()
+  if (status === "all") return queryText
+  if (queryText === "") return `status:${status}`
+  return `${queryText} status:${status}`
+}
+
+function parseFilterText(filterText) {
+  const raw = (filterText ?? "").trim()
+  if (raw === "") return { query: "", status: "all" }
+
+  const statusMatch = raw.match(/(?:^|\s)status:([a-z]+)/i)
+  const status = statusMatch?.[1]?.toLowerCase() ?? "all"
+  const query = raw
+    .replace(/(?:^|\s)status:[a-z]+/gi, " ")
+    .trim()
+    .toLowerCase()
+  return { query, status }
+}
+
+const releasesDataSource = {
+  fetch: async (query, { signal }) => {
     const latency = 260 + Math.floor(Math.random() * 220)
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(resolve, latency)
+      signal.addEventListener(
+        "abort",
+        () => {
+          clearTimeout(timeout)
+          reject(new DOMException("Aborted", "AbortError"))
+        },
+        { once: true },
+      )
+    })
 
-    setTimeout(() => {
-      let filtered = sourceRows.filter((row) => {
-        if (status !== "all" && row.status !== status) return false
-        if (query.trim() !== "" && !row.name.toLowerCase().includes(query.trim().toLowerCase())) return false
-        return true
-      })
+    const parsedFilter = parseFilterText(query.filterText)
 
-      filtered = [...filtered].sort((a, b) => compareBySort(a, b, sort))
+    let filtered = sourceRows.filter((row) => {
+      if (parsedFilter.status !== "all" && row.status !== parsedFilter.status) return false
+      if (parsedFilter.query !== "" && !row.name.toLowerCase().includes(parsedFilter.query)) return false
+      return true
+    })
 
-      const totalRows = filtered.length
-      const totalPages = Math.max(1, Math.ceil(totalRows / pageSize))
-      const safePage = Math.min(Math.max(1, page), totalPages)
-      const start = (safePage - 1) * pageSize
-      const pageItems = filtered.slice(start, start + pageSize)
+    filtered = [...filtered].sort((left, right) => compareBySort(left, right, query.sort))
 
-      resolve({
-        requestId,
-        rows: toDataTableRows(pageItems),
-        totalRows,
-        safePage,
-      })
-    }, latency)
-  })
+    const totalRows = filtered.length
+    const start = (query.page - 1) * query.pageSize
+    const pageItems = filtered.slice(start, start + query.pageSize)
+
+    return {
+      rows: toDataTableRows(pageItems),
+      totalRows,
+    }
+  },
 }
 
 type RemoteDemoProps = {
-  rows: unknown[]
-  totalRows: number
-  page: number
   query: string
   status: string
-  sort: unknown
-  loading: boolean
   selectedKeys: string[]
-  errorState?: string
-  onPageChange: (page: number) => void
-  onSortChange: (sort: unknown) => void
   onQueryChange: (query: string) => void
   onStatusChange: (status: string) => void
   onSelectionChange: (keys: string[]) => void
@@ -122,20 +140,15 @@ export function ReleasesTable(_handle) {
 
       <DataTable
         columns={columns}
-        rows={props.rows}
-        dataMode="server"
-        totalRows={props.totalRows}
-        page={props.page}
+        rows={[]}
+        dataSource={releasesDataSource}
         pageSize={pageSize}
-        sort={props.sort}
-        loading={props.loading}
-        errorState={props.errorState}
-        selectable
+        filterText={buildFilterText(props.query, props.status)}
+        filterColumnKeys={["name", "status"]}
+        selectionMode="multiple"
         selectedKeys={props.selectedKeys}
         onSelectionChange={props.onSelectionChange}
-        onPageChange={props.onPageChange}
-        onSortChange={props.onSortChange}
-        caption="Remote releases (server-mode DataTable)"
+        caption="Remote releases (dataSource DataTable)"
       />
     </section>
   )
@@ -145,52 +158,27 @@ export function mount(mountEl: HTMLElement) {
   const root = createRoot(mountEl)
 
   let renderQueued = false
-  let requestSeq = 0
-  let rows = []
-  let totalRows = 0
-  let page = 1
   let query = ""
   let status = "all"
-  let sort = undefined
-  let loading = true
-  let errorState = undefined
   let selectedKeys: string[] = []
 
   const render = () => {
     root.render(
       <ReleasesTable
-        rows={rows}
-        totalRows={totalRows}
-        page={page}
         query={query}
         status={status}
-        sort={sort}
-        loading={loading}
-        errorState={errorState}
         selectedKeys={selectedKeys}
         onSelectionChange={(keys) => {
           selectedKeys = keys
           queueRender()
         }}
-        onPageChange={(nextPage) => {
-          if (page === nextPage) return
-          page = nextPage
-          fetchRows()
-        }}
-        onSortChange={(nextSort) => {
-          sort = nextSort
-          page = 1
-          fetchRows()
-        }}
         onQueryChange={(nextQuery) => {
           query = nextQuery
-          page = 1
-          fetchRows()
+          queueRender()
         }}
         onStatusChange={(nextStatus) => {
           status = nextStatus
-          page = 1
-          fetchRows()
+          queueRender()
         }}
       />,
     )
@@ -205,28 +193,5 @@ export function mount(mountEl: HTMLElement) {
     })
   }
 
-  const fetchRows = () => {
-    const requestId = ++requestSeq
-    loading = true
-    errorState = undefined
-    queueRender()
-
-    loadServerRows({ page, sort, query, status, requestId })
-      .then((response) => {
-        if (response.requestId !== requestSeq) return
-        rows = response.rows
-        totalRows = response.totalRows
-        page = response.safePage
-        loading = false
-        queueRender()
-      })
-      .catch(() => {
-        if (requestId !== requestSeq) return
-        loading = false
-        errorState = "Failed to load releases"
-        queueRender()
-      })
-  }
-
-  fetchRows()
+  render()
 }

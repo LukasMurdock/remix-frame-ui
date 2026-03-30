@@ -30,3 +30,50 @@ Validate CSS import order:
 ```bash
 pnpm run check:css-order
 ```
+
+## DataTable stable contract
+
+`@lukasmurdock/remix-ui-styles` treats DataTable part names and `--rf-data-table-*` variables as semver-stable.
+
+Stable DataTable `data-part` values:
+
+- `wrapper`
+- `table`
+- `header`
+- `header-row`
+- `header-cell`
+- `sort-button`
+- `sort-indicator`
+- `body`
+- `row`
+- `cell`
+- `selection-cell`
+- `empty-cell`
+- `footer`
+- `pagination-status`
+- `pagination-actions`
+- `loading`
+- `error`
+
+Common stable DataTable CSS variables:
+
+- `--rf-data-table-header-bg`
+- `--rf-data-table-cell-padding-y`
+- `--rf-data-table-cell-padding-x`
+- `--rf-data-table-row-selected-bg`
+- `--rf-data-table-footer-border`
+- `--rf-data-table-sort-indicator-size`
+
+Example override:
+
+```css
+.rf-data-table-wrap {
+  --rf-data-table-header-bg: color-mix(in srgb, var(--rf-brand-default) 8%, var(--rf-surface-default));
+  --rf-data-table-cell-padding-y: 0.625rem;
+  --rf-data-table-row-selected-bg: color-mix(in srgb, var(--rf-brand-default) 14%, var(--rf-surface-default));
+}
+
+.rf-data-table-wrap [data-part="sort-indicator"] {
+  opacity: 1;
+}
+```

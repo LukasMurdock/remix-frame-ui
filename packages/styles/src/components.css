@@ -2544,36 +2544,88 @@
     background: color-mix(in srgb, var(--rf-surface-default) 92%, var(--rf-color-gray-100));
   }
 
+  .rf-data-table-wrap,
+  .rf-data-table-loading,
+  .rf-data-table-error {
+    --rf-data-table-border-color: var(--rf-border-default);
+    --rf-data-table-border-radius: 0.875rem;
+    --rf-data-table-background: var(--rf-surface-default);
+    --rf-data-table-min-width: 680px;
+    --rf-data-table-header-bg: color-mix(in srgb, var(--rf-color-gray-100) 80%, var(--rf-surface-default));
+    --rf-data-table-cell-border-color: color-mix(in srgb, var(--rf-border-default) 70%, transparent);
+    --rf-data-table-cell-padding-y: 0.75rem;
+    --rf-data-table-cell-padding-x: 1rem;
+    --rf-data-table-caption-padding-top: 0.875rem;
+    --rf-data-table-caption-padding-bottom: 0.4rem;
+    --rf-data-table-caption-padding-x: 1rem;
+    --rf-data-table-row-hover-bg: color-mix(in srgb, var(--rf-brand-default) 5%, var(--rf-surface-default));
+    --rf-data-table-row-selected-bg: color-mix(in srgb, var(--rf-brand-default) 9%, var(--rf-surface-default));
+    --rf-data-table-sort-indicator-size: 0.85rem;
+    --rf-data-table-sort-indicator-opacity: 0.75;
+    --rf-data-table-selection-column-width: 2.75rem;
+    --rf-data-table-footer-border: color-mix(in srgb, var(--rf-border-default) 70%, transparent);
+    --rf-data-table-footer-padding-y: 0.65rem;
+    --rf-data-table-footer-padding-x: 0.875rem;
+    --rf-data-table-pagination-font-size: 0.84rem;
+    --rf-data-table-pagination-text: color-mix(in srgb, var(--rf-text-default) 72%, transparent);
+  }
+
   .rf-data-table-wrap {
-    border: 1px solid var(--rf-border-default);
-    border-radius: 0.875rem;
-    background: var(--rf-surface-default);
+    border: 1px solid var(--rf-data-table-border-color);
+    border-radius: var(--rf-data-table-border-radius);
+    background: var(--rf-data-table-background);
     overflow: clip;
     display: grid;
+  }
+
+  .rf-data-table-wrap[data-density="compact"] {
+    --rf-data-table-cell-padding-y: 0.5rem;
+    --rf-data-table-cell-padding-x: 0.75rem;
+    --rf-data-table-footer-padding-y: 0.5rem;
+    --rf-data-table-footer-padding-x: 0.75rem;
+  }
+
+  .rf-data-table-wrap[data-density="comfortable"] {
+    --rf-data-table-cell-padding-y: 0.95rem;
+    --rf-data-table-cell-padding-x: 1.125rem;
+    --rf-data-table-footer-padding-y: 0.8rem;
+    --rf-data-table-footer-padding-x: 1rem;
+  }
+
+  .rf-data-table-wrap[data-surface="flat"] {
+    --rf-data-table-border-radius: 0;
+  }
+
+  .rf-data-table-wrap[data-surface="none"] {
+    --rf-data-table-border-color: transparent;
+    --rf-data-table-border-radius: 0;
+    --rf-data-table-background: transparent;
+    border: 0;
   }
 
   .rf-data-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 680px;
+    min-width: var(--rf-data-table-min-width);
   }
 
   .rf-data-table caption {
     text-align: left;
     font-weight: 600;
-    padding: 0.875rem 1rem 0.4rem;
+    padding: var(--rf-data-table-caption-padding-top) var(--rf-data-table-caption-padding-x)
+      var(--rf-data-table-caption-padding-bottom);
   }
 
   .rf-data-table th,
   .rf-data-table td {
-    border-top: 1px solid color-mix(in srgb, var(--rf-border-default) 70%, transparent);
-    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--rf-data-table-cell-border-color);
+    padding: var(--rf-data-table-cell-padding-y) var(--rf-data-table-cell-padding-x);
     text-align: left;
     vertical-align: top;
   }
 
   .rf-data-table th {
-    background: color-mix(in srgb, var(--rf-color-gray-100) 80%, var(--rf-surface-default));
+    background: var(--rf-data-table-header-bg);
     font-weight: 600;
     border-top: 0;
   }
@@ -2594,22 +2646,35 @@
     background: transparent;
     color: inherit;
     font: inherit;
+    line-height: 1.2;
     cursor: pointer;
     padding: 0;
   }
 
   .rf-data-table-sort-indicator {
-    font-size: 0.85rem;
-    opacity: 0.75;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.15em;
+    font-size: var(--rf-data-table-sort-indicator-size);
+    opacity: var(--rf-data-table-sort-indicator-opacity);
   }
 
   .rf-data-table-select-col {
-    width: 2.75rem;
+    width: var(--rf-data-table-selection-column-width);
     text-align: center;
   }
 
+  .rf-data-table [data-part="row"][data-interactive="true"] {
+    cursor: pointer;
+  }
+
+  .rf-data-table [data-part="row"][data-interactive="true"]:hover {
+    background: var(--rf-data-table-row-hover-bg);
+  }
+
   .rf-data-table tbody tr[data-selected="true"] {
-    background: color-mix(in srgb, var(--rf-brand-default) 9%, var(--rf-surface-default));
+    background: var(--rf-data-table-row-selected-bg);
   }
 
   .rf-data-table-empty {
@@ -2619,16 +2684,30 @@
 
   .rf-data-table-loading,
   .rf-data-table-error {
-    border: 1px solid var(--rf-border-default);
-    border-radius: 0.875rem;
+    border: 1px solid var(--rf-data-table-border-color);
+    border-radius: var(--rf-data-table-border-radius);
     padding: 1rem;
     color: color-mix(in srgb, var(--rf-text-default) 70%, transparent);
-    background: color-mix(in srgb, var(--rf-surface-default) 92%, var(--rf-color-gray-100));
+    background: color-mix(in srgb, var(--rf-data-table-background) 92%, var(--rf-color-gray-100));
+  }
+
+  .rf-data-table-loading[data-surface="flat"],
+  .rf-data-table-error[data-surface="flat"] {
+    --rf-data-table-border-radius: 0;
+  }
+
+  .rf-data-table-loading[data-surface="none"],
+  .rf-data-table-error[data-surface="none"] {
+    --rf-data-table-border-color: transparent;
+    --rf-data-table-border-radius: 0;
+    --rf-data-table-background: transparent;
+    border: 0;
+    padding: 0;
   }
 
   .rf-data-table-footer {
-    border-top: 1px solid color-mix(in srgb, var(--rf-border-default) 70%, transparent);
-    padding: 0.65rem 0.875rem;
+    border-top: 1px solid var(--rf-data-table-footer-border);
+    padding: var(--rf-data-table-footer-padding-y) var(--rf-data-table-footer-padding-x);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2637,8 +2716,8 @@
   }
 
   .rf-data-table-pagination-status {
-    font-size: 0.84rem;
-    color: color-mix(in srgb, var(--rf-text-default) 72%, transparent);
+    font-size: var(--rf-data-table-pagination-font-size);
+    color: var(--rf-data-table-pagination-text);
   }
 
   .rf-data-table-pagination-actions {
