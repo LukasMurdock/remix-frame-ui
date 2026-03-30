@@ -46,7 +46,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts src/server/index.ts src/client/index.ts --format esm --dts",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "pnpm --filter @lukasmurdock/remix-ui-core run build && tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
