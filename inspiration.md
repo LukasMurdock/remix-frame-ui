@@ -5,7 +5,9 @@
 - https://ant.design/components/overview/
 - https://mobile.ant.design/
 - https://ui.shadcn.com/docs/components
-
+- https://component.gallery/
+- https://heroui.com/docs/react/components
+- https://ui.mantine.dev/
 
 ## Other
 
