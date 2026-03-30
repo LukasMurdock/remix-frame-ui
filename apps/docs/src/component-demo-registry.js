@@ -174,7 +174,7 @@ export const componentDemoEntries = [
   ],
   ["filterpanel", { id: "filter-panel-basic", title: "FilterPanel: drawer-based filters" }],
   ["floatingpanel", { id: "floating-panel-basic", title: "FloatingPanel: draggable snap heights" }],
-  ["input", { id: "field-input", title: "Field + Input: live validation" }],
+  ["input", { id: "field-input", title: "Field + Input: validation wiring" }],
   ["inlinealert", { id: "inline-alert-basic", title: "InlineAlert: compact in-flow status" }],
   ["infinitescroll", { id: "infinite-scroll-basic", title: "InfiniteScroll: progressive feed loading" }],
   ["image", { id: "image-basic", title: "Image: media with fit strategies" }],
