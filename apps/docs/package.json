@@ -17,7 +17,7 @@
     "cf:dev": "pnpm run build && pnpm dlx wrangler dev --config wrangler.jsonc",
     "cf:deploy": "pnpm run build && pnpm dlx wrangler deploy --config wrangler.jsonc",
     "preview": "vite preview",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "pnpm --filter @lukasmurdock/remix-ui-components run build && tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
