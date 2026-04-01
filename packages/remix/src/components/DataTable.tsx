@@ -403,12 +403,20 @@ export function DataTable(handle: Handle) {
   let activeDataSource: DataTableDataSource | undefined
   let previousDataSource: DataTableDataSource | undefined
   let pageControlMode: "controlled" | "uncontrolled" | undefined
+  let controllerSyncQueued = false
+  let pendingController: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult> | undefined
+  let pendingQuery: DataTableDataSourceQuery | undefined
+  let pendingReload = false
 
   handle.signal.addEventListener("abort", () => {
     releaseDataController?.()
     releaseDataController = undefined
     dataController?.dispose()
     dataController = undefined
+    pendingController = undefined
+    pendingQuery = undefined
+    pendingReload = false
+    controllerSyncQueued = false
   })
 
   function getSelected(props: DataTableProps): Set<string> {
@@ -444,12 +452,62 @@ export function DataTable(handle: Handle) {
     dataController = undefined
     previousDataSource = undefined
     pageControlMode = undefined
+    pendingController = undefined
+    pendingQuery = undefined
+    pendingReload = false
+    controllerSyncQueued = false
+  }
+
+  function queueControllerSync(): void {
+    if (controllerSyncQueued) return
+    controllerSyncQueued = true
+
+    handle.queueTask(() => {
+      controllerSyncQueued = false
+      if (handle.signal.aborted) return
+
+      const controller = pendingController
+      const nextQuery = pendingQuery
+      const shouldReload = pendingReload
+
+      pendingController = undefined
+      pendingQuery = undefined
+      pendingReload = false
+
+      if (!controller) return
+
+      if (nextQuery) {
+        const current = controller.getSnapshot().query
+        if (!isSameDataTableDataSourceQuery(current, nextQuery)) {
+          controller.setQuery(nextQuery)
+          return
+        }
+      }
+
+      if (shouldReload) {
+        controller.reload()
+      }
+    })
+  }
+
+  function scheduleDataControllerSync(
+    controller: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult>,
+    nextQuery: DataTableDataSourceQuery,
+    options: { shouldSetQuery: boolean; shouldReload: boolean },
+  ): void {
+    pendingController = controller
+    pendingQuery = options.shouldSetQuery ? nextQuery : undefined
+    pendingReload = options.shouldSetQuery ? false : options.shouldReload
+    queueControllerSync()
   }
 
   function getDataController(
     props: DataTableProps,
     query: DataTableDataSourceQuery,
-  ): TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult> {
+  ): {
+    controller: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult>
+    sourceChanged: boolean
+  } {
     activeDataSource = props.dataSource
     const nextPageControlMode = props.page === undefined ? "uncontrolled" : "controlled"
     const shouldRecreate = !dataController || pageControlMode !== nextPageControlMode
@@ -494,9 +552,7 @@ export function DataTable(handle: Handle) {
       })
     }
 
-    if (!shouldRecreate && previousDataSource !== props.dataSource) {
-      dataController?.reload()
-    }
+    const sourceChanged = !shouldRecreate && previousDataSource !== props.dataSource
 
     previousDataSource = props.dataSource
 
@@ -504,7 +560,10 @@ export function DataTable(handle: Handle) {
       throw new Error("Data table data controller not available")
     }
 
-    return dataController
+    return {
+      controller: dataController,
+      sourceChanged,
+    }
   }
 
   function createDataSourceQuery(
@@ -567,10 +626,14 @@ export function DataTable(handle: Handle) {
 
     if (props.dataSource) {
       const nextQuery = createDataSourceQuery(props, pageSize, sort)
-      const controller = getDataController(props, nextQuery)
+      const { controller, sourceChanged } = getDataController(props, nextQuery)
       const snapshot = controller.getSnapshot()
-      if (!isSameDataTableDataSourceQuery(snapshot.query, nextQuery)) {
-        controller.setQuery(nextQuery)
+      const shouldSetQuery = !isSameDataTableDataSourceQuery(snapshot.query, nextQuery)
+      if (shouldSetQuery || sourceChanged) {
+        scheduleDataControllerSync(controller, nextQuery, {
+          shouldSetQuery,
+          shouldReload: sourceChanged,
+        })
       }
 
       const nextSnapshot = controller.getSnapshot()
