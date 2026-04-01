@@ -148,4 +148,46 @@ describe("data table integration", () => {
       container.remove()
     }
   })
+
+  it("does not loop on uncontrolled server pagination", async () => {
+    const { createRoot, DataTable } = await loadRuntime()
+
+    const container = document.createElement("div")
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    const columns = [{ key: "name", header: "Name", sortable: true }]
+    const calls: number[] = []
+
+    const dataSource = {
+      fetch: async (query: { page: number }) => {
+        calls.push(query.page)
+        const pageLabel = query.page === 1 ? "Page 1" : "Page 2"
+        return {
+          rows: [{ key: String(query.page), cells: { name: pageLabel }, sortValues: { name: pageLabel } }],
+          totalRows: 2,
+        }
+      },
+    }
+
+    try {
+      root.render(<DataTable columns={columns} rows={[]} dataSource={dataSource} pageSize={1} />)
+      await flushWork(root)
+      expect(container.textContent).toContain("Page 1")
+
+      const nextButton = [...container.querySelectorAll("button")].find((button) =>
+        (button.textContent ?? "").includes("Next"),
+      )
+      expect(nextButton).toBeTruthy()
+
+      nextButton?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))
+      await flushWork(root, 6)
+
+      expect(container.textContent).toContain("Page 2")
+      expect(calls).toEqual([1, 2])
+    } finally {
+      root.dispose()
+      container.remove()
+    }
+  })
 })

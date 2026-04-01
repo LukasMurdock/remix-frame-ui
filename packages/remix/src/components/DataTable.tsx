@@ -398,6 +398,7 @@ export function DataTable(handle: Handle) {
   let localSort: DataTableSort | undefined
   let localSelected = new Set<string>()
   let localPage: number | undefined
+  let localPageDirty = false
   let dataController: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult> | undefined
   let releaseDataController: (() => void) | undefined
   let activeDataSource: DataTableDataSource | undefined
@@ -440,6 +441,7 @@ export function DataTable(handle: Handle) {
   function setPage(props: DataTableProps, nextPage: number): void {
     if (props.page === undefined) {
       localPage = nextPage
+      localPageDirty = true
       handle.update()
     }
     props.onPageChange?.(nextPage)
@@ -452,6 +454,7 @@ export function DataTable(handle: Handle) {
     dataController = undefined
     previousDataSourceFetch = undefined
     pageControlMode = undefined
+    localPageDirty = false
     pendingController = undefined
     pendingQuery = undefined
     pendingReload = false
@@ -625,9 +628,15 @@ export function DataTable(handle: Handle) {
     let currentQuery: DataTableDataSourceQuery | undefined
 
     if (props.dataSource) {
-      const nextQuery = createDataSourceQuery(props, pageSize, sort)
+      let nextQuery = createDataSourceQuery(props, pageSize, sort)
       const { controller, sourceChanged } = getDataController(props, nextQuery)
       const snapshot = controller.getSnapshot()
+
+      if (props.page === undefined && !localPageDirty) {
+        localPage = snapshot.query.page
+        nextQuery = createDataSourceQuery(props, pageSize, sort)
+      }
+
       const shouldSetQuery = !isSameDataTableDataSourceQuery(snapshot.query, nextQuery)
       if (shouldSetQuery || sourceChanged) {
         scheduleDataControllerSync(controller, nextQuery, {
@@ -638,7 +647,10 @@ export function DataTable(handle: Handle) {
 
       const nextSnapshot = controller.getSnapshot()
       currentQuery = nextSnapshot.query
-      if (props.page === undefined) {
+      if (props.page === undefined && localPageDirty && nextSnapshot.query.page === localPage) {
+        localPageDirty = false
+      }
+      if (props.page === undefined && !localPageDirty) {
         localPage = nextSnapshot.query.page
       }
       sourceRows = nextSnapshot.result?.rows ?? []
@@ -741,7 +753,10 @@ export function DataTable(handle: Handle) {
                           on("click", () => {
                             const next = nextTableSort(sort, column.key)
                             if (props.sort === undefined) localSort = next
-                            if (props.page === undefined) localPage = 1
+                            if (props.page === undefined) {
+                              localPage = 1
+                              localPageDirty = true
+                            }
                             handle.update()
                             props.onSortChange?.(next)
                             props.onPageChange?.(1)
