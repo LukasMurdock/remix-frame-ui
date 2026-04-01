@@ -90,4 +90,62 @@ describe("data table integration", () => {
       container.remove()
     }
   })
+
+  it("does not loop on pagination with recreated dataSource wrappers", async () => {
+    const { createRoot, DataTable } = await loadRuntime()
+
+    const container = document.createElement("div")
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    const columns = [{ key: "name", header: "Name", sortable: true }]
+    const rowsByPage = {
+      1: [{ key: "p1-a", cells: { name: "Page 1" }, sortValues: { name: "Page 1" } }],
+      2: [{ key: "p2-a", cells: { name: "Page 2" }, sortValues: { name: "Page 2" } }],
+    }
+    const calls: number[] = []
+
+    const fetchRows = async (query: { page: number }) => {
+      calls.push(query.page)
+      const rows = rowsByPage[query.page as 1 | 2] ?? []
+      return { rows, totalRows: 2 }
+    }
+
+    let page = 1
+    const render = () => {
+      root.render(
+        <DataTable
+          columns={columns}
+          rows={[]}
+          dataSource={{ fetch: fetchRows }}
+          page={page}
+          onPageChange={(nextPage) => {
+            page = nextPage
+            render()
+          }}
+          pageSize={1}
+        />,
+      )
+    }
+
+    try {
+      render()
+      await flushWork(root)
+      expect(container.textContent).toContain("Page 1")
+
+      const nextButton = [...container.querySelectorAll("button")].find((button) =>
+        (button.textContent ?? "").includes("Next"),
+      )
+      expect(nextButton).toBeTruthy()
+
+      nextButton?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))
+      await flushWork(root, 6)
+
+      expect(container.textContent).toContain("Page 2")
+      expect(calls).toEqual([1, 2])
+    } finally {
+      root.dispose()
+      container.remove()
+    }
+  })
 })

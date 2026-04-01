@@ -401,7 +401,7 @@ export function DataTable(handle: Handle) {
   let dataController: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult> | undefined
   let releaseDataController: (() => void) | undefined
   let activeDataSource: DataTableDataSource | undefined
-  let previousDataSource: DataTableDataSource | undefined
+  let previousDataSourceFetch: DataTableDataSource["fetch"] | undefined
   let pageControlMode: "controlled" | "uncontrolled" | undefined
   let controllerSyncQueued = false
   let pendingController: TableDataController<DataTableDataSourceQuery, DataTableDataSourceResult> | undefined
@@ -450,7 +450,7 @@ export function DataTable(handle: Handle) {
     releaseDataController = undefined
     dataController?.dispose()
     dataController = undefined
-    previousDataSource = undefined
+    previousDataSourceFetch = undefined
     pageControlMode = undefined
     pendingController = undefined
     pendingQuery = undefined
@@ -552,9 +552,9 @@ export function DataTable(handle: Handle) {
       })
     }
 
-    const sourceChanged = !shouldRecreate && previousDataSource !== props.dataSource
+    const sourceChanged = !shouldRecreate && previousDataSourceFetch !== props.dataSource?.fetch
 
-    previousDataSource = props.dataSource
+    previousDataSourceFetch = props.dataSource?.fetch
 
     if (!dataController) {
       throw new Error("Data table data controller not available")
